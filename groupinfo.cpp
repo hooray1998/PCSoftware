@@ -4,3 +4,7 @@ GroupInfo::GroupInfo()
 {
 
 }
+
+int GroupInfo::getOnlineTime(){
+
+}

@@ -32,27 +32,34 @@
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>调试项目</string>
+     <string>调试</string>
     </property>
-    <addaction name="action_VS"/>
-    <addaction name="action_VS_2"/>
+    <addaction name="actionVs"/>
+    <addaction name="actionJingdu"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>设备绑定</string>
+     <string>设备</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
+    <addaction name="actionGroupBound"/>
+    <addaction name="actionGroupUnbound"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
-     <string>公式编辑</string>
+     <string>公式</string>
     </property>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="actionSetIP"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave">
@@ -65,24 +72,29 @@
     <string>另存为</string>
    </property>
   </action>
-  <action name="action_VS">
+  <action name="actionVs">
    <property name="text">
     <string>VS调试</string>
    </property>
   </action>
-  <action name="action_VS_2">
+  <action name="actionJingdu">
    <property name="text">
     <string>精度调试</string>
    </property>
   </action>
-  <action name="action">
+  <action name="actionGroupBound">
    <property name="text">
     <string>设备组绑定</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="actionGroupUnbound">
    <property name="text">
     <string>设备组解绑</string>
+   </property>
+  </action>
+  <action name="actionSetIP">
+   <property name="text">
+    <string>设置IP</string>
    </property>
   </action>
  </widget>

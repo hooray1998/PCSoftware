@@ -1,1 +1,15 @@
 ComeOnBoy.pro.user
+.qmake.stash
+ComeOnBoy
+alldata.o
+expression.o
+group.o
+groupinfo.o
+main.o
+mainwindow.o
+moc_mainwindow.cpp
+moc_mainwindow.o
+moc_mythread.cpp
+moc_mythread.o
+moc_predefs.h
+mythread.o

@@ -5,10 +5,14 @@
 #include "mythread.h"
 #include "alldata.h"
 
+class MyThread;
 class Group
 {
 public:
     Group();
+
+    void analyzeDataA(QByteArray data);
+
 
 private:
     GroupInfo groupInfo;

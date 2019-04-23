@@ -13,7 +13,7 @@ public:
     void chooseExpression();
 
 private:
-    QString allExpression[];
+    QString allExpression[20];
     int expressionSize;
 };
 
