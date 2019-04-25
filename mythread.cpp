@@ -7,6 +7,7 @@ MyThread::MyThread(QTcpSocket *t)
     group = NULL;
     machineId = "-1";
     tcpSocket = t;
+    die = false;
 }
 
 void MyThread::run()
@@ -24,7 +25,8 @@ void MyThread::run()
     /**/        );
     connect(tcpSocket, &QTcpSocket::disconnected, [=](){
         DBG<<"dis connect";
-        emit SendLog(QString("%1 disconnect").arg(QString(machineId)));
+        die = true;
+        emit SendLog(group, QByteArray(machineId+"09"));
         tcpSocket->disconnectFromHost();
     });
 
@@ -35,16 +37,17 @@ void MyThread::run()
 void MyThread::analyzeHeader(){
     QByteArray header = data.left(8);
     mode = header.right(2);
+    DBG<<"length is"<<data.size()<<"head"<<header<<"mode"<<mode<<"   all is"<<data;
     if(mode=="01")
     {
         if(machineId=="-1")//init login
         {
             machineId = header.left(6);
-            emit SendLog(QString("%1 login in").arg(QString(machineId)));
+            emit SendLog(group, header);
         }
         else if(machineId==header.left(6))
         {
-            emit SendLog(QString("don't need to login in again."));
+            emit SendLog(QString("%1don't need to login in again.").arg(QString(machineId)));
         }
         else//Normally bu hui chu xian zhe zhong qingkuang.
             emit SendLog("Error in this.");
@@ -54,15 +57,23 @@ void MyThread::analyzeHeader(){
     {
             if(!group)
             {
-                emit SendLog("Haven't bound group, data will be loss.");
+                emit SendLog(QString("%1Haven't bound group, data will be loss.").arg(QString(machineId)));
             }
             else{
-                emit SendLog("Its group is ready.");
+                emit SendLog(group, header);
                 group->analyzeDataA(data.right(data.size()-8));
             }
     }
     else if(mode=="03")
     {
+            if(!group)
+            {
+                emit SendLog(QString("%1Haven't bound group, data will be loss.").arg(QString(machineId)));
+            }
+            else{
+                emit SendLog(group, header);
+                group->analyzeDataA(data.right(data.size()-8));
+            }
     }
     else if(mode=="04")
     {
@@ -71,8 +82,7 @@ void MyThread::analyzeHeader(){
     {
     }
     else{
-        emit SendLog("receive other mode");
-        DBG<<"length is"<<data.size()<<"head"<<header<<"mode"<<mode<<"   all is"<<data;
+        emit SendLog(QString("%1 receive other mode%2").arg(QString(machineId)).arg(QString(mode)));
     }
 }
 void MyThread::WriteData(QByteArray array)
@@ -102,3 +112,7 @@ qint16 MyThread::getPort()
     return tcpSocket->peerPort();
 }
 
+
+QString MyThread::getMachineID(){
+    return machineId;
+}

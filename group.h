@@ -10,12 +10,13 @@ class Group
 {
 public:
     Group();
+    GroupInfo groupInfo;
 
     void analyzeDataA(QByteArray data);
+    void analyzeDataB(QByteArray data);
 
 
 private:
-    GroupInfo groupInfo;
     MyThread *machineA;
     MyThread *machineB;
     AllData allData;
