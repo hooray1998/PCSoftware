@@ -9,25 +9,35 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("TcpServer");
-    setWindowTitle("iTT");
     setWindowState(Qt::WindowMaximized);
-    cur = 0;
 
     wip = new QWidget;
     wip->resize(300,200);
 
     wip_layout = new QGridLayout;
-    wip_ip = new QLineEdit("ip");
-    wip_port = new QLineEdit("port");
+    wip_labelip = new QLabel("IP:");
+    wip_labelport = new QLabel("Port:");
+    wip_ip = new QLineEdit;
+    wip_port = new QSpinBox;
     wip_button = new QPushButton("Listen");
 
-    wip_layout->addWidget(wip_ip,0,0,1,4);
-    wip_layout->addWidget(wip_port,1,0,1,2);
-    wip_layout->addWidget(wip_button,1,2,1,2);
+    wip_port->setMaximum(99999);
+    wip_ip->setText("127.0.0.1");
+    wip_port->setValue(8888);
+
+    wip_layout->addWidget(wip_labelip,0,0,1,1);
+    wip_layout->addWidget(wip_labelport,1,0,1,1);
+    wip_layout->addWidget(wip_ip,0,1,1,5);
+    wip_layout->addWidget(wip_port,1,1,1,2);
+    wip_layout->addWidget(wip_button,1,4,1,2);
     wip->setLayout(wip_layout);
+    connect(wip_button,&QPushButton::clicked,this,&MainWindow::listenButtonClickSlot);
 
 
-
+    QStringList strList;
+    strList<<"1"<<"22"<<"333"<<"4444";
+    m_model=new QStringListModel(strList);
+    ui->listView->setModel(m_model);
     connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::SetIP_Port);
 
 
@@ -44,19 +54,18 @@ MainWindow::MainWindow(QWidget *parent) :
                 //获得客户端的IP和端口
                 QString ip = pTcpSocket->peerAddress().toString();
                 qint16 port = pTcpSocket->peerPort();
-                QString temp = QString("[%1:%2]:The client connection is successful.").arg(ip).arg(port);
+                QString msg = QString("[%1:%2]:The client connection is successful.").arg(ip).arg(port);
 
-                //ui->textEditRead->append(temp);
+                ui->logTextEdit->append(msg);
 
-                allMachine[cur] = new MyThread(cur, pTcpSocket);
-                allMachine[cur]->start();
+                MyThread *temp = new MyThread(pTcpSocket);
+                allMachine.push_back(temp);
+                temp->start();
 
                 //-----------------------------------------------------------------------------------------------
                 //接收到了内容之后，直接在显示区域显示消息
-                 connect(allMachine[cur], SIGNAL(ReadData(int, QByteArray)),this,SLOT(analyzeData(int, QByteArray)));
-				// 根据ID分析是否是意外掉线，是否存在当前已有的设备组中。
-                //-----------------------------------------------------------------------------------------------
-                cur++;
+                connect(temp, &MyThread::ReadData, this, &MainWindow::analyzeData);
+                connect(temp, &MyThread::SendLog, this, &MainWindow::showLog);
             }
             );
 
@@ -87,21 +96,6 @@ void MainWindow::SetIP_Port()
 
 
     /*
-    QString myAddr = ui->ipLineEdit->text();     //手动输入IP到edit框
-    QString myPort = ui->portLineEdit->text();       //手动设置端口
-    QString msg;
-    bool ret = pTcpServer->listen(QHostAddress(myAddr),myPort.toUInt());      //服务器监听绑定
-    if(!ret)
-    {
-        msg = "绑定失败";
-    }
-    else
-    {
-        msg = "绑定成功";
-        //ui->boundPushButton->setEnabled(false);
-    }
-
-    ui->textEditRead->append(msg);
     */
 }
 
@@ -119,3 +113,30 @@ void MainWindow::addGroup(){
 void MainWindow::removeGroup(){
 
 }//show a small widget
+
+void MainWindow::listenButtonClickSlot()
+{
+    QString myAddr = wip_ip->text();     //手动输入IP到edit框
+    QString myPort = wip_port->text();       //手动设置端口
+    QString msg;
+    bool ret = pTcpServer->listen(QHostAddress(myAddr),myPort.toUInt());      //服务器监听绑定
+    if(!ret)
+    {
+        msg = "绑定失败";
+    }
+    else
+    {
+        msg = "绑定成功";
+        wip_button->setEnabled(false);
+    }
+
+    ui->logTextEdit->append(msg);
+}
+
+void MainWindow::showLog(QString msg)
+{
+    ui->logTextEdit->append(msg);
+    //TODO: delete if it is disconnected.
+    //TODO: find group if it is login in now.
+}
+

@@ -1,8 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QStringListModel>
+#include <QStringList>
+
+
 #include <QPushButton>
 #include <QGridLayout>
+#include <QLabel>
+#include <QSpinBox>
 #include <QLineEdit>
 #include <QMainWindow>
 #include <QTcpServer>  //监听套接字
@@ -30,7 +36,20 @@ class MainWindow : public QMainWindow
 protected:
     void closeEvent(QCloseEvent *event);
 public slots:
+    void showLog(QString msg);
     void SetIP_Port();
+    void listenButtonClickSlot();
+
+    //
+    //设备组
+    void getGroupList();//show
+    void addGroup();//show a small widget
+    void removeGroup();//show a small widget
+
+
+
+    //数据传输
+    void analyzeData(int id, QByteArray array);
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -38,13 +57,7 @@ public:
 
 
 
-	//数据传输
-    void analyzeData(int id, QByteArray array);
 
-	//设备组
-    void getGroupList();//show
-    void addGroup();//show a small widget
-    void removeGroup();//show a small widget
 
 	//数据处理
 
@@ -54,23 +67,26 @@ private:
 	//通信
     QTcpServer *pTcpServer;
     QTcpSocket *pTcpSocket;
-    MyThread *allMachine[200];
+    QVector<MyThread*> allMachine;
 
 	//设备组
     Group *curGroup;
-    int machineSize;
-    Group *allGroup[200];
-    int groupsize;
+    //int machineSize;
+    //Group *allGroup[200];
+    QVector<Group*> allGroup;
+    //int groupsize;
 
 	//数据处理
     Expression allExpression;
 
-    int cur;
     QWidget *wip;
     QGridLayout *wip_layout;
+    QLabel *wip_labelip;
+    QLabel *wip_labelport;
     QLineEdit *wip_ip;
-    QLineEdit *wip_port;
+    QSpinBox *wip_port;
     QPushButton *wip_button;
+    QStringListModel *m_model;
 
 };
 

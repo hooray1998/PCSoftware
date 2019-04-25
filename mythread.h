@@ -23,7 +23,7 @@ class MyThread : public QThread
 {
     Q_OBJECT
 public:
-    MyThread(int i, QTcpSocket *t);
+    MyThread(QTcpSocket *t);
     void WriteData(QByteArray);
     QString getIp();
     qint16 getPort();
@@ -36,6 +36,7 @@ public slots:
 signals:
     void ReadData(int, QByteArray);
     void RecvEnd();
+    void SendLog(QString);
 protected:
     void run();
 private:
