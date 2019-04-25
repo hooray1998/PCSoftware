@@ -23,22 +23,26 @@ class MyThread : public QThread
 {
     Q_OBJECT
 public:
-    Group *group;
     MyThread(QTcpSocket *t);
-    void WriteData(QByteArray);
+
+    void setName(QString n);
+    void setGroup(Group *g);
+
+    Group* getGroup();
     QString getIp();
     qint16 getPort();
     QString getMachineID();
-    void setName(QString n);
+
+    void WriteData(QByteArray);
     void analyzeHeader();
-    QString getName();
+
     bool die;
 public slots:
 
 signals:
     void ReadData(int, QByteArray);
     void RecvEnd();
-    void SendLog(Group*, QByteArray);
+    void SendLog(MyThread*, QByteArray);
     void SendLog(QString);
 protected:
     void run();
@@ -46,7 +50,7 @@ private:
     QTcpSocket *tcpSocket;
     int index;
     QByteArray machineId;
-    QString name;
+    Group *group;
 
 	QByteArray data;
     QByteArray mode;

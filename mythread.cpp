@@ -12,25 +12,18 @@ MyThread::MyThread(QTcpSocket *t)
 
 void MyThread::run()
 {
-    DBG<<"start run";
+    connect(tcpSocket, &QTcpSocket::readyRead, [=](){
+       data = tcpSocket->readAll();
+            analyzeHeader();
+    }
+    );
 
-    //-----------------------------------------------------------------------------------------------
-    //接收到了内容之后，直接在显示区域显示消息
-    /**/ connect(tcpSocket, &QTcpSocket::readyRead,
-    /**/        [=]()
-    /**/        {
-    /**/           data = tcpSocket->readAll();
-                    analyzeHeader();
-    /**/        }
-    /**/        );
     connect(tcpSocket, &QTcpSocket::disconnected, [=](){
         DBG<<"dis connect";
         die = true;
-        emit SendLog(group, QByteArray(machineId+"09"));
+        emit SendLog(this, QByteArray(machineId+"09"));
         tcpSocket->disconnectFromHost();
     });
-
-    //-----------------------------------------------------------------------------------------------
 
 }
 
@@ -43,7 +36,7 @@ void MyThread::analyzeHeader(){
         if(machineId=="-1")//init login
         {
             machineId = header.left(6);
-            emit SendLog(group, header);
+            emit SendLog(this, header);
         }
         else if(machineId==header.left(6))
         {
@@ -60,8 +53,14 @@ void MyThread::analyzeHeader(){
                 emit SendLog(QString("%1Haven't bound group, data will be loss.").arg(QString(machineId)));
             }
             else{
-                emit SendLog(group, header);
-                group->analyzeDataA(data.right(data.size()-8));
+                emit SendLog(this, header);
+
+                if(this->group->getMachineA_id()==machineId)
+                    group->analyzeDataA(data.right(data.size()-8));
+                else if(this->group->getMachineB_id()==machineId)
+                    group->analyzeDataB(data.right(data.size()-8));
+                else
+                    emit SendLog(QString("%1 error in this machineId. group haven't its id."));
             }
     }
     else if(mode=="03")
@@ -71,7 +70,7 @@ void MyThread::analyzeHeader(){
                 emit SendLog(QString("%1Haven't bound group, data will be loss.").arg(QString(machineId)));
             }
             else{
-                emit SendLog(group, header);
+                emit SendLog(this, header);
                 group->analyzeDataA(data.right(data.size()-8));
             }
     }
@@ -91,17 +90,6 @@ void MyThread::WriteData(QByteArray array)
     tcpSocket->write(array);
 }
 
-
-void MyThread::setName(QString n)
-{
-    name = n;
-}
-
-QString MyThread::getName()
-{
-    return name;
-}
-
 QString MyThread::getIp()
 {
     return tcpSocket->peerAddress().toString();
@@ -115,4 +103,12 @@ qint16 MyThread::getPort()
 
 QString MyThread::getMachineID(){
     return machineId;
+}
+
+void MyThread::setGroup(Group *g){
+    group = g;
+}
+
+Group* MyThread::getGroup(){
+    return group;
 }

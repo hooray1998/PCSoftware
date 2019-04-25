@@ -2,6 +2,8 @@
 #define ALLDATA_H
 
 #include "expression.h"
+#include <QVector>
+#include <QDebug>
 
 
 class AllData
@@ -10,17 +12,20 @@ public:
     AllData();
 
     void saveAlpha();
-    void analyAlpha();
+    void analyAlpha(QByteArray data);
     void saveBeta();
-    void analyBeta();
+    void analyBeta(QByteArray data);
 
-    void calData(Expression cur);
-    void returnData(int mode);
+    void calData();
+    void returnData(QVector<int> **a, QVector<int> **b, QVector<int> **r, int mode);
     void saveToExcel();
 
 
 private:
-    int curExpression;
+    Expression express;
+    QVector<int> dataA;
+    QVector<int> dataB;
+    QVector<int> result;
 };
 
 #endif // ALLDATA_H

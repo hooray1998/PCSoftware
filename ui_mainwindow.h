@@ -13,14 +13,17 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QFrame>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -38,16 +41,22 @@ public:
     QAction *actionGroupUnbound;
     QAction *actionSetIP;
     QWidget *centralWidget;
-    QWidget *verticalLayoutWidget;
+    QHBoxLayout *horizontalLayout_4;
     QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout_3;
+    QLabel *label;
+    QPushButton *pushButtonUntie;
     QListView *listView;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *label_2;
+    QPushButton *pushButtonTie;
     QListView *listView_2;
-    QWidget *verticalLayoutWidget_2;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
     QWidget *tab;
+    QHBoxLayout *horizontalLayout;
+    QTableWidget *tableWidget;
     QWidget *tab_2;
-    QFrame *line;
     QTextEdit *logTextEdit;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -78,36 +87,74 @@ public:
         actionSetIP->setObjectName(QStringLiteral("actionSetIP"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        verticalLayoutWidget = new QWidget(centralWidget);
-        verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 10, 281, 631));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        horizontalLayout_4 = new QHBoxLayout(centralWidget);
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        listView = new QListView(verticalLayoutWidget);
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+
+        horizontalLayout_3->addWidget(label);
+
+        pushButtonUntie = new QPushButton(centralWidget);
+        pushButtonUntie->setObjectName(QStringLiteral("pushButtonUntie"));
+
+        horizontalLayout_3->addWidget(pushButtonUntie);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
+
+        listView = new QListView(centralWidget);
         listView->setObjectName(QStringLiteral("listView"));
 
         verticalLayout->addWidget(listView);
 
-        listView_2 = new QListView(verticalLayoutWidget);
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        label_2 = new QLabel(centralWidget);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        horizontalLayout_2->addWidget(label_2);
+
+        pushButtonTie = new QPushButton(centralWidget);
+        pushButtonTie->setObjectName(QStringLiteral("pushButtonTie"));
+
+        horizontalLayout_2->addWidget(pushButtonTie);
+
+
+        verticalLayout->addLayout(horizontalLayout_2);
+
+        listView_2 = new QListView(centralWidget);
         listView_2->setObjectName(QStringLiteral("listView_2"));
 
         verticalLayout->addWidget(listView_2);
 
-        verticalLayoutWidget_2 = new QWidget(centralWidget);
-        verticalLayoutWidget_2->setObjectName(QStringLiteral("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(290, 0, 871, 671));
-        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
+
+        horizontalLayout_4->addLayout(verticalLayout);
+
+        verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
-        tabWidget = new QTabWidget(verticalLayoutWidget_2);
+        tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
+        horizontalLayout = new QHBoxLayout(tab);
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        tableWidget = new QTableWidget(tab);
+        tableWidget->setObjectName(QStringLiteral("tableWidget"));
+
+        horizontalLayout->addWidget(tableWidget);
+
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
@@ -115,18 +162,14 @@ public:
 
         verticalLayout_2->addWidget(tabWidget);
 
-        line = new QFrame(verticalLayoutWidget_2);
-        line->setObjectName(QStringLiteral("line"));
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
-
-        verticalLayout_2->addWidget(line);
-
-        logTextEdit = new QTextEdit(verticalLayoutWidget_2);
+        logTextEdit = new QTextEdit(centralWidget);
         logTextEdit->setObjectName(QStringLiteral("logTextEdit"));
-        logTextEdit->setMaximumSize(QSize(800, 200));
+        logTextEdit->setMaximumSize(QSize(99999, 200));
 
         verticalLayout_2->addWidget(logTextEdit);
+
+
+        horizontalLayout_4->addLayout(verticalLayout_2);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -178,8 +221,12 @@ public:
         actionGroupBound->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\347\273\221\345\256\232", Q_NULLPTR));
         actionGroupUnbound->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\350\247\243\347\273\221", Q_NULLPTR));
         actionSetIP->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256IP", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Tab 1", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Tab 2", Q_NULLPTR));
+        label->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\345\210\227\350\241\250\357\274\232 ", Q_NULLPTR));
+        pushButtonUntie->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\350\247\243\347\273\221", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", "\346\234\252\347\273\221\345\256\232\347\232\204\350\256\276\345\244\207\345\210\227\350\241\250\357\274\232", Q_NULLPTR));
+        pushButtonTie->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\347\273\221\345\256\232", Q_NULLPTR));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", " VS\350\260\203\350\257\225", Q_NULLPTR));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "\347\262\276\345\272\246\350\260\203\350\257\225", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266", Q_NULLPTR));
         menu->setTitle(QApplication::translate("MainWindow", "\350\260\203\350\257\225", Q_NULLPTR));
         menu_2->setTitle(QApplication::translate("MainWindow", "\350\256\276\345\244\207", Q_NULLPTR));

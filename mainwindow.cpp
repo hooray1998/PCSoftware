@@ -8,16 +8,23 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    DBG<<"init";
     ui->setupUi(this);
-    this->setWindowTitle("TcpServer");
+    this->setWindowTitle("上位机软件");
     setWindowState(Qt::WindowMaximized);
+    ui->tableWidget->setRowCount(20);
+    ui->tableWidget->setColumnCount(15);
+
+    red.setColor(QPalette::WindowText, Qt::red);
+    black.setColor(QPalette::WindowText, Qt::black);
 
 
     initIpWidget();
     initTieGroupWidget();
     initUntieGroupWidget();
-    DBG<<"end";
+    initTcpServer();
+
+    ui->listView->setUpdatesEnabled(true);
+    ui->listView_2->setUpdatesEnabled(true);
 
 
     m_model=new QStringListModel();
@@ -25,10 +32,46 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::showIpWidget);
     connect(ui->actionGroupBound,&QAction::triggered,this,&MainWindow::showTieGroupWidget);
+    connect(ui->pushButtonTie,&QPushButton::clicked,this,&MainWindow::showTieGroupWidget);
     connect(ui->actionGroupUnbound,&QAction::triggered,this,&MainWindow::showUntieGroupWidget);
+    connect(ui->pushButtonUntie,&QPushButton::clicked,this,&MainWindow::showUntieGroupWidget);
 
 
-    DBG<<"init";
+    connect(ui->listView,&QListView::clicked,this,&MainWindow::showTable);
+
+	//设备组
+
+	//数据处理
+
+    listenButtonClickSlot();//auto to connect
+    updateListView();
+}
+
+MainWindow::~MainWindow()
+{
+    delete wip;
+    delete wtie;
+    delete wuntie;
+
+    delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    wip->close();
+    wtie->close();
+    wuntie->close();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event){
+    //set layout
+    ui->logTextEdit->setMinimumWidth(this->width()*5/6);
+
+
+
+
+}
+void MainWindow::initTcpServer(){
     //通信
     pTcpServer = NULL;
     pTcpServer = new QTcpServer(this);
@@ -38,61 +81,32 @@ MainWindow::MainWindow(QWidget *parent) :
             {
                 //取出建立好的连接套接字
                 pTcpSocket = pTcpServer->nextPendingConnection();
-
-                //获得客户端的IP和端口
-                QString ip = pTcpSocket->peerAddress().toString();
-                qint16 port = pTcpSocket->peerPort();
-                QString msg = QString("[%1:%2]:The client connection is successful.").arg(ip).arg(port);
-
-                ui->logTextEdit->append(msg);
-
                 MyThread *temp = new MyThread(pTcpSocket);
                 allMachine.push_back(temp);
                 temp->start();
 
-                //-----------------------------------------------------------------------------------------------
-                connect(temp, SIGNAL(SendLog(Group*,QByteArray)), this, SLOT(showLog(Group*,QByteArray)));
+                connect(temp, SIGNAL(SendLog(MyThread*,QByteArray)), this, SLOT(showLog(MyThread*,QByteArray)));
                 connect(temp, SIGNAL(SendLog(QString)), this, SLOT(showLog(QString)));
             }
             );
-
-	//设备组
-
-	//数据处理
-
 }
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-//void MainWindow::on_boundPushButton_clicked()
-//{
-//}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    if(true)
-        event->accept();
-}
-
 void MainWindow::showIpWidget()
 {
     wip->move((this->width()-wip->width())/2,(this->height()-wip->height())/2);
     wip->show();
 }
 void MainWindow::showTieGroupWidget(){
-    wtie_A->clear();
-    wtie_A->addItems(singleStringList);
-    wtie_B->clear();
-    wtie_B->addItems(singleStringList);
+    wtie_msg->clear();
+    wtie_groupname->clear();
     wtie->move((this->width()-wtie->width())/2,(this->height()-wtie->height())/2);
+    wtie->hide();
     wtie->show();
 }
 void MainWindow::showUntieGroupWidget(){
-    //wip->move((this->width()-wip->width())/2,(this->height()-wip->height())/2);
-    //wip->show();
-
+    wuntie_msg->clear();
+    wuntie->move((this->width()-wuntie->width())/2,(this->height()-wuntie->height())/2);
+    wuntie->hide();
+    wuntie->show();
 }
 
 //设备组
@@ -118,7 +132,7 @@ void MainWindow::listenButtonClickSlot()
     }
     else
     {
-        msg = "绑定成功";
+        msg = "绑定成功 IP:"+myAddr+"   Port:"+myPort;
         wip_button->setEnabled(false);
         wip->close();
     }
@@ -128,30 +142,49 @@ void MainWindow::listenButtonClickSlot()
 
 void MainWindow::showLog(QString msg)
 {
+    QString time = QTime::currentTime().toString("hh:mm:ss");
+    msg = "["+time+"]"+msg;
     ui->logTextEdit->append(msg);
 }
 
 
-void MainWindow::showLog(Group *group, QByteArray header)
+void MainWindow::showLog(MyThread *machine, QByteArray header)
 {
     QString time = QTime::currentTime().toString("hh:mm:ss");
     QString groupName;
     QString cmd;
-    if(!group)
+    if(!machine->getGroup())
         groupName = "No Group";
     else
-        groupName = "Group:"+group->groupInfo.name;
+        groupName = "Group:"+machine->getGroup()->groupInfo.name;
 
     if(header.right(2)=="01"){
         cmd = "Login in";
-    //TODO: find group if it is login in now.
+        //TODO: find group if it is login in now.
+        for(int i=0;i<allGroup.size();i++)
+        {
+            if(allGroup.at(i)->getMachineA_id()==header.left(6))
+            {
+                allGroup.at(i)->setMachineA(machine);
+                groupName = "Group:"+allGroup.at(i)->groupInfo.name;
+                break;
+            }
+            else if(allGroup.at(i)->getMachineB_id()==header.left(6))
+            {
+                allGroup.at(i)->setMachineB(machine);
+                groupName = "Group:"+allGroup.at(i)->groupInfo.name;
+                break;
+            }
+        }
         updateListView();
     }
     else if(header.right(2)=="02"){
-        cmd = "Send a";
-    }
-    else if(header.right(2)=="03"){
-        cmd = "Send b&c";
+        if(machine->getGroup()->getMachineA_id()==machine->getMachineID())
+            cmd = "Send a";
+        else if(machine->getGroup()->getMachineB_id()==machine->getMachineID())
+            cmd = "Send b";
+        else
+            cmd = "Error: Its group haven't the id.";
     }
     else if(header.right(2)=="09"){
         cmd = "Login out";
@@ -174,14 +207,33 @@ void MainWindow::showLog(Group *group, QByteArray header)
 void MainWindow::updateListView(){
     groupStringList.clear();
     singleStringList.clear();
+    for(int i=0;i<allGroup.size();i++)
+        groupStringList.append(allGroup.at(i)->groupInfo.name);
+
     for(int i=0;i<allMachine.size();i++)
     {
-        if(!allMachine.at(i)->group)
-            singleStringList.append(QString("Machine:%1").arg(allMachine.at(i)->getMachineID()));
+        if(!allMachine.at(i)->getGroup())
+            singleStringList.append(QString("%1").arg(allMachine.at(i)->getMachineID()));
     }
 
+    m_model->setStringList(groupStringList);
+    ui->listView->setModel(m_model);
     m_model2->setStringList(singleStringList);
     ui->listView_2->setModel(m_model2);
+
+    //update Tie widget and untiewidget
+    wtie_A->clear();
+    wtie_A->addItems(singleStringList);
+    wtie_B->clear();
+    wtie_B->addItems(singleStringList);
+
+    wuntie_group->clear();
+    wuntie_group->addItems(groupStringList);
+
+    if(singleStringList.size()==0)
+        ui->listView_2->hide();
+    else
+        ui->listView_2->show();
 }
 
 void MainWindow::initIpWidget(){
@@ -210,11 +262,13 @@ void MainWindow::initIpWidget(){
 }
 void MainWindow::initTieGroupWidget(){
     wtie = new QWidget;
+    wtie->setWindowTitle("tie");
     wtie->resize(300,200);
 
     wtie_layout = new QGridLayout;
     wtie_labelA = new QLabel("MachineA:");
     wtie_labelB = new QLabel("MachineB:");
+    wtie_msg = new QLabel();
     wtie_labelgroupname = new QLabel("GroupName:");
     wtie_groupname = new QLineEdit();
     wtie_A = new QComboBox();
@@ -229,19 +283,154 @@ void MainWindow::initTieGroupWidget(){
     wtie_layout->addWidget(wtie_A,0,2,1,5);
     wtie_layout->addWidget(wtie_B,1,2,1,5);
     wtie_layout->addWidget(wtie_groupname,2,2,1,5);
-    wtie_layout->addWidget(wtie_button,3,0,1,2);
-    wtie_layout->addWidget(wtie_buttonclose,3,3,1,2);
+    wtie_layout->addWidget(wtie_msg,3,0,1,5);
+    wtie_layout->addWidget(wtie_button,4,0,1,2);
+    wtie_layout->addWidget(wtie_buttonclose,4,3,1,2);
     wtie->setLayout(wtie_layout);
     connect(wtie_button,&QPushButton::clicked,this,&MainWindow::tieTwoMachine);
+    connect(wtie_buttonclose,&QPushButton::clicked,wtie,&QWidget::close);
 
 }
 void MainWindow::initUntieGroupWidget(){
+    wuntie = new QWidget;
+    wtie->setWindowTitle("untie");
+    wtie->resize(300,200);
 
+    wuntie_layout = new QGridLayout;
+    wuntie_label = new QLabel("Group:");
+    wuntie_msg = new QLabel("contains machineA and machineB");
+    wuntie_group = new QComboBox;
+    wuntie_button = new QPushButton("Untie");
+    wuntie_buttonclose = new QPushButton("close");
+
+    wuntie_layout->addWidget(wuntie_label,0,0,1,2);
+    wuntie_layout->addWidget(wuntie_group,0,2,1,3);
+    wuntie_layout->addWidget(wuntie_msg,1,0,1,5);
+    wuntie_layout->addWidget(wuntie_button,3,0,1,2);
+    wuntie_layout->addWidget(wuntie_buttonclose,3,3,1,2);
+    wuntie->setLayout(wuntie_layout);
+    connect(wuntie_button,&QPushButton::clicked,this,&MainWindow::untieTwoMachine);
+    connect(wuntie_buttonclose,&QPushButton::clicked,wuntie,&QWidget::close);
 }
 
 void MainWindow::tieTwoMachine(){
+    wtie_msg->setPalette(black);
+
+    //judge group name
+    if(wtie_groupname->text().size()==0)
+    {
+        wtie_msg->setPalette(red);
+        wtie_msg->setText("error: The group Name is empty.");
+        return ;
+    }
+    else{
+        for(int i=0;i<allGroup.size();i++)
+            if(allGroup.at(i)->groupInfo.name==wtie_groupname->text())
+            {
+                wtie_msg->setPalette(red);
+                wtie_msg->setText("error: The group Name is exist.");
+                return ;
+            }
+    }
+    if(wtie_A->currentText()==wtie_B->currentText())
+    {
+        wtie_msg->setPalette(red);
+        wtie_msg->setText("error: A equal B.");
+        return ;
+    }
+    else{
+        MyThread *a = NULL, *b = NULL;
+        for(int i=0;i<allMachine.size();i++)
+            if(allMachine.at(i)->getMachineID() == wtie_A->currentText())
+            {
+                if(allMachine.at(i)->getGroup()==NULL)
+                    a = allMachine.at(i);
+                else{
+                    wtie_msg->setPalette(red);
+                    wtie_msg->setText("error: A already tie one group.");
+                    return ;
+                }
+            }
+        for(int i=0;i<allMachine.size();i++)
+            if(allMachine.at(i)->getMachineID() == wtie_B->currentText())
+            {
+                if(allMachine.at(i)->getGroup()==NULL)
+                    b = allMachine.at(i);
+                else{
+                    wtie_msg->setPalette(red);
+                    wtie_msg->setText("error: B already tie one group.");
+                    return ;
+                }
+            }
+
+        if(!a||!b)
+        {
+            wtie_msg->setPalette(red);
+            wtie_msg->setText("error: A or B isn't exist.");
+            return ;
+        }
+        Group *g = new Group();
+        g->tie(wtie_groupname->text(),a,b);
+        allGroup.push_back(g);
+        wtie_msg->setText("tie is OK.");
+    }
+
+    updateListView();
 
 }
 void MainWindow::untieTwoMachine(){
+    wuntie->setPalette(black);
+    Group *g = NULL;
+    for(int i=0;i<allGroup.size();i++)
+        if(allGroup.at(i)->groupInfo.name==wuntie_group->currentText())
+        {
+            g = allGroup.at(i);
+            allGroup.remove(i);
+        }
+    if(!g)
+    {
+        wuntie->setPalette(red);
+        wuntie_msg->setText("error: This group isn't exist");
+        return ;
+    }
+
+    g->untie();
+    wuntie_msg->setText("untie is OK.");
+    updateListView();
+}
+
+void MainWindow::showTable(QModelIndex index){
+    DBG<<"enter show table";
+
+
+    QString groupName = m_model->data(index).toByteArray();
+    if(groupName.size())
+    for(int i=0;i<allGroup.size();i++)
+    {
+        if(allGroup.at(i)->groupInfo.name==groupName)
+        {
+            allGroup.at(i)->allData.returnData(&dataA, &dataB, &result, 0);
+            DBG<<dataA->size()<<dataB->size()<<result->size();
+            //TODO: show all data
+            ui->tableWidget->clear();
+            for(int i=0;i<dataA->size();i++)
+            {
+                ui->tableWidget->setItem(i,0,new QTableWidgetItem(QString::number(dataA->at(i))));
+            }
+            for(int i=0;i<dataB->size();i++)
+            {
+                ui->tableWidget->setItem(i,1,new QTableWidgetItem(QString::number(dataB->at(i))));
+            }
+            for(int i=0;i<result->size();i++)
+            {
+                ui->tableWidget->setItem(i,2,new QTableWidgetItem(QString::number(result->at(i))));
+            }
+
+
+            return;
+
+
+        }
+    }
 
 }

@@ -11,8 +11,10 @@ public:
     int getOnlineTime();
 
     unsigned short status;
-    QString id;
+
     QString name;
+    QString machineA_id;
+    QString machineB_id;
     QDate loginTime;
 };
 

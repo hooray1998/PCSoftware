@@ -2,6 +2,7 @@
 #define EXPRESSION_H
 
 #include <QString>
+#include <QVector>
 
 class Expression
 {
@@ -13,8 +14,7 @@ public:
     void chooseExpression();
 
 private:
-    QString allExpression[20];
-    int expressionSize;
+    QVector<QString> allExpression;
 };
 
 #endif // EXPRESSION_H

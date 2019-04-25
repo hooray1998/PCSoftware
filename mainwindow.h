@@ -4,6 +4,7 @@
 #include <QStringListModel>
 #include <QStringList>
 #include <QTime>
+#include <QPalette>
 
 
 #include <QPushButton>
@@ -37,10 +38,12 @@ class MainWindow : public QMainWindow
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void resizeEvent(QResizeEvent *event);
 public slots:
-    void showLog(Group* group, QByteArray header);
+    void showLog(MyThread* machine, QByteArray header);
     void showLog(QString msg);
 
+    void initTcpServer();
     void initIpWidget();
     void showIpWidget();
     void listenButtonClickSlot();
@@ -59,6 +62,8 @@ public slots:
     void addGroup();//show a small widget
     void removeGroup();//show a small widget
 
+
+    void showTable(QModelIndex index);
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -93,18 +98,27 @@ private:
     QPushButton *wip_button;
 
 
-    //Tie group and untie
+    //Tie group
     QWidget *wtie;
     QGridLayout *wtie_layout;
     QLabel *wtie_labelA;
     QLabel *wtie_labelB;
     QLabel *wtie_labelgroupname;
+    QLabel *wtie_msg;
     QComboBox *wtie_A;
     QComboBox *wtie_B;
     QLineEdit *wtie_groupname;
     QPushButton *wtie_button;
     QPushButton *wtie_buttonclose;
 
+    //Untie group
+    QWidget *wuntie;
+    QGridLayout *wuntie_layout;
+    QLabel *wuntie_label;
+    QLabel *wuntie_msg;
+    QComboBox *wuntie_group;
+    QPushButton *wuntie_button;
+    QPushButton *wuntie_buttonclose;
 
 
     QStringListModel *m_model;
@@ -114,6 +128,13 @@ private:
 
 
 
+    QPalette red;
+    QPalette black;
+
+
+    QVector<int> *dataA;
+    QVector<int> *dataB;
+    QVector<int> *result;
 };
 
 #endif // MAINWINDOW_H
