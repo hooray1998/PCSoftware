@@ -56,8 +56,8 @@ SOURCES       = main.cpp \
 		alldata.cpp \
 		groupinfo.cpp \
 		group.cpp \
-		mythread.cpp qrc_main.cpp \
-		qrc_pp.cpp \
+		mythread.cpp qrc_qss.cpp \
+		qrc_main.cpp \
 		moc_mainwindow.cpp \
 		moc_mythread.cpp
 OBJECTS       = main.o \
@@ -67,8 +67,8 @@ OBJECTS       = main.o \
 		groupinfo.o \
 		group.o \
 		mythread.o \
+		qrc_qss.o \
 		qrc_main.o \
-		qrc_pp.o \
 		moc_mainwindow.o \
 		moc_mythread.o
 DIST          = ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/spec_pre.prf \
@@ -433,8 +433,8 @@ Makefile: ComeOnBoy.pro ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/yacc.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/lex.prf \
 		ComeOnBoy.pro \
-		main.qrc \
-		pp.qrc \
+		other/qss.qrc \
+		other/main.qrc \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Widgets.prl \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Gui.prl \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Network.prl \
@@ -610,8 +610,8 @@ Makefile: ComeOnBoy.pro ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/yacc.prf:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/lex.prf:
 ComeOnBoy.pro:
-main.qrc:
-pp.qrc:
+other/qss.qrc:
+other/main.qrc:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Widgets.prl:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Gui.prl:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Network.prl:
@@ -630,7 +630,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents main.qrc pp.qrc $(DISTDIR)/
+	$(COPY_FILE) --parents other/qss.qrc other/main.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.h expression.h alldata.h groupinfo.h group.h mythread.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp mainwindow.cpp expression.cpp alldata.cpp groupinfo.cpp group.cpp mythread.cpp $(DISTDIR)/
@@ -658,22 +658,310 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all: qrc_main.cpp qrc_pp.cpp
+compiler_rcc_make_all: qrc_qss.cpp qrc_main.cpp
 compiler_rcc_clean:
-	-$(DEL_FILE) qrc_main.cpp qrc_pp.cpp
-qrc_main.cpp: main.qrc \
+	-$(DEL_FILE) qrc_qss.cpp qrc_main.cpp
+qrc_qss.cpp: other/qss.qrc \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc \
-		other/image/4.jpg \
-		other/image/1.jpg \
-		other/image/5.jpg \
-		other/qss/pswrite.css \
-		other/qss/psblack.css
-	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc -name main main.qrc -o qrc_main.cpp
+		other/qss/blue.css \
+		other/qss/gray.css \
+		other/qss/black.css \
+		other/qss/bf.css \
+		other/qss/darkblue.css \
+		other/qss/test.css \
+		other/qss/flatblack.css \
+		other/qss/darkblack.css \
+		other/qss/lightblue.css \
+		other/qss/lightgray.css \
+		other/qss/darkgray.css \
+		other/qss/flatwhite.css \
+		other/qss/psblack.css \
+		other/qss/silvery.css \
+		other/qss/lightblack.css \
+		other/qss/bf/checkbox_checked_disable.png \
+		other/qss/bf/checkbox_checked.png \
+		other/qss/bf/add_left.png \
+		other/qss/bf/add_right.png \
+		other/qss/bf/checkbox_unchecked_disable.png \
+		other/qss/bf/radiobutton_checked_disable.png \
+		other/qss/bf/checkbox_unchecked.png \
+		other/qss/bf/add_top.png \
+		other/qss/bf/calendar_prevmonth.png \
+		other/qss/bf/checkbox_parcial.png \
+		other/qss/bf/radiobutton_unchecked_disable.png \
+		other/qss/bf/branch_open.png \
+		other/qss/bf/calendar_nextmonth.png \
+		other/qss/bf/add_bottom.png \
+		other/qss/bf/radiobutton_checked.png \
+		other/qss/bf/branch_close.png \
+		other/qss/bf/checkbox_parcial_disable.png \
+		other/qss/bf/radiobutton_unchecked.png \
+		other/qss/lightgray/checkbox_checked_disable.png \
+		other/qss/lightgray/checkbox_checked.png \
+		other/qss/lightgray/add_left.png \
+		other/qss/lightgray/add_right.png \
+		other/qss/lightgray/checkbox_unchecked_disable.png \
+		other/qss/lightgray/radiobutton_checked_disable.png \
+		other/qss/lightgray/checkbox_unchecked.png \
+		other/qss/lightgray/add_top.png \
+		other/qss/lightgray/calendar_prevmonth.png \
+		other/qss/lightgray/checkbox_parcial.png \
+		other/qss/lightgray/radiobutton_unchecked_disable.png \
+		other/qss/lightgray/branch_open.png \
+		other/qss/lightgray/calendar_nextmonth.png \
+		other/qss/lightgray/add_bottom.png \
+		other/qss/lightgray/radiobutton_checked.png \
+		other/qss/lightgray/branch_close.png \
+		other/qss/lightgray/checkbox_parcial_disable.png \
+		other/qss/lightgray/radiobutton_unchecked.png \
+		other/qss/blue/checkbox_checked_disable.png \
+		other/qss/blue/checkbox_checked.png \
+		other/qss/blue/add_left.png \
+		other/qss/blue/add_right.png \
+		other/qss/blue/checkbox_unchecked_disable.png \
+		other/qss/blue/radiobutton_checked_disable.png \
+		other/qss/blue/checkbox_unchecked.png \
+		other/qss/blue/add_top.png \
+		other/qss/blue/calendar_prevmonth.png \
+		other/qss/blue/checkbox_parcial.png \
+		other/qss/blue/radiobutton_unchecked_disable.png \
+		other/qss/blue/branch_open.png \
+		other/qss/blue/calendar_nextmonth.png \
+		other/qss/blue/add_bottom.png \
+		other/qss/blue/radiobutton_checked.png \
+		other/qss/blue/branch_close.png \
+		other/qss/blue/checkbox_parcial_disable.png \
+		other/qss/blue/radiobutton_unchecked.png \
+		other/qss/darkblue/checkbox_checked_disable.png \
+		other/qss/darkblue/checkbox_checked.png \
+		other/qss/darkblue/add_left.png \
+		other/qss/darkblue/add_right.png \
+		other/qss/darkblue/checkbox_unchecked_disable.png \
+		other/qss/darkblue/radiobutton_checked_disable.png \
+		other/qss/darkblue/checkbox_unchecked.png \
+		other/qss/darkblue/add_top.png \
+		other/qss/darkblue/calendar_prevmonth.png \
+		other/qss/darkblue/checkbox_parcial.png \
+		other/qss/darkblue/radiobutton_unchecked_disable.png \
+		other/qss/darkblue/branch_open.png \
+		other/qss/darkblue/calendar_nextmonth.png \
+		other/qss/darkblue/add_bottom.png \
+		other/qss/darkblue/radiobutton_checked.png \
+		other/qss/darkblue/branch_close.png \
+		other/qss/darkblue/checkbox_parcial_disable.png \
+		other/qss/darkblue/radiobutton_unchecked.png \
+		other/qss/test/checkbox_checked_disable.png \
+		other/qss/test/checkbox_checked.png \
+		other/qss/test/add_left.png \
+		other/qss/test/add_right.png \
+		other/qss/test/checkbox_unchecked_disable.png \
+		other/qss/test/radiobutton_checked_disable.png \
+		other/qss/test/checkbox_unchecked.png \
+		other/qss/test/add_top.png \
+		other/qss/test/calendar_prevmonth.png \
+		other/qss/test/checkbox_parcial.png \
+		other/qss/test/radiobutton_unchecked_disable.png \
+		other/qss/test/branch_open.png \
+		other/qss/test/calendar_nextmonth.png \
+		other/qss/test/add_bottom.png \
+		other/qss/test/radiobutton_checked.png \
+		other/qss/test/branch_close.png \
+		other/qss/test/checkbox_parcial_disable.png \
+		other/qss/test/radiobutton_unchecked.png \
+		other/qss/flatblack/checkbox_checked_disable.png \
+		other/qss/flatblack/checkbox_checked.png \
+		other/qss/flatblack/add_left.png \
+		other/qss/flatblack/add_right.png \
+		other/qss/flatblack/checkbox_unchecked_disable.png \
+		other/qss/flatblack/radiobutton_checked_disable.png \
+		other/qss/flatblack/checkbox_unchecked.png \
+		other/qss/flatblack/add_top.png \
+		other/qss/flatblack/calendar_prevmonth.png \
+		other/qss/flatblack/checkbox_parcial.png \
+		other/qss/flatblack/radiobutton_unchecked_disable.png \
+		other/qss/flatblack/branch_open.png \
+		other/qss/flatblack/calendar_nextmonth.png \
+		other/qss/flatblack/add_bottom.png \
+		other/qss/flatblack/radiobutton_checked.png \
+		other/qss/flatblack/branch_close.png \
+		other/qss/flatblack/checkbox_parcial_disable.png \
+		other/qss/flatblack/radiobutton_unchecked.png \
+		other/qss/silvery/checkbox_checked_disable.png \
+		other/qss/silvery/checkbox_checked.png \
+		other/qss/silvery/add_left.png \
+		other/qss/silvery/add_right.png \
+		other/qss/silvery/checkbox_unchecked_disable.png \
+		other/qss/silvery/radiobutton_checked_disable.png \
+		other/qss/silvery/checkbox_unchecked.png \
+		other/qss/silvery/add_top.png \
+		other/qss/silvery/calendar_prevmonth.png \
+		other/qss/silvery/checkbox_parcial.png \
+		other/qss/silvery/radiobutton_unchecked_disable.png \
+		other/qss/silvery/branch_open.png \
+		other/qss/silvery/calendar_nextmonth.png \
+		other/qss/silvery/add_bottom.png \
+		other/qss/silvery/radiobutton_checked.png \
+		other/qss/silvery/branch_close.png \
+		other/qss/silvery/checkbox_parcial_disable.png \
+		other/qss/silvery/radiobutton_unchecked.png \
+		other/qss/darkblack/checkbox_checked_disable.png \
+		other/qss/darkblack/checkbox_checked.png \
+		other/qss/darkblack/add_left.png \
+		other/qss/darkblack/add_right.png \
+		other/qss/darkblack/checkbox_unchecked_disable.png \
+		other/qss/darkblack/radiobutton_checked_disable.png \
+		other/qss/darkblack/checkbox_unchecked.png \
+		other/qss/darkblack/add_top.png \
+		other/qss/darkblack/calendar_prevmonth.png \
+		other/qss/darkblack/checkbox_parcial.png \
+		other/qss/darkblack/radiobutton_unchecked_disable.png \
+		other/qss/darkblack/branch_open.png \
+		other/qss/darkblack/calendar_nextmonth.png \
+		other/qss/darkblack/add_bottom.png \
+		other/qss/darkblack/radiobutton_checked.png \
+		other/qss/darkblack/branch_close.png \
+		other/qss/darkblack/checkbox_parcial_disable.png \
+		other/qss/darkblack/radiobutton_unchecked.png \
+		other/qss/black/checkbox_checked_disable.png \
+		other/qss/black/checkbox_checked.png \
+		other/qss/black/add_left.png \
+		other/qss/black/add_right.png \
+		other/qss/black/checkbox_unchecked_disable.png \
+		other/qss/black/radiobutton_checked_disable.png \
+		other/qss/black/checkbox_unchecked.png \
+		other/qss/black/add_top.png \
+		other/qss/black/calendar_prevmonth.png \
+		other/qss/black/checkbox_parcial.png \
+		other/qss/black/radiobutton_unchecked_disable.png \
+		other/qss/black/branch_open.png \
+		other/qss/black/calendar_nextmonth.png \
+		other/qss/black/add_bottom.png \
+		other/qss/black/radiobutton_checked.png \
+		other/qss/black/branch_close.png \
+		other/qss/black/checkbox_parcial_disable.png \
+		other/qss/black/radiobutton_unchecked.png \
+		other/qss/psblack/checkbox_checked_disable.png \
+		other/qss/psblack/checkbox_checked.png \
+		other/qss/psblack/add_left.png \
+		other/qss/psblack/add_right.png \
+		other/qss/psblack/checkbox_unchecked_disable.png \
+		other/qss/psblack/radiobutton_checked_disable.png \
+		other/qss/psblack/checkbox_unchecked.png \
+		other/qss/psblack/add_top.png \
+		other/qss/psblack/calendar_prevmonth.png \
+		other/qss/psblack/checkbox_parcial.png \
+		other/qss/psblack/radiobutton_unchecked_disable.png \
+		other/qss/psblack/branch_open.png \
+		other/qss/psblack/calendar_nextmonth.png \
+		other/qss/psblack/add_bottom.png \
+		other/qss/psblack/radiobutton_checked.png \
+		other/qss/psblack/branch_close.png \
+		other/qss/psblack/checkbox_parcial_disable.png \
+		other/qss/psblack/radiobutton_unchecked.png \
+		other/qss/lightblue/checkbox_checked_disable.png \
+		other/qss/lightblue/checkbox_checked.png \
+		other/qss/lightblue/add_left.png \
+		other/qss/lightblue/add_right.png \
+		other/qss/lightblue/checkbox_unchecked_disable.png \
+		other/qss/lightblue/radiobutton_checked_disable.png \
+		other/qss/lightblue/checkbox_unchecked.png \
+		other/qss/lightblue/add_top.png \
+		other/qss/lightblue/calendar_prevmonth.png \
+		other/qss/lightblue/checkbox_parcial.png \
+		other/qss/lightblue/radiobutton_unchecked_disable.png \
+		other/qss/lightblue/branch_open.png \
+		other/qss/lightblue/calendar_nextmonth.png \
+		other/qss/lightblue/add_bottom.png \
+		other/qss/lightblue/radiobutton_checked.png \
+		other/qss/lightblue/branch_close.png \
+		other/qss/lightblue/checkbox_parcial_disable.png \
+		other/qss/lightblue/radiobutton_unchecked.png \
+		other/qss/flatwhite/checkbox_checked_disable.png \
+		other/qss/flatwhite/checkbox_checked.png \
+		other/qss/flatwhite/add_left.png \
+		other/qss/flatwhite/add_right.png \
+		other/qss/flatwhite/checkbox_unchecked_disable.png \
+		other/qss/flatwhite/radiobutton_checked_disable.png \
+		other/qss/flatwhite/checkbox_unchecked.png \
+		other/qss/flatwhite/add_top.png \
+		other/qss/flatwhite/calendar_prevmonth.png \
+		other/qss/flatwhite/checkbox_parcial.png \
+		other/qss/flatwhite/radiobutton_unchecked_disable.png \
+		other/qss/flatwhite/branch_open.png \
+		other/qss/flatwhite/calendar_nextmonth.png \
+		other/qss/flatwhite/add_bottom.png \
+		other/qss/flatwhite/radiobutton_checked.png \
+		other/qss/flatwhite/branch_close.png \
+		other/qss/flatwhite/checkbox_parcial_disable.png \
+		other/qss/flatwhite/radiobutton_unchecked.png \
+		other/qss/gray/checkbox_checked_disable.png \
+		other/qss/gray/checkbox_checked.png \
+		other/qss/gray/add_left.png \
+		other/qss/gray/add_right.png \
+		other/qss/gray/checkbox_unchecked_disable.png \
+		other/qss/gray/radiobutton_checked_disable.png \
+		other/qss/gray/checkbox_unchecked.png \
+		other/qss/gray/add_top.png \
+		other/qss/gray/calendar_prevmonth.png \
+		other/qss/gray/checkbox_parcial.png \
+		other/qss/gray/radiobutton_unchecked_disable.png \
+		other/qss/gray/branch_open.png \
+		other/qss/gray/calendar_nextmonth.png \
+		other/qss/gray/add_bottom.png \
+		other/qss/gray/radiobutton_checked.png \
+		other/qss/gray/branch_close.png \
+		other/qss/gray/checkbox_parcial_disable.png \
+		other/qss/gray/radiobutton_unchecked.png \
+		other/qss/darkgray/checkbox_checked_disable.png \
+		other/qss/darkgray/checkbox_checked.png \
+		other/qss/darkgray/add_left.png \
+		other/qss/darkgray/add_right.png \
+		other/qss/darkgray/checkbox_unchecked_disable.png \
+		other/qss/darkgray/radiobutton_checked_disable.png \
+		other/qss/darkgray/checkbox_unchecked.png \
+		other/qss/darkgray/add_top.png \
+		other/qss/darkgray/calendar_prevmonth.png \
+		other/qss/darkgray/checkbox_parcial.png \
+		other/qss/darkgray/radiobutton_unchecked_disable.png \
+		other/qss/darkgray/branch_open.png \
+		other/qss/darkgray/calendar_nextmonth.png \
+		other/qss/darkgray/add_bottom.png \
+		other/qss/darkgray/radiobutton_checked.png \
+		other/qss/darkgray/branch_close.png \
+		other/qss/darkgray/checkbox_parcial_disable.png \
+		other/qss/darkgray/radiobutton_unchecked.png \
+		other/qss/lightblack/checkbox_checked_disable.png \
+		other/qss/lightblack/checkbox_checked.png \
+		other/qss/lightblack/add_left.png \
+		other/qss/lightblack/add_right.png \
+		other/qss/lightblack/checkbox_unchecked_disable.png \
+		other/qss/lightblack/radiobutton_checked_disable.png \
+		other/qss/lightblack/checkbox_unchecked.png \
+		other/qss/lightblack/add_top.png \
+		other/qss/lightblack/calendar_prevmonth.png \
+		other/qss/lightblack/checkbox_parcial.png \
+		other/qss/lightblack/radiobutton_unchecked_disable.png \
+		other/qss/lightblack/branch_open.png \
+		other/qss/lightblack/calendar_nextmonth.png \
+		other/qss/lightblack/add_bottom.png \
+		other/qss/lightblack/radiobutton_checked.png \
+		other/qss/lightblack/branch_close.png \
+		other/qss/lightblack/checkbox_parcial_disable.png \
+		other/qss/lightblack/radiobutton_unchecked.png
+	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc -name qss other/qss.qrc -o qrc_qss.cpp
 
-qrc_pp.cpp: pp.qrc \
+qrc_main.cpp: other/main.qrc \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc \
-		cpn.ico
-	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc -name pp pp.qrc -o qrc_pp.cpp
+		other/main.ico \
+		other/image/msg_question.png \
+		other/image/widgets.qm \
+		other/image/btn_close.png \
+		other/image/qt_zh_CN.qm \
+		other/image/btn_ok.png \
+		other/image/msg_error.png \
+		other/image/fontawesome-webfont.ttf \
+		other/image/msg_info.png
+	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc -name main other/main.qrc -o qrc_main.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
@@ -774,6 +1062,7 @@ moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStrin
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1107,6 +1396,7 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1294,6 +1584,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1831,11 +2122,11 @@ mythread.o: mythread.cpp mythread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mythread.o mythread.cpp
 
+qrc_qss.o: qrc_qss.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qss.o qrc_qss.cpp
+
 qrc_main.o: qrc_main.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_main.o qrc_main.cpp
-
-qrc_pp.o: qrc_pp.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_pp.o qrc_pp.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

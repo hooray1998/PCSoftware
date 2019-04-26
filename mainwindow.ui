@@ -146,7 +146,6 @@
      <string>设置</string>
     </property>
     <addaction name="actionSetIP"/>
-    <addaction name="actionchange_theme"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu"/>

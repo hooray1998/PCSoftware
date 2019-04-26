@@ -613,7 +613,7 @@ padding:0px;
 margin:0px;
 }
 
-QTableView QLineEdit,QTableView QComboBox,QTableView QSpinBox,QMessageBox,QTableView QDoubleSpinBox,QTableView QDateEdit,QTableView QTimeEdit,QTableView QDateTimeEdit{
+QTableView QLineEdit,QTableView QComboBox,QTableView QSpinBox,QTableView QDoubleSpinBox,QTableView QDateEdit,QTableView QTimeEdit,QTableView QDateTimeEdit{
 border-width:0px;
 border-radius:0px;
 }
