@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setRowCount(20);
     ui->tableWidget->setColumnCount(15);
 
+    curTheme = 0;
     red.setColor(QPalette::WindowText, Qt::red);
     black.setColor(QPalette::WindowText, Qt::black);
 
@@ -36,6 +37,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionGroupUnbound,&QAction::triggered,this,&MainWindow::showUntieGroupWidget);
     connect(ui->pushButtonUntie,&QPushButton::clicked,this,&MainWindow::showUntieGroupWidget);
 
+    connect(ui->actionchange_theme,&QAction::triggered,[=](){
+        initStyle();
+    });
 
     connect(ui->listView,&QListView::clicked,this,&MainWindow::showTable);
 
@@ -43,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	//数据处理
 
+    initStyle();
     listenButtonClickSlot();//auto to connect
     updateListView();
 }
@@ -66,10 +71,33 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::resizeEvent(QResizeEvent *event){
     //set layout
     ui->logTextEdit->setMinimumWidth(this->width()*5/6);
+    ui->listView_2->setMaximumHeight(this->height()/3);
 
 
 
 
+}
+
+void MainWindow::initStyle(){
+    if(curTheme==0)
+    {
+        qApp->setStyleSheet("");
+
+    }
+    else
+    {
+        /////////////////////////////////////////////////////////
+        //加载样式表
+        QFile file(":/other/qss/psblack.css");
+        if (file.open(QFile::ReadOnly)) {
+            QString qss = QLatin1String(file.readAll());
+            QString paletteColor = qss.mid(20, 7);
+            qApp->setPalette(QPalette(QColor(paletteColor)));
+            qApp->setStyleSheet(qss);
+            file.close();
+        }
+    }
+    curTheme = (curTheme+1)%2;
 }
 void MainWindow::initTcpServer(){
     //通信
@@ -373,6 +401,7 @@ void MainWindow::tieTwoMachine(){
         g->tie(wtie_groupname->text(),a,b);
         allGroup.push_back(g);
         wtie_msg->setText("tie is OK.");
+        wtie_groupname->clear();
     }
 
     updateListView();

@@ -39,11 +39,15 @@ class MainWindow : public QMainWindow
 protected:
     void closeEvent(QCloseEvent *event);
     void resizeEvent(QResizeEvent *event);
+
 public slots:
     void showLog(MyThread* machine, QByteArray header);
     void showLog(QString msg);
 
+    void initStyle();
     void initTcpServer();
+
+
     void initIpWidget();
     void showIpWidget();
     void listenButtonClickSlot();
@@ -135,6 +139,8 @@ private:
     QVector<int> *dataA;
     QVector<int> *dataB;
     QVector<int> *result;
+
+    int curTheme;
 };
 
 #endif // MAINWINDOW_H

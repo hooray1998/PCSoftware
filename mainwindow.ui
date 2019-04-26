@@ -36,7 +36,14 @@
        </layout>
       </item>
       <item>
-       <widget class="QListView" name="listView"/>
+       <widget class="QListView" name="listView">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="dragEnabled">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -139,6 +146,7 @@
      <string>设置</string>
     </property>
     <addaction name="actionSetIP"/>
+    <addaction name="actionchange_theme"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu"/>
@@ -180,6 +188,11 @@
   <action name="actionSetIP">
    <property name="text">
     <string>设置IP</string>
+   </property>
+  </action>
+  <action name="actionchange_theme">
+   <property name="text">
+    <string>change theme</string>
    </property>
   </action>
  </widget>

@@ -43,3 +43,9 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+RESOURCES += \
+    main.qrc \
+    pp.qrc
+
+RC_FILE = myapp.rc

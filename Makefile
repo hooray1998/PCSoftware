@@ -56,7 +56,9 @@ SOURCES       = main.cpp \
 		alldata.cpp \
 		groupinfo.cpp \
 		group.cpp \
-		mythread.cpp moc_mainwindow.cpp \
+		mythread.cpp qrc_main.cpp \
+		qrc_pp.cpp \
+		moc_mainwindow.cpp \
 		moc_mythread.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
@@ -65,6 +67,8 @@ OBJECTS       = main.o \
 		groupinfo.o \
 		group.o \
 		mythread.o \
+		qrc_main.o \
+		qrc_pp.o \
 		moc_mainwindow.o \
 		moc_mythread.o
 DIST          = ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/spec_pre.prf \
@@ -429,6 +433,8 @@ Makefile: ComeOnBoy.pro ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/yacc.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/lex.prf \
 		ComeOnBoy.pro \
+		main.qrc \
+		pp.qrc \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Widgets.prl \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Gui.prl \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Network.prl \
@@ -604,6 +610,8 @@ Makefile: ComeOnBoy.pro ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/yacc.prf:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/lex.prf:
 ComeOnBoy.pro:
+main.qrc:
+pp.qrc:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Widgets.prl:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Gui.prl:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/lib/libQt5Network.prl:
@@ -622,6 +630,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents main.qrc pp.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.h expression.h alldata.h groupinfo.h group.h mythread.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp mainwindow.cpp expression.cpp alldata.cpp groupinfo.cpp group.cpp mythread.cpp $(DISTDIR)/
@@ -649,8 +658,23 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_main.cpp qrc_pp.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_main.cpp qrc_pp.cpp
+qrc_main.cpp: main.qrc \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc \
+		other/image/4.jpg \
+		other/image/1.jpg \
+		other/image/5.jpg \
+		other/qss/pswrite.css \
+		other/qss/psblack.css
+	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc -name main main.qrc -o qrc_main.cpp
+
+qrc_pp.cpp: pp.qrc \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc \
+		cpn.ico
+	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/rcc -name pp pp.qrc -o qrc_pp.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -726,37 +750,38 @@ moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStrin
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qwidget.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontmetrics.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontinfo.h \
@@ -835,6 +860,7 @@ moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStrin
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qudpsocket.h \
 		alldata.h \
 		expression.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
 		mainwindow.h \
 		moc_predefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc
@@ -964,6 +990,8 @@ moc_mythread.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QTcpS
 		mythread.h \
 		alldata.h \
 		expression.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
 		mythread.h \
 		moc_predefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc
@@ -984,7 +1012,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -1055,37 +1083,38 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qwidget.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontmetrics.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontinfo.h \
@@ -1164,6 +1193,7 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qudpsocket.h \
 		alldata.h \
 		expression.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QApplication \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qapplication.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1240,37 +1270,38 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qwidget.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontmetrics.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontinfo.h \
@@ -1349,6 +1380,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qudpsocket.h \
 		alldata.h \
 		expression.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
 		ui_mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QAction \
@@ -1363,7 +1395,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qinputmethod.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QButtonGroup \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qbuttongroup.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QFrame \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QHBoxLayout \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QHeaderView \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qheaderview.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractitemview.h \
@@ -1378,6 +1410,9 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QStatusBar \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qstatusbar.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTabWidget \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTableWidget \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtablewidget.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtableview.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTextEdit \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtextedit.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextdocument.h \
@@ -1413,7 +1448,19 @@ expression.o: expression.cpp expression.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o expression.o expression.cpp
 
 alldata.o: alldata.cpp alldata.h \
@@ -1446,7 +1493,41 @@ alldata.o: alldata.cpp alldata.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o alldata.o alldata.cpp
 
 groupinfo.o: groupinfo.cpp groupinfo.h \
@@ -1617,7 +1698,9 @@ group.o: group.cpp group.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qudpsocket.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
 		alldata.h \
-		expression.h
+		expression.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o group.o group.cpp
 
 mythread.o: mythread.cpp mythread.h \
@@ -1743,8 +1826,16 @@ mythread.o: mythread.cpp mythread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDate \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
 		alldata.h \
-		expression.h
+		expression.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mythread.o mythread.cpp
+
+qrc_main.o: qrc_main.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_main.o qrc_main.cpp
+
+qrc_pp.o: qrc_pp.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_pp.o qrc_pp.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

@@ -40,6 +40,7 @@ public:
     QAction *actionGroupBound;
     QAction *actionGroupUnbound;
     QAction *actionSetIP;
+    QAction *actionchange_theme;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_4;
     QVBoxLayout *verticalLayout;
@@ -85,6 +86,8 @@ public:
         actionGroupUnbound->setObjectName(QStringLiteral("actionGroupUnbound"));
         actionSetIP = new QAction(MainWindow);
         actionSetIP->setObjectName(QStringLiteral("actionSetIP"));
+        actionchange_theme = new QAction(MainWindow);
+        actionchange_theme->setObjectName(QStringLiteral("actionchange_theme"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         horizontalLayout_4 = new QHBoxLayout(centralWidget);
@@ -112,6 +115,8 @@ public:
 
         listView = new QListView(centralWidget);
         listView->setObjectName(QStringLiteral("listView"));
+        listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        listView->setDragEnabled(false);
 
         verticalLayout->addWidget(listView);
 
@@ -202,6 +207,7 @@ public:
         menu_2->addAction(actionGroupBound);
         menu_2->addAction(actionGroupUnbound);
         menu_4->addAction(actionSetIP);
+        menu_4->addAction(actionchange_theme);
 
         retranslateUi(MainWindow);
 
@@ -221,6 +227,7 @@ public:
         actionGroupBound->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\347\273\221\345\256\232", Q_NULLPTR));
         actionGroupUnbound->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\350\247\243\347\273\221", Q_NULLPTR));
         actionSetIP->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256IP", Q_NULLPTR));
+        actionchange_theme->setText(QApplication::translate("MainWindow", "change theme", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\345\210\227\350\241\250\357\274\232 ", Q_NULLPTR));
         pushButtonUntie->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\350\247\243\347\273\221", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "\346\234\252\347\273\221\345\256\232\347\232\204\350\256\276\345\244\207\345\210\227\350\241\250\357\274\232", Q_NULLPTR));
