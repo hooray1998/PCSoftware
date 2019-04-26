@@ -207,7 +207,6 @@ public:
         menu_2->addAction(actionGroupBound);
         menu_2->addAction(actionGroupUnbound);
         menu_4->addAction(actionSetIP);
-        menu_4->addAction(actionchange_theme);
 
         retranslateUi(MainWindow);
 

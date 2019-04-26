@@ -11,14 +11,29 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("上位机软件");
     setWindowState(Qt::WindowMaximized);
+    setStyle(MainWindow::Style_LightBlue);
+
     ui->tableWidget->setRowCount(20);
     ui->tableWidget->setColumnCount(15);
 
-    curTheme = 0;
     red.setColor(QPalette::WindowText, Qt::red);
     black.setColor(QPalette::WindowText, Qt::black);
     green.setRgb(127,0,0,127);
 
+    themeMenu = new QMenu();
+    themeMenu->setTitle("ChangeTheme");
+
+    //添加换肤菜单
+    QStringList name;
+    name << "银色" << "蓝色" << "浅蓝色" << "深蓝色" << "灰色" << "浅灰色" << "深灰色" << "黑色"
+         << "浅黑色" << "深黑色" << "PS黑色" << "黑色扁平" << "白色扁平";
+
+    foreach (QString str, name) {
+        QAction *action = new QAction(str, this);
+        themeMenu->addAction(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(changeStyle()));
+    }
+    ui->menu_4->addMenu(themeMenu);
 
     initIpWidget();
     initTieGroupWidget();
@@ -38,9 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionGroupUnbound,&QAction::triggered,this,&MainWindow::showUntieGroupWidget);
     connect(ui->pushButtonUntie,&QPushButton::clicked,this,&MainWindow::showUntieGroupWidget);
 
-    connect(ui->actionchange_theme,&QAction::triggered,[=](){
-        initStyle();
-    });
 
     connect(ui->listView,&QListView::clicked,this,&MainWindow::showTable);
 
@@ -48,7 +60,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	//数据处理
 
-    initStyle();
     listenButtonClickSlot();//auto to connect
     updateListView();
 }
@@ -79,27 +90,101 @@ void MainWindow::resizeEvent(QResizeEvent *event){
 
 }
 
-void MainWindow::initStyle(){
-    if(curTheme==0)
-    {
-        qApp->setStyleSheet("");
 
+void MainWindow::changeStyle()
+{
+    QAction *act = (QAction *)sender();
+    QString name = act->text();
+    QString qssFile = ":/qss/blue.css";
+
+    if (name == "银色") {
+        qssFile = ":/qss/silvery.css";
+        setStyle(MainWindow::Style_Silvery);
+    } else if (name == "蓝色") {
+        qssFile = ":/qss/blue.css";
+        setStyle(MainWindow::Style_Blue);
+    } else if (name == "浅蓝色") {
+        qssFile = ":/qss/lightblue.css";
+        setStyle(MainWindow::Style_LightBlue);
+    } else if (name == "深蓝色") {
+        qssFile = ":/qss/darkblue.css";
+        setStyle(MainWindow::Style_DarkBlue);
+    } else if (name == "灰色") {
+        qssFile = ":/qss/gray.css";
+        setStyle(MainWindow::Style_Gray);
+    } else if (name == "浅灰色") {
+        qssFile = ":/qss/lightgray.css";
+        setStyle(MainWindow::Style_LightGray);
+    } else if (name == "深灰色") {
+        qssFile = ":/qss/darkgray.css";
+        setStyle(MainWindow::Style_DarkGray);
+    } else if (name == "黑色") {
+        qssFile = ":/qss/black.css";
+        setStyle(MainWindow::Style_Black);
+    } else if (name == "浅黑色") {
+        qssFile = ":/qss/lightblack.css";
+        setStyle(MainWindow::Style_LightBlack);
+    } else if (name == "深黑色") {
+        qssFile = ":/qss/darkblack.css";
+        setStyle(MainWindow::Style_DarkBlack);
+    } else if (name == "PS黑色") {
+        qssFile = ":/qss/psblack.css";
+        setStyle(MainWindow::Style_PSBlack);
+    } else if (name == "黑色扁平") {
+        qssFile = ":/qss/flatblack.css";
+        setStyle(MainWindow::Style_FlatBlack);
+    } else if (name == "白色扁平") {
+        qssFile = ":/qss/flatwhite.css";
+        setStyle(MainWindow::Style_FlatWhite);
     }
-    else
-    {
-        /////////////////////////////////////////////////////////
-        //加载样式表
-        QFile file(":/other/qss/psblack.css");
-        if (file.open(QFile::ReadOnly)) {
-            QString qss = QLatin1String(file.readAll());
-            QString paletteColor = qss.mid(20, 7);
-            qApp->setPalette(QPalette(QColor(paletteColor)));
-            qApp->setStyleSheet(qss);
-            file.close();
-        }
-    }
-    curTheme = (curTheme+1)%2;
+
+    emit changeStyle(qssFile);
 }
+
+
+void MainWindow::setStyle(MainWindow::Style style)
+{
+    QString qssFile = ":/qss/blue.css";
+
+    if (style == MainWindow::Style_Silvery) {
+        qssFile = ":/qss/silvery.css";
+    } else if (style == MainWindow::Style_Blue) {
+        qssFile = ":/qss/blue.css";
+    } else if (style == MainWindow::Style_LightBlue) {
+        qssFile = ":/qss/lightblue.css";
+    } else if (style == MainWindow::Style_DarkBlue) {
+        qssFile = ":/qss/darkblue.css";
+    } else if (style == MainWindow::Style_Gray) {
+        qssFile = ":/qss/gray.css";
+    } else if (style == MainWindow::Style_LightGray) {
+        qssFile = ":/qss/lightgray.css";
+    } else if (style == MainWindow::Style_DarkGray) {
+        qssFile = ":/qss/darkgray.css";
+    } else if (style == MainWindow::Style_Black) {
+        qssFile = ":/qss/black.css";
+    } else if (style == MainWindow::Style_LightBlack) {
+        qssFile = ":/qss/lightblack.css";
+    } else if (style == MainWindow::Style_DarkBlack) {
+        qssFile = ":/qss/darkblack.css";
+    } else if (style == MainWindow::Style_PSBlack) {
+        qssFile = ":/qss/psblack.css";
+    } else if (style == MainWindow::Style_FlatBlack) {
+        qssFile = ":/qss/flatblack.css";
+    } else if (style == MainWindow::Style_FlatWhite) {
+        qssFile = ":/qss/flatwhite.css";
+    }
+
+    QFile file(qssFile);
+
+    if (file.open(QFile::ReadOnly)) {
+        QString qss = QLatin1String(file.readAll());
+        QString paletteColor = qss.mid(20, 7);
+        qApp->setPalette(QPalette(QColor(paletteColor)));
+        qApp->setStyleSheet(qss);
+        file.close();
+    }
+}
+
 void MainWindow::initTcpServer(){
     //通信
     pTcpServer = NULL;

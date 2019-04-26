@@ -45,7 +45,7 @@ FORMS += \
         mainwindow.ui
 
 RESOURCES += \
-    main.qrc \
-    pp.qrc
+    other/qss.qrc \
+    other/main.qrc \
 
 RC_FILE = myapp.rc
