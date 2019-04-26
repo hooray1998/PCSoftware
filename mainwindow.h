@@ -5,6 +5,7 @@
 #include <QStringList>
 #include <QTime>
 #include <QPalette>
+#include <QColor>
 
 
 #include <QPushButton>
@@ -129,11 +130,13 @@ private:
     QStringListModel *m_model2;
     QStringList groupStringList;
     QStringList singleStringList;
+    QString curGroupName;
 
 
 
     QPalette red;
     QPalette black;
+    QColor green;
 
 
     QVector<int> *dataA;

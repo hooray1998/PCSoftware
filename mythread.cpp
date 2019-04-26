@@ -53,7 +53,6 @@ void MyThread::analyzeHeader(){
                 emit SendLog(QString("%1Haven't bound group, data will be loss.").arg(QString(machineId)));
             }
             else{
-                emit SendLog(this, header);
 
                 if(this->group->getMachineA_id()==machineId)
                     group->analyzeDataA(data.right(data.size()-8));
@@ -61,6 +60,7 @@ void MyThread::analyzeHeader(){
                     group->analyzeDataB(data.right(data.size()-8));
                 else
                     emit SendLog(QString("%1 error in this machineId. group haven't its id."));
+                emit SendLog(this, header);
             }
     }
     else if(mode=="03")

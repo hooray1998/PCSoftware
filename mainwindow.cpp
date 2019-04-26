@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     curTheme = 0;
     red.setColor(QPalette::WindowText, Qt::red);
     black.setColor(QPalette::WindowText, Qt::black);
+    green.setRgb(127,0,0,127);
 
 
     initIpWidget();
@@ -213,6 +214,9 @@ void MainWindow::showLog(MyThread *machine, QByteArray header)
             cmd = "Send b";
         else
             cmd = "Error: Its group haven't the id.";
+        //shishigengxin
+        if(machine->getGroup()->groupInfo.name==curGroupName)
+            showTable(ui->listView->currentIndex());
     }
     else if(header.right(2)=="09"){
         cmd = "Login out";
@@ -431,12 +435,11 @@ void MainWindow::untieTwoMachine(){
 void MainWindow::showTable(QModelIndex index){
     DBG<<"enter show table";
 
-
-    QString groupName = m_model->data(index).toByteArray();
-    if(groupName.size())
+    curGroupName = m_model->data(index).toByteArray();
+    if(curGroupName.size())
     for(int i=0;i<allGroup.size();i++)
     {
-        if(allGroup.at(i)->groupInfo.name==groupName)
+        if(allGroup.at(i)->groupInfo.name==curGroupName)
         {
             allGroup.at(i)->allData.returnData(&dataA, &dataB, &result, 0);
             DBG<<dataA->size()<<dataB->size()<<result->size();
@@ -455,10 +458,7 @@ void MainWindow::showTable(QModelIndex index){
                 ui->tableWidget->setItem(i,2,new QTableWidgetItem(QString::number(result->at(i))));
             }
 
-
             return;
-
-
         }
     }
 
