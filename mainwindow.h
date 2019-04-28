@@ -1,6 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "xlsxdocument.h"
+#include "xlsxformat.h"
+#include "xlsxcellrange.h"
+#include "xlsxworksheet.h"
+
 #include <QStringListModel>
 #include <QStringList>
 #include <QTime>
