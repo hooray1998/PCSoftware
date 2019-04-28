@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DXLSX_NO_LIB -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -I3rdparty/qtxlsx/src/xlsx -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3 -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3 -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -50,7 +50,38 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp \
+SOURCES       = 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxtheme.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipwriter.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawing.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipreader.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxmediafile.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula.cpp \
+		main.cpp \
 		mainwindow.cpp \
 		expression.cpp \
 		alldata.cpp \
@@ -58,9 +89,41 @@ SOURCES       = main.cpp \
 		group.cpp \
 		mythread.cpp qrc_qss.cpp \
 		qrc_main.cpp \
+		moc_xlsxdocument.cpp \
 		moc_mainwindow.cpp \
 		moc_mythread.cpp
-OBJECTS       = main.o \
+OBJECTS       = xlsxdocpropscore.o \
+		xlsxdocpropsapp.o \
+		xlsxrelationships.o \
+		xlsxutility.o \
+		xlsxsharedstrings.o \
+		xlsxcontenttypes.o \
+		xlsxtheme.o \
+		xlsxformat.o \
+		xlsxstyles.o \
+		xlsxworkbook.o \
+		xlsxabstractsheet.o \
+		xlsxworksheet.o \
+		xlsxchartsheet.o \
+		xlsxzipwriter.o \
+		xlsxdrawing.o \
+		xlsxzipreader.o \
+		xlsxdocument.o \
+		xlsxcell.o \
+		xlsxdatavalidation.o \
+		xlsxcellreference.o \
+		xlsxcellrange.o \
+		xlsxrichstring.o \
+		xlsxconditionalformatting.o \
+		xlsxcolor.o \
+		xlsxnumformatparser.o \
+		xlsxdrawinganchor.o \
+		xlsxmediafile.o \
+		xlsxabstractooxmlfile.o \
+		xlsxchart.o \
+		xlsxsimpleooxmlfile.o \
+		xlsxcellformula.o \
+		main.o \
 		mainwindow.o \
 		expression.o \
 		alldata.o \
@@ -69,6 +132,7 @@ OBJECTS       = main.o \
 		mythread.o \
 		qrc_qss.o \
 		qrc_main.o \
+		moc_xlsxdocument.o \
 		moc_mainwindow.o \
 		moc_mythread.o
 DIST          = ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/spec_pre.prf \
@@ -224,6 +288,7 @@ DIST          = ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/spec_pre
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/toolchain.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/default_pre.prf \
+		3rdparty/qtxlsx/src/xlsx/qtxlsx.pri \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/resolve_config.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/default_post.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/qml_debug.prf \
@@ -240,12 +305,88 @@ DIST          = ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/spec_pre
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/exceptions.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/yacc.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/lex.prf \
-		ComeOnBoy.pro mainwindow.h \
+		ComeOnBoy.pro 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxtheme_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxchartsheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipwriter_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawing_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipreader_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxmediafile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula_p.h \
+		mainwindow.h \
 		expression.h \
 		alldata.h \
 		groupinfo.h \
 		group.h \
-		mythread.h main.cpp \
+		mythread.h 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxtheme.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipwriter.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawing.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipreader.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxmediafile.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile.cpp \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula.cpp \
+		main.cpp \
 		mainwindow.cpp \
 		expression.cpp \
 		alldata.cpp \
@@ -416,6 +557,7 @@ Makefile: ComeOnBoy.pro ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/toolchain.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/default_pre.prf \
+		3rdparty/qtxlsx/src/xlsx/qtxlsx.pri \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/resolve_config.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/default_post.prf \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/qml_debug.prf \
@@ -593,6 +735,7 @@ Makefile: ComeOnBoy.pro ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/toolchain.prf:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/default_pre.prf:
+3rdparty/qtxlsx/src/xlsx/qtxlsx.pri:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/resolve_config.prf:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/default_post.prf:
 ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/qml_debug.prf:
@@ -632,8 +775,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents other/qss.qrc other/main.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h expression.h alldata.h groupinfo.h group.h mythread.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp expression.cpp alldata.cpp groupinfo.cpp group.cpp mythread.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore_p.h 3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp_p.h 3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h 3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h 3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings_p.h 3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes_p.h 3rdparty/qtxlsx/src/xlsx/xlsxtheme_p.h 3rdparty/qtxlsx/src/xlsx/xlsxformat.h 3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h 3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h 3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h 3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet_p.h 3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h 3rdparty/qtxlsx/src/xlsx/xlsxworksheet_p.h 3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.h 3rdparty/qtxlsx/src/xlsx/xlsxchartsheet_p.h 3rdparty/qtxlsx/src/xlsx/xlsxzipwriter_p.h 3rdparty/qtxlsx/src/xlsx/xlsxworkbook_p.h 3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h 3rdparty/qtxlsx/src/xlsx/xlsxglobal.h 3rdparty/qtxlsx/src/xlsx/xlsxdrawing_p.h 3rdparty/qtxlsx/src/xlsx/xlsxzipreader_p.h 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h 3rdparty/qtxlsx/src/xlsx/xlsxdocument_p.h 3rdparty/qtxlsx/src/xlsx/xlsxcell.h 3rdparty/qtxlsx/src/xlsx/xlsxcell_p.h 3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.h 3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation_p.h 3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h 3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h 3rdparty/qtxlsx/src/xlsx/xlsxrichstring_p.h 3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h 3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.h 3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting_p.h 3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h 3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser_p.h 3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor_p.h 3rdparty/qtxlsx/src/xlsx/xlsxmediafile_p.h 3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h 3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h 3rdparty/qtxlsx/src/xlsx/xlsxchart.h 3rdparty/qtxlsx/src/xlsx/xlsxchart_p.h 3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile_p.h 3rdparty/qtxlsx/src/xlsx/xlsxcellformula.h 3rdparty/qtxlsx/src/xlsx/xlsxcellformula_p.h mainwindow.h expression.h alldata.h groupinfo.h group.h mythread.h $(DISTDIR)/
+	$(COPY_FILE) --parents 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp.cpp 3rdparty/qtxlsx/src/xlsx/xlsxrelationships.cpp 3rdparty/qtxlsx/src/xlsx/xlsxutility.cpp 3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes.cpp 3rdparty/qtxlsx/src/xlsx/xlsxtheme.cpp 3rdparty/qtxlsx/src/xlsx/xlsxformat.cpp 3rdparty/qtxlsx/src/xlsx/xlsxstyles.cpp 3rdparty/qtxlsx/src/xlsx/xlsxworkbook.cpp 3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.cpp 3rdparty/qtxlsx/src/xlsx/xlsxworksheet.cpp 3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.cpp 3rdparty/qtxlsx/src/xlsx/xlsxzipwriter.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdrawing.cpp 3rdparty/qtxlsx/src/xlsx/xlsxzipreader.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdocument.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcell.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcellreference.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcellrange.cpp 3rdparty/qtxlsx/src/xlsx/xlsxrichstring.cpp 3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcolor.cpp 3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor.cpp 3rdparty/qtxlsx/src/xlsx/xlsxmediafile.cpp 3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.cpp 3rdparty/qtxlsx/src/xlsx/xlsxchart.cpp 3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcellformula.cpp main.cpp mainwindow.cpp expression.cpp alldata.cpp groupinfo.cpp group.cpp mythread.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -969,14 +1112,11 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_mythread.cpp
+compiler_moc_header_make_all: moc_xlsxdocument.cpp moc_mainwindow.cpp moc_mythread.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_mythread.cpp
-moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+	-$(DEL_FILE) moc_xlsxdocument.cpp moc_mainwindow.cpp moc_mythread.cpp
+moc_xlsxdocument.cpp: 3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
@@ -988,73 +1128,211 @@ moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStrin
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
+		moc_predefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc
+	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++ -I/home/itt/Coding/QtCoding/ComeOnBoy -I/home/itt/Coding/QtCoding/ComeOnBoy/3rdparty/qtxlsx/src/xlsx -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3 -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3 -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h -o moc_xlsxdocument.cpp
+
+moc_mainwindow.cpp: 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
@@ -1062,27 +1340,17 @@ moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStrin
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qwidget.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontmetrics.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontinfo.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qsizepolicy.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcursor.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QComboBox \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qcombobox.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -1139,12 +1407,10 @@ moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStrin
 		mythread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QHostAddress \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSetIterator \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QThread \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qthread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtDebug \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QWidget \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QUdpSocket \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qudpsocket.h \
 		alldata.h \
@@ -1153,7 +1419,7 @@ moc_mainwindow.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStrin
 		mainwindow.h \
 		moc_predefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc
-	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++ -I/home/itt/Coding/QtCoding/ComeOnBoy -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++ -I/home/itt/Coding/QtCoding/ComeOnBoy -I/home/itt/Coding/QtCoding/ComeOnBoy/3rdparty/qtxlsx/src/xlsx -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3 -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3 -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
 
 moc_mythread.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QTcpSocket \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qtcpsocket.h \
@@ -1284,7 +1550,7 @@ moc_mythread.cpp: ../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QTcpS
 		mythread.h \
 		moc_predefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc
-	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++ -I/home/itt/Coding/QtCoding/ComeOnBoy -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mythread.h -o moc_mythread.cpp
+	/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/mkspecs/linux-g++ -I/home/itt/Coding/QtCoding/ComeOnBoy -I/home/itt/Coding/QtCoding/ComeOnBoy/3rdparty/qtxlsx/src/xlsx -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3 -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3 -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore -I/home/itt/SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mythread.h -o moc_mythread.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1305,12 +1571,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-main.o: main.cpp mainwindow.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+xlsxdocpropscore.o: 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
@@ -1322,15 +1585,2329 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDateTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxdocpropscore.o 3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore.cpp
+
+xlsxdocpropsapp.o: 3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPair \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDateTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxdocpropsapp.o 3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp.cpp
+
+xlsxrelationships.o: 3rdparty/qtxlsx/src/xlsx/xlsxrelationships.cpp 3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxrelationships.o 3rdparty/qtxlsx/src/xlsx/xlsxrelationships.cpp
+
+xlsxutility.o: 3rdparty/qtxlsx/src/xlsx/xlsxutility.cpp 3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPoint \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QRegularExpression \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregularexpression.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDateTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxutility.o 3rdparty/qtxlsx/src/xlsx/xlsxutility.cpp
+
+xlsxsharedstrings.o: 3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings.cpp 3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QHash \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSet \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxsharedstrings.o 3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings.cpp
+
+xlsxcontenttypes.o: 3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMapIterator \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxcontenttypes.o 3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes.cpp
+
+xlsxtheme.o: 3rdparty/qtxlsx/src/xlsx/xlsxtheme.cpp 3rdparty/qtxlsx/src/xlsx/xlsxtheme_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QIODevice \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxtheme.o 3rdparty/qtxlsx/src/xlsx/xlsxtheme.cpp
+
+xlsxformat.o: 3rdparty/qtxlsx/src/xlsx/xlsxformat.cpp 3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSet \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDataStream \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxformat.o 3rdparty/qtxlsx/src/xlsx/xlsxformat.cpp
+
+xlsxstyles.o: 3rdparty/qtxlsx/src/xlsx/xlsxstyles.cpp 3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QHash \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSet \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDataStream \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxstyles.o 3rdparty/qtxlsx/src/xlsx/xlsxstyles.cpp
+
+xlsxworkbook.o: 3rdparty/qtxlsx/src/xlsx/xlsxworkbook.cpp 3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QImage \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxtheme_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPair \
+		3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QHash \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QRegularExpression \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregularexpression.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSet \
+		3rdparty/qtxlsx/src/xlsx/xlsxmediafile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxworkbook.o 3rdparty/qtxlsx/src/xlsx/xlsxworkbook.cpp
+
+xlsxabstractsheet.o: 3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.cpp 3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QImage \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxabstractsheet.o 3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.cpp
+
+xlsxworksheet.o: 3rdparty/qtxlsx/src/xlsx/xlsxworksheet.cpp 3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QImage \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QRegularExpression \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregularexpression.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSet \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QHash \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawing_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPoint \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSize \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDateTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QUrl \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QTextDocument \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextdocument.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxworksheet.o 3rdparty/qtxlsx/src/xlsx/xlsxworksheet.cpp
+
+xlsxchartsheet.o: 3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.cpp 3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxchartsheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QImage \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawing_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPoint \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSize \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxchartsheet.o 3rdparty/qtxlsx/src/xlsx/xlsxchartsheet.cpp
+
+xlsxzipwriter.o: 3rdparty/qtxlsx/src/xlsx/xlsxzipwriter.cpp 3rdparty/qtxlsx/src/xlsx/xlsxzipwriter_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui/private/qzipwriter_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui/private/qtguiglobal_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore/private/qglobal_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore/private/qconfig_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore/private/qtcore-config_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui/private/qtgui-config_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxzipwriter.o 3rdparty/qtxlsx/src/xlsx/xlsxzipwriter.cpp
+
+xlsxdrawing.o: 3rdparty/qtxlsx/src/xlsx/xlsxdrawing.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdrawing_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPoint \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSize \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxdrawing.o 3rdparty/qtxlsx/src/xlsx/xlsxdrawing.cpp
+
+xlsxzipreader.o: 3rdparty/qtxlsx/src/xlsx/xlsxzipreader.cpp 3rdparty/qtxlsx/src/xlsx/xlsxzipreader_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QScopedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui/private/qzipreader_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui/private/qtguiglobal_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore/private/qglobal_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore/private/qconfig_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/5.9.3/QtCore/private/qtcore-config_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/5.9.3/QtGui/private/qtgui-config_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxzipreader.o 3rdparty/qtxlsx/src/xlsx/xlsxzipreader.cpp
+
+xlsxdocument.o: 3rdparty/qtxlsx/src/xlsx/xlsxdocument.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QImage \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcontenttypes_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QHash \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		3rdparty/qtxlsx/src/xlsx/xlsxtheme_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocpropsapp_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPair \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocpropscore_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxsharedstrings_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawing_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxmediafile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipreader_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QScopedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxzipwriter_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QFile \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxdocument.o 3rdparty/qtxlsx/src/xlsx/xlsxdocument.cpp
+
+xlsxcell.o: 3rdparty/qtxlsx/src/xlsx/xlsxcell.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSet \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QImage \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDateTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxcell.o 3rdparty/qtxlsx/src/xlsx/xlsxcell.cpp
+
+xlsxdatavalidation.o: 3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxdatavalidation.o 3rdparty/qtxlsx/src/xlsx/xlsxdatavalidation.cpp
+
+xlsxcellreference.o: 3rdparty/qtxlsx/src/xlsx/xlsxcellreference.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QRegularExpression \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregularexpression.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxcellreference.o 3rdparty/qtxlsx/src/xlsx/xlsxcellreference.cpp
+
+xlsxcellrange.o: 3rdparty/qtxlsx/src/xlsx/xlsxcellrange.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPoint \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxcellrange.o 3rdparty/qtxlsx/src/xlsx/xlsxcellrange.cpp
+
+xlsxrichstring.o: 3rdparty/qtxlsx/src/xlsx/xlsxrichstring.cpp 3rdparty/qtxlsx/src/xlsx/xlsxrichstring.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxrichstring_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSet \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QTextDocument \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextdocument.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QTextFragment \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpen.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextoption.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextlayout.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qglyphrun.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrawfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontdatabase.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtextcursor.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxrichstring.o 3rdparty/qtxlsx/src/xlsx/xlsxrichstring.cpp
+
+xlsxconditionalformatting.o: 3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.cpp 3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QHash \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxconditionalformatting.o 3rdparty/qtxlsx/src/xlsx/xlsxconditionalformatting.cpp
+
+xlsxcolor.o: 3rdparty/qtxlsx/src/xlsx/xlsxcolor.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcolor_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
@@ -1369,26 +3946,674 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxstyles_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QHash \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDataStream \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxcolor.o 3rdparty/qtxlsx/src/xlsx/xlsxcolor.cpp
+
+xlsxnumformatparser.o: 3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser.cpp 3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxnumformatparser.o 3rdparty/qtxlsx/src/xlsx/xlsxnumformatparser.cpp
+
+xlsxdrawinganchor.o: 3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor.cpp 3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPoint \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSize \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdrawing_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxmediafile_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxworkbook.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QImage \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qimage.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDir \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdir.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfileinfo.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxdrawinganchor.o 3rdparty/qtxlsx/src/xlsx/xlsxdrawinganchor.cpp
+
+xlsxmediafile.o: 3rdparty/qtxlsx/src/xlsx/xlsxmediafile.cpp 3rdparty/qtxlsx/src/xlsx/xlsxmediafile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QCryptographicHash \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxmediafile.o 3rdparty/qtxlsx/src/xlsx/xlsxmediafile.cpp
+
+xlsxabstractooxmlfile.o: 3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.cpp 3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QBuffer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxabstractooxmlfile.o 3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.cpp
+
+xlsxchart.o: 3rdparty/qtxlsx/src/xlsx/xlsxchart.cpp 3rdparty/qtxlsx/src/xlsx/xlsxchart_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxrelationships_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxchart.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QIODevice \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxchart.o 3rdparty/qtxlsx/src/xlsx/xlsxchart.cpp
+
+xlsxsimpleooxmlfile.o: 3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile.cpp 3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QIODevice \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxsimpleooxmlfile.o 3rdparty/qtxlsx/src/xlsx/xlsxsimpleooxmlfile.cpp
+
+xlsxcellformula.o: 3rdparty/qtxlsx/src/xlsx/xlsxcellformula.cpp 3rdparty/qtxlsx/src/xlsx/xlsxcellformula.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellformula_p.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedData \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QString \
+		3rdparty/qtxlsx/src/xlsx/xlsxutility_p.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamReader \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QXmlStreamWriter
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xlsxcellformula.o 3rdparty/qtxlsx/src/xlsx/xlsxcellformula.cpp
+
+main.o: main.cpp mainwindow.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtcore-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
@@ -1396,27 +4621,17 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qwidget.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontmetrics.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontinfo.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qsizepolicy.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcursor.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QComboBox \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qcombobox.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -1473,12 +4688,10 @@ main.o: main.cpp mainwindow.h \
 		mythread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QHostAddress \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSetIterator \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QThread \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qthread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtDebug \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QWidget \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QUdpSocket \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qudpsocket.h \
 		alldata.h \
@@ -1494,11 +4707,9 @@ main.o: main.cpp mainwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtGlobal \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig-bootstrapped.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qconfig.h \
@@ -1510,73 +4721,104 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsysinfo.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlogging.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qflags.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbasicatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qgenericatomic.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_cxx11.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmutex.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qversiontagging.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxformat.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QFont \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qnamespace.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstring.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qchar.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qarraydata.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlist.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qalgorithms.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiterator.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhashfunctions.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpair.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qbytearraylist.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlist.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregexp.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qhash.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreevent.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontainerfwd.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qobject_impl.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qshareddata.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qpoint.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvariant.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdebug.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qlocale.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qvector.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qset.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QExplicitlySharedDataPointer \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
+		3rdparty/qtxlsx/src/xlsx/xlsxworksheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractsheet.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxabstractooxmlfile.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringList \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSharedPointer \
+		3rdparty/qtxlsx/src/xlsx/xlsxcell.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellrange.h \
+		3rdparty/qtxlsx/src/xlsx/xlsxcellreference.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtguiglobal.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtgui-config.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcolor.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgb.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qrgba64.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qrect.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qmargins.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qsize.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qregion.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatastream.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qline.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtransform.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpainterpath.h \
@@ -1584,27 +4826,17 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QColor \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qkeysequence.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qwidget.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfont.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontmetrics.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qfontinfo.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qsizepolicy.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qcursor.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qevent.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurl.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qurlquery.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfile.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qfiledevice.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvector2d.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QComboBox \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qcombobox.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -1661,19 +4893,16 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		mythread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QHostAddress \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QSetIterator \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QThread \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qthread.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QtDebug \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QWidget \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QByteArray \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/QUdpSocket \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtNetwork/qudpsocket.h \
 		alldata.h \
 		expression.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
 		ui_mainwindow.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVariant \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QAction \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qaction.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qactiongroup.h \
@@ -2127,6 +5356,9 @@ qrc_qss.o: qrc_qss.cpp
 
 qrc_main.o: qrc_main.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_main.o qrc_main.cpp
+
+moc_xlsxdocument.o: moc_xlsxdocument.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_xlsxdocument.o moc_xlsxdocument.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
