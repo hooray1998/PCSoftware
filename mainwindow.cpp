@@ -10,23 +10,28 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("上位机软件");
-    setWindowState(Qt::WindowMaximized);
-    setStyle(MainWindow::Style_LightBlue);
+    setStyle(MainWindow::Style_PSBlack);
 
-    ui->tableWidget->setRowCount(20);
-    ui->tableWidget->setColumnCount(15);
+    ui->tableWidgetvs1->setRowCount(20);
+    ui->tableWidgetvs1->setColumnCount(15);
+    ui->tableWidgetvs2->setRowCount(20);
+    ui->tableWidgetvs2->setColumnCount(15);
+    ui->tableWidget_2->setRowCount(20);
+    ui->tableWidget_2->setColumnCount(15);
+    ui->tabWidget->setCurrentIndex(0);
 
     red.setColor(QPalette::WindowText, Qt::red);
     black.setColor(QPalette::WindowText, Qt::black);
     green.setRgb(127,0,0,127);
 
     themeMenu = new QMenu();
-    themeMenu->setTitle("ChangeTheme");
+    themeMenu->setTitle("改变主题");
 
     //添加换肤菜单
     QStringList name;
-    name << "银色" << "蓝色" << "浅蓝色" << "深蓝色" << "灰色" << "浅灰色" << "深灰色" << "黑色"
-         << "浅黑色" << "深黑色" << "PS黑色" << "黑色扁平" << "白色扁平";
+    //name << "银色" << "蓝色" << "浅蓝色" << "深蓝色" << "灰色" << "浅灰色" << "深灰色" << "黑色"
+         //<< "浅黑色" << "深黑色" << "PS黑色" << "黑色扁平" << "白色扁平";
+    name << "银色" << "浅蓝色" << "灰色" << "PS黑色";
 
     foreach (QString str, name) {
         QAction *action = new QAction(str, this);
@@ -42,6 +47,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->listView->setUpdatesEnabled(true);
     ui->listView_2->setUpdatesEnabled(true);
+
+    ui->lineEditCeName_mode1->setFixedWidth(140);
+    ui->lineEditCeName_mode2->setFixedWidth(140);
+    ui->lineEditJiNumber_mode1->setFixedWidth(140);
+    ui->lineEditJiNumber_mode2->setFixedWidth(140);
+    ui->lineEditVS1_mode1->setFixedWidth(140);
+    ui->lineEditVS1_mode2->setFixedWidth(140);
+    ui->lineEditVS2_mode1->setFixedWidth(140);
+    ui->lineEditVS2_mode2->setFixedWidth(140);
+    ui->lineEditYinNumber_mode2->setFixedWidth(140);
 
 
     m_model=new QStringListModel();
@@ -62,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     listenButtonClickSlot();//auto to connect
     updateListView();
+    setWindowState(Qt::WindowMaximized);
 }
 
 MainWindow::~MainWindow()
@@ -273,7 +289,7 @@ void MainWindow::showLog(MyThread *machine, QByteArray header)
         groupName = "Group:"+machine->getGroup()->groupInfo.name;
 
     if(header.right(2)=="01"){
-        cmd = "Login in";
+        cmd = "登录";
         //TODO: find group if it is login in now.
         for(int i=0;i<allGroup.size();i++)
         {
@@ -294,17 +310,17 @@ void MainWindow::showLog(MyThread *machine, QByteArray header)
     }
     else if(header.right(2)=="02"){
         if(machine->getGroup()->getMachineA_id()==machine->getMachineID())
-            cmd = "Send a";
+            cmd = "发送alpha";
         else if(machine->getGroup()->getMachineB_id()==machine->getMachineID())
-            cmd = "Send b";
+            cmd = "发送beta";
         else
-            cmd = "Error: Its group haven't the id.";
+            cmd = "Error: Its group haven't the id.正常情况不会出现这条";
         //shishigengxin
         if(machine->getGroup()->groupInfo.name==curGroupName)
             showTable(ui->listView->currentIndex());
     }
     else if(header.right(2)=="09"){
-        cmd = "Login out";
+        cmd = "下线";
         for(int i=allMachine.size()-1;i>=0;i--)
         {
             if(allMachine.at(i)->die)
@@ -362,7 +378,7 @@ void MainWindow::initIpWidget(){
     wip_labelport = new QLabel("Port:");
     wip_ip = new QLineEdit;
     wip_port = new QSpinBox;
-    wip_button = new QPushButton("Listen");
+    wip_button = new QPushButton("绑定");
 
     wip_port->setMaximum(99999);
     wip_ip->setText("127.0.0.1");
@@ -379,19 +395,19 @@ void MainWindow::initIpWidget(){
 }
 void MainWindow::initTieGroupWidget(){
     wtie = new QWidget;
-    wtie->setWindowTitle("tie");
+    wtie->setWindowTitle("绑定设备");
     wtie->resize(300,200);
 
     wtie_layout = new QGridLayout;
-    wtie_labelA = new QLabel("MachineA:");
-    wtie_labelB = new QLabel("MachineB:");
+    wtie_labelA = new QLabel("设备A:");
+    wtie_labelB = new QLabel("设备B:");
     wtie_msg = new QLabel();
-    wtie_labelgroupname = new QLabel("GroupName:");
+    wtie_labelgroupname = new QLabel("设备组名称:");
     wtie_groupname = new QLineEdit();
     wtie_A = new QComboBox();
     wtie_B = new QComboBox();
-    wtie_button = new QPushButton("BangDing");
-    wtie_buttonclose = new QPushButton("GuanBi");
+    wtie_button = new QPushButton("绑定");
+    wtie_buttonclose = new QPushButton("关闭");
 
 
     wtie_layout->addWidget(wtie_labelA,0,0,1,2);
@@ -410,15 +426,15 @@ void MainWindow::initTieGroupWidget(){
 }
 void MainWindow::initUntieGroupWidget(){
     wuntie = new QWidget;
-    wtie->setWindowTitle("untie");
+    wtie->setWindowTitle("解绑设备组");
     wtie->resize(300,200);
 
     wuntie_layout = new QGridLayout;
-    wuntie_label = new QLabel("Group:");
-    wuntie_msg = new QLabel("contains machineA and machineB");
+    wuntie_label = new QLabel("设备组名称:");
+    wuntie_msg = new QLabel();
     wuntie_group = new QComboBox;
-    wuntie_button = new QPushButton("Untie");
-    wuntie_buttonclose = new QPushButton("close");
+    wuntie_button = new QPushButton("解绑");
+    wuntie_buttonclose = new QPushButton("关闭");
 
     wuntie_layout->addWidget(wuntie_label,0,0,1,2);
     wuntie_layout->addWidget(wuntie_group,0,2,1,3);
@@ -437,7 +453,7 @@ void MainWindow::tieTwoMachine(){
     if(wtie_groupname->text().size()==0)
     {
         wtie_msg->setPalette(red);
-        wtie_msg->setText("error: The group Name is empty.");
+        wtie_msg->setText("错误：名称不能为空。");
         return ;
     }
     else{
@@ -445,14 +461,14 @@ void MainWindow::tieTwoMachine(){
             if(allGroup.at(i)->groupInfo.name==wtie_groupname->text())
             {
                 wtie_msg->setPalette(red);
-                wtie_msg->setText("error: The group Name is exist.");
+                wtie_msg->setText("错误：名称已经存在。");
                 return ;
             }
     }
     if(wtie_A->currentText()==wtie_B->currentText())
     {
         wtie_msg->setPalette(red);
-        wtie_msg->setText("error: A equal B.");
+        wtie_msg->setText("错误：设备A和B不能相同。");
         return ;
     }
     else{
@@ -464,7 +480,7 @@ void MainWindow::tieTwoMachine(){
                     a = allMachine.at(i);
                 else{
                     wtie_msg->setPalette(red);
-                    wtie_msg->setText("error: A already tie one group.");
+                    wtie_msg->setText("错误：设备A已经被其他设备绑定。");
                     return ;
                 }
             }
@@ -475,7 +491,7 @@ void MainWindow::tieTwoMachine(){
                     b = allMachine.at(i);
                 else{
                     wtie_msg->setPalette(red);
-                    wtie_msg->setText("error: B already tie one group.");
+                    wtie_msg->setText("错误：设备B已经被其他设备绑定。");
                     return ;
                 }
             }
@@ -483,13 +499,13 @@ void MainWindow::tieTwoMachine(){
         if(!a||!b)
         {
             wtie_msg->setPalette(red);
-            wtie_msg->setText("error: A or B isn't exist.");
+            wtie_msg->setText("错误：设备A或B不存在。");
             return ;
         }
         Group *g = new Group();
         g->tie(wtie_groupname->text(),a,b);
         allGroup.push_back(g);
-        wtie_msg->setText("tie is OK.");
+        wtie_msg->setText("绑定成功。");
         wtie_groupname->clear();
     }
 
@@ -508,12 +524,12 @@ void MainWindow::untieTwoMachine(){
     if(!g)
     {
         wuntie->setPalette(red);
-        wuntie_msg->setText("error: This group isn't exist");
+        wuntie_msg->setText("错误：设备组不存在。");
         return ;
     }
 
     g->untie();
-    wuntie_msg->setText("untie is OK.");
+    wuntie_msg->setText("解绑成功。");
     updateListView();
 }
 
@@ -529,18 +545,18 @@ void MainWindow::showTable(QModelIndex index){
             allGroup.at(i)->allData.returnData(&dataA, &dataB, &result, 0);
             DBG<<dataA->size()<<dataB->size()<<result->size();
             //TODO: show all data
-            ui->tableWidget->clear();
+            ui->tableWidgetvs1->clear();
             for(int i=0;i<dataA->size();i++)
             {
-                ui->tableWidget->setItem(i,0,new QTableWidgetItem(QString::number(dataA->at(i))));
+                ui->tableWidgetvs1->setItem(i,0,new QTableWidgetItem(QString::number(dataA->at(i))));
             }
             for(int i=0;i<dataB->size();i++)
             {
-                ui->tableWidget->setItem(i,1,new QTableWidgetItem(QString::number(dataB->at(i))));
+                ui->tableWidgetvs1->setItem(i,1,new QTableWidgetItem(QString::number(dataB->at(i))));
             }
             for(int i=0;i<result->size();i++)
             {
-                ui->tableWidget->setItem(i,2,new QTableWidgetItem(QString::number(result->at(i))));
+                ui->tableWidgetvs1->setItem(i,2,new QTableWidgetItem(QString::number(result->at(i))));
             }
 
             return;

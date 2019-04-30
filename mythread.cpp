@@ -19,7 +19,7 @@ void MyThread::run()
     );
 
     connect(tcpSocket, &QTcpSocket::disconnected, [=](){
-        DBG<<"dis connect";
+        DBG<<"断开连接";
         die = true;
         emit SendLog(this, QByteArray(machineId+"09"));
         tcpSocket->disconnectFromHost();
@@ -40,7 +40,7 @@ void MyThread::analyzeHeader(){
         }
         else if(machineId==header.left(6))
         {
-            emit SendLog(QString("%1don't need to login in again.").arg(QString(machineId)));
+            emit SendLog(QString("%1不需要再次登录。").arg(QString(machineId)));
         }
         else//Normally bu hui chu xian zhe zhong qingkuang.
             emit SendLog("Error in this.");
@@ -50,7 +50,7 @@ void MyThread::analyzeHeader(){
     {
             if(!group)
             {
-                emit SendLog(QString("%1Haven't bound group, data will be loss.").arg(QString(machineId)));
+                emit SendLog(QString("设备%1还未绑定设备组，数据会丢失。").arg(QString(machineId)));
             }
             else{
 
@@ -59,7 +59,7 @@ void MyThread::analyzeHeader(){
                 else if(this->group->getMachineB_id()==machineId)
                     group->analyzeDataB(data.right(data.size()-8));
                 else
-                    emit SendLog(QString("%1 error in this machineId. group haven't its id."));
+                    emit SendLog(QString("所属的设备组没有这个设备【%1】。"));
                 emit SendLog(this, header);
             }
     }
@@ -67,7 +67,7 @@ void MyThread::analyzeHeader(){
     {
             if(!group)
             {
-                emit SendLog(QString("%1Haven't bound group, data will be loss.").arg(QString(machineId)));
+                emit SendLog(QString("%1 还未绑定设备，数据会丢失。").arg(QString(machineId)));
             }
             else{
                 emit SendLog(this, header);
