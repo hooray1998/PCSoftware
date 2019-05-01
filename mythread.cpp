@@ -31,11 +31,15 @@ void MyThread::analyzeHeader(){
     QByteArray header = data.left(8);
     mode = header.right(2);
     DBG<<"length is"<<data.size()<<"head"<<header<<"mode"<<mode<<"   all is"<<data;
+
+
+
     if(mode=="01")
     {
         if(machineId=="-1")//init login
         {
             machineId = header.left(6);
+            this->WriteData(QByteArray("ok"));
             emit SendLog(this, header);
         }
         else if(machineId==header.left(6))
@@ -46,42 +50,48 @@ void MyThread::analyzeHeader(){
             emit SendLog("Error in this.");
 
     }
-    else if(mode=="02")
-    {
-            if(!group)
-            {
-                emit SendLog(QString("设备%1还未绑定设备组，数据会丢失。").arg(QString(machineId)));
-            }
-            else{
-
-                if(this->group->getMachineA_id()==machineId)
-                    group->analyzeDataA(data.right(data.size()-8));
-                else if(this->group->getMachineB_id()==machineId)
-                    group->analyzeDataB(data.right(data.size()-8));
-                else
-                    emit SendLog(QString("所属的设备组没有这个设备【%1】。"));
-                emit SendLog(this, header);
-            }
-    }
-    else if(mode=="03")
-    {
-            if(!group)
-            {
-                emit SendLog(QString("%1 还未绑定设备，数据会丢失。").arg(QString(machineId)));
-            }
-            else{
-                emit SendLog(this, header);
-                group->analyzeDataA(data.right(data.size()-8));
-            }
-    }
-    else if(mode=="04")
-    {
-    }
-    else if(mode=="05")
-    {
-    }
     else{
-        emit SendLog(QString("%1 receive other mode%2").arg(QString(machineId)).arg(QString(mode)));
+        //analyze if the group have this machine. => ofcourse have it.
+
+        if(mode=="02")
+        {
+                if(!group)
+                {
+                    emit SendLog(QString("设备%1还未绑定设备组，数据会丢失。").arg(QString(machineId)));
+                }
+                else{
+
+                    if(this->group->getMachineA_id()==machineId)
+                    {
+                        group->analyzeData_a(data.right(data.size()-8));
+                    }
+                    else if(this->group->getMachineB_id()==machineId)
+                    {
+                        group->analyzeData_r(data.right(data.size()-8));
+                    }
+                    else
+                        emit SendLog(QString("所属的设备组没有这个设备【%1】。").arg(QString(machineId)));
+                }
+        }
+        else if(mode=="03")
+        {
+                if(!group)
+                {
+                    emit SendLog(QString("%1 还未绑定设备，数据会丢失。").arg(QString(machineId)));
+                }
+                else{
+                    if(this->group->getMachineB_id()==machineId)
+                    {
+                        group->analyzeData_b(data.right(data.size()-8));
+                    }
+                    else
+                        emit SendLog(QString("所属的设备组没有这个设备B【%1】。").arg(QString(machineId)));
+                }
+        }
+        else{
+            emit SendLog(QString("%1 receive other mode%2").arg(QString(machineId)).arg(QString(mode)));
+        }
+
     }
 }
 void MyThread::WriteData(QByteArray array)

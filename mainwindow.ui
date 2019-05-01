@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1216</width>
+    <width>1281</width>
     <height>728</height>
    </rect>
   </property>
@@ -83,25 +83,21 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="pushButtonStartVS1">
               <property name="text">
                <string>开始VS1调试</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>开始VS2调试</string>
+               <string>VS1原值：</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
-              <property name="text">
-               <string>中止当前调试</string>
-              </property>
-             </widget>
+             <widget class="QLineEdit" name="lineEditVS1_mode1"/>
             </item>
             <item>
              <spacer name="horizontalSpacer">
@@ -118,26 +114,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>VS1原值：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEditVS1_mode1"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>  VS2原值：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEditVS2_mode1"/>
             </item>
             <item>
              <widget class="QLabel" name="label_5">
@@ -157,12 +133,92 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditCeName_mode1"/>
+             <widget class="QComboBox" name="comboBoxWorker1"/>
             </item>
            </layout>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidgetvs1"/>
+           <widget class="QTableWidget" name="tableWidgetvs1">
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOn</enum>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::DoubleClicked</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QPushButton" name="pushButtonStartVS2">
+              <property name="maximumSize">
+               <size>
+                <width>106</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>开始VS2调试</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>  VS2原值：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEditVS2_mode1">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>145</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonStop1">
+              <property name="text">
+               <string>中止当前调试</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QTableWidget" name="tableWidgetvs2"/>
@@ -240,7 +296,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditCeName_mode2"/>
+             <widget class="QComboBox" name="comboBoxWorker2"/>
             </item>
            </layout>
           </item>
@@ -273,8 +329,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1216</width>
-     <height>25</height>
+     <width>1281</width>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -49,8 +49,14 @@ signals:
     void changeStyle(const QString &qssFile);
 
 public slots:
-    void showLog(MyThread* machine, QByteArray header);
+    void startVS1();
+    void startVS2();
+    void startJingdu();
+
+
     void showLog(QString msg);
+    void showLog(MyThread* machine, QByteArray header);
+    void showLog(QString group,QString msg);
 
     void changeStyle();             //更换样式
     void initTcpServer();
@@ -76,6 +82,7 @@ public slots:
 
 
     void showTable(QModelIndex index);
+    void updateTable();
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -98,10 +105,13 @@ public:
     };
 
 
+    void readGroupShip();
+    void saveGroupShip();
     void updateListView();
     void setStyle(Style style);
 
 	//数据处理
+
 
 private:
     Ui::MainWindow *ui;
@@ -158,15 +168,14 @@ private:
     QString curGroupName;
 
 
+    QStringList headers;
+    QVector<double> *f_vecotrArr[7];//f_vector[0] point to originalVector.
+    QVector<QString> *s_vectorArr[3];
+
 
     QPalette red;
     QPalette black;
     QColor green;
-
-
-    QVector<int> *dataA;
-    QVector<int> *dataB;
-    QVector<int> *result;
 
     //change Theme
     QMenu *themeMenu;

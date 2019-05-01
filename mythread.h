@@ -42,8 +42,8 @@ public slots:
 signals:
     void ReadData(int, QByteArray);
     void RecvEnd();
-    void SendLog(MyThread*, QByteArray);
     void SendLog(QString);
+    void SendLog(MyThread*, QByteArray);
 protected:
     void run();
 private:

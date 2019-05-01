@@ -4,12 +4,10 @@ Expression::Expression()
 {
 
 }
-void Expression::analyExpression(){
 
-}
-
-void Expression::addExpression(){
-
+void Expression::addExpression(QString e){
+    allExpression.push_back(e);
+    this->saveExpression();
 }
 
 void Expression::saveExpression(){
@@ -20,3 +18,6 @@ void Expression::chooseExpression(){
 
 }
 
+void Expression::findExpression(QString e){
+
+}
