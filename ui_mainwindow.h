@@ -13,6 +13,8 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -59,19 +61,22 @@ public:
     QWidget *tab;
     QVBoxLayout *verticalLayout_4;
     QHBoxLayout *horizontalLayout_5;
-    QPushButton *pushButton;
-    QPushButton *pushButton_3;
-    QPushButton *pushButton_2;
-    QSpacerItem *horizontalSpacer;
+    QPushButton *pushButtonStartVS1;
     QLabel *label_3;
     QLineEdit *lineEditVS1_mode1;
-    QLabel *label_4;
-    QLineEdit *lineEditVS2_mode1;
+    QSpacerItem *horizontalSpacer;
     QLabel *label_5;
     QLineEdit *lineEditJiNumber_mode1;
     QLabel *label_6;
-    QLineEdit *lineEditCeName_mode1;
+    QComboBox *comboBoxWorker1;
     QTableWidget *tableWidgetvs1;
+    QHBoxLayout *horizontalLayout_6;
+    QPushButton *pushButtonStartVS2;
+    QLabel *label_4;
+    QLineEdit *lineEditVS2_mode1;
+    QSpacerItem *horizontalSpacer_3;
+    QPushButton *pushButtonStop1;
+    QFrame *line;
     QTableWidget *tableWidgetvs2;
     QWidget *tab_2;
     QVBoxLayout *verticalLayout_3;
@@ -86,7 +91,7 @@ public:
     QLabel *label_9;
     QLineEdit *lineEditJiNumber_mode2;
     QLabel *label_10;
-    QLineEdit *lineEditCeName_mode2;
+    QComboBox *comboBoxWorker2;
     QTableWidget *tableWidget_2;
     QTextEdit *logTextEdit;
     QMenuBar *menuBar;
@@ -101,7 +106,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1216, 728);
+        MainWindow->resize(1281, 728);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QStringLiteral("actionSave"));
         actionSave_as = new QAction(MainWindow);
@@ -188,24 +193,10 @@ public:
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setSpacing(6);
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
-        pushButton = new QPushButton(tab);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButtonStartVS1 = new QPushButton(tab);
+        pushButtonStartVS1->setObjectName(QStringLiteral("pushButtonStartVS1"));
 
-        horizontalLayout_5->addWidget(pushButton);
-
-        pushButton_3 = new QPushButton(tab);
-        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-
-        horizontalLayout_5->addWidget(pushButton_3);
-
-        pushButton_2 = new QPushButton(tab);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-
-        horizontalLayout_5->addWidget(pushButton_2);
-
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_5->addItem(horizontalSpacer);
+        horizontalLayout_5->addWidget(pushButtonStartVS1);
 
         label_3 = new QLabel(tab);
         label_3->setObjectName(QStringLiteral("label_3"));
@@ -217,15 +208,9 @@ public:
 
         horizontalLayout_5->addWidget(lineEditVS1_mode1);
 
-        label_4 = new QLabel(tab);
-        label_4->setObjectName(QStringLiteral("label_4"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_5->addWidget(label_4);
-
-        lineEditVS2_mode1 = new QLineEdit(tab);
-        lineEditVS2_mode1->setObjectName(QStringLiteral("lineEditVS2_mode1"));
-
-        horizontalLayout_5->addWidget(lineEditVS2_mode1);
+        horizontalLayout_5->addItem(horizontalSpacer);
 
         label_5 = new QLabel(tab);
         label_5->setObjectName(QStringLiteral("label_5"));
@@ -242,18 +227,69 @@ public:
 
         horizontalLayout_5->addWidget(label_6);
 
-        lineEditCeName_mode1 = new QLineEdit(tab);
-        lineEditCeName_mode1->setObjectName(QStringLiteral("lineEditCeName_mode1"));
+        comboBoxWorker1 = new QComboBox(tab);
+        comboBoxWorker1->setObjectName(QStringLiteral("comboBoxWorker1"));
 
-        horizontalLayout_5->addWidget(lineEditCeName_mode1);
+        horizontalLayout_5->addWidget(comboBoxWorker1);
 
 
         verticalLayout_4->addLayout(horizontalLayout_5);
 
         tableWidgetvs1 = new QTableWidget(tab);
         tableWidgetvs1->setObjectName(QStringLiteral("tableWidgetvs1"));
+        tableWidgetvs1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        tableWidgetvs1->setEditTriggers(QAbstractItemView::DoubleClicked);
 
         verticalLayout_4->addWidget(tableWidgetvs1);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setSpacing(6);
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        pushButtonStartVS2 = new QPushButton(tab);
+        pushButtonStartVS2->setObjectName(QStringLiteral("pushButtonStartVS2"));
+        pushButtonStartVS2->setMaximumSize(QSize(106, 16777215));
+
+        horizontalLayout_6->addWidget(pushButtonStartVS2);
+
+        label_4 = new QLabel(tab);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
+        label_4->setSizePolicy(sizePolicy);
+
+        horizontalLayout_6->addWidget(label_4);
+
+        lineEditVS2_mode1 = new QLineEdit(tab);
+        lineEditVS2_mode1->setObjectName(QStringLiteral("lineEditVS2_mode1"));
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(lineEditVS2_mode1->sizePolicy().hasHeightForWidth());
+        lineEditVS2_mode1->setSizePolicy(sizePolicy1);
+        lineEditVS2_mode1->setMaximumSize(QSize(145, 16777215));
+
+        horizontalLayout_6->addWidget(lineEditVS2_mode1);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_6->addItem(horizontalSpacer_3);
+
+        pushButtonStop1 = new QPushButton(tab);
+        pushButtonStop1->setObjectName(QStringLiteral("pushButtonStop1"));
+
+        horizontalLayout_6->addWidget(pushButtonStop1);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_6);
+
+        line = new QFrame(tab);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_4->addWidget(line);
 
         tableWidgetvs2 = new QTableWidget(tab);
         tableWidgetvs2->setObjectName(QStringLiteral("tableWidgetvs2"));
@@ -319,10 +355,10 @@ public:
 
         horizontalLayout->addWidget(label_10);
 
-        lineEditCeName_mode2 = new QLineEdit(tab_2);
-        lineEditCeName_mode2->setObjectName(QStringLiteral("lineEditCeName_mode2"));
+        comboBoxWorker2 = new QComboBox(tab_2);
+        comboBoxWorker2->setObjectName(QStringLiteral("comboBoxWorker2"));
 
-        horizontalLayout->addWidget(lineEditCeName_mode2);
+        horizontalLayout->addWidget(comboBoxWorker2);
 
 
         verticalLayout_3->addLayout(horizontalLayout);
@@ -349,7 +385,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1216, 25));
+        menuBar->setGeometry(QRect(0, 0, 1281, 31));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menu = new QMenu(menuBar);
@@ -401,13 +437,13 @@ public:
         pushButtonUntie->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\350\247\243\347\273\221", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "\346\234\252\347\273\221\345\256\232\347\232\204\350\256\276\345\244\207\345\210\227\350\241\250\357\274\232", Q_NULLPTR));
         pushButtonTie->setText(QApplication::translate("MainWindow", "\350\256\276\345\244\207\347\273\204\347\273\221\345\256\232", Q_NULLPTR));
-        pushButton->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213VS1\350\260\203\350\257\225", Q_NULLPTR));
-        pushButton_3->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213VS2\350\260\203\350\257\225", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("MainWindow", "\344\270\255\346\255\242\345\275\223\345\211\215\350\260\203\350\257\225", Q_NULLPTR));
+        pushButtonStartVS1->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213VS1\350\260\203\350\257\225", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "VS1\345\216\237\345\200\274\357\274\232", Q_NULLPTR));
-        label_4->setText(QApplication::translate("MainWindow", "  VS2\345\216\237\345\200\274\357\274\232", Q_NULLPTR));
         label_5->setText(QApplication::translate("MainWindow", "  \346\234\272\345\231\250\345\217\267\357\274\232", Q_NULLPTR));
         label_6->setText(QApplication::translate("MainWindow", "  \346\265\213\350\257\225\344\272\272\345\221\230\357\274\232", Q_NULLPTR));
+        pushButtonStartVS2->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213VS2\350\260\203\350\257\225", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MainWindow", "  VS2\345\216\237\345\200\274\357\274\232", Q_NULLPTR));
+        pushButtonStop1->setText(QApplication::translate("MainWindow", "\344\270\255\346\255\242\345\275\223\345\211\215\350\260\203\350\257\225", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", " VS\350\260\203\350\257\225", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "VS1\345\216\237\345\200\274\357\274\232", Q_NULLPTR));
         label_7->setText(QApplication::translate("MainWindow", "  VS2\345\216\237\345\200\274\357\274\232", Q_NULLPTR));

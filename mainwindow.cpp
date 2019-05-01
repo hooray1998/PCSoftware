@@ -10,15 +10,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("上位机软件");
-    setStyle(MainWindow::Style_PSBlack);
+    setStyle(MainWindow::Style_Silvery);
+    setWindowState(Qt::WindowMaximized);
 
-    ui->tableWidgetvs1->setRowCount(20);
-    ui->tableWidgetvs1->setColumnCount(15);
-    ui->tableWidgetvs2->setRowCount(20);
-    ui->tableWidgetvs2->setColumnCount(15);
-    ui->tableWidget_2->setRowCount(20);
-    ui->tableWidget_2->setColumnCount(15);
+    ui->tableWidgetvs1->setRowCount(200);
+    ui->tableWidgetvs1->setColumnCount(10);
+    ui->tableWidgetvs2->setRowCount(200);
+    ui->tableWidgetvs2->setColumnCount(10);
+    ui->tableWidget_2->setRowCount(200);
+    ui->tableWidget_2->setColumnCount(20);
     ui->tabWidget->setCurrentIndex(0);
+
+    headers<<"yuanzhi"<<"b"<<"r"<<"r-b"<<"a"<<"diata"<<"finnal";
+    ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
+    ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+    //ui->tableWidgetvs1->setFixedWidth(ui->tabWidget->width());
 
     red.setColor(QPalette::WindowText, Qt::red);
     black.setColor(QPalette::WindowText, Qt::black);
@@ -29,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //添加换肤菜单
     QStringList name;
-    //name << "银色" << "蓝色" << "浅蓝色" << "深蓝色" << "灰色" << "浅灰色" << "深灰色" << "黑色"
-         //<< "浅黑色" << "深黑色" << "PS黑色" << "黑色扁平" << "白色扁平";
     name << "银色" << "浅蓝色" << "灰色" << "PS黑色";
 
     foreach (QString str, name) {
@@ -48,8 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView->setUpdatesEnabled(true);
     ui->listView_2->setUpdatesEnabled(true);
 
-    ui->lineEditCeName_mode1->setFixedWidth(140);
-    ui->lineEditCeName_mode2->setFixedWidth(140);
+    ui->comboBoxWorker1->setFixedWidth(140);
+    ui->comboBoxWorker2->setFixedWidth(140);
     ui->lineEditJiNumber_mode1->setFixedWidth(140);
     ui->lineEditJiNumber_mode2->setFixedWidth(140);
     ui->lineEditVS1_mode1->setFixedWidth(140);
@@ -71,13 +75,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->listView,&QListView::clicked,this,&MainWindow::showTable);
 
+    connect(ui->pushButtonStartVS1,&QPushButton::clicked,this,&MainWindow::startVS1);
+    connect(ui->pushButtonStartVS2,&QPushButton::clicked,this,&MainWindow::startVS2);
+
 	//设备组
 
 	//数据处理
 
     listenButtonClickSlot();//auto to connect
+    readGroupShip();
     updateListView();
-    setWindowState(Qt::WindowMaximized);
 }
 
 MainWindow::~MainWindow()
@@ -91,6 +98,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    saveGroupShip();
     wip->close();
     wtie->close();
     wuntie->close();
@@ -215,8 +223,8 @@ void MainWindow::initTcpServer(){
                 allMachine.push_back(temp);
                 temp->start();
 
-                connect(temp, SIGNAL(SendLog(MyThread*,QByteArray)), this, SLOT(showLog(MyThread*,QByteArray)));
                 connect(temp, SIGNAL(SendLog(QString)), this, SLOT(showLog(QString)));
+                connect(temp, SIGNAL(SendLog(MyThread*,QByteArray)), this, SLOT(showLog(MyThread*,QByteArray)));
             }
             );
 }
@@ -273,13 +281,14 @@ void MainWindow::listenButtonClickSlot()
 void MainWindow::showLog(QString msg)
 {
     QString time = QTime::currentTime().toString("hh:mm:ss");
-    msg = "["+time+"]"+msg;
-    ui->logTextEdit->append(msg);
+    QString msg2 = QString("[%1] => %2").arg(time).arg(msg);
+    ui->logTextEdit->append(msg2);
 }
 
 
-void MainWindow::showLog(MyThread *machine, QByteArray header)
+void MainWindow::showLog(MyThread* machine, QByteArray header)
 {
+
     QString time = QTime::currentTime().toString("hh:mm:ss");
     QString groupName;
     QString cmd;
@@ -308,6 +317,7 @@ void MainWindow::showLog(MyThread *machine, QByteArray header)
         }
         updateListView();
     }
+    /*
     else if(header.right(2)=="02"){
         if(machine->getGroup()->getMachineA_id()==machine->getMachineID())
             cmd = "发送alpha";
@@ -319,6 +329,7 @@ void MainWindow::showLog(MyThread *machine, QByteArray header)
         if(machine->getGroup()->groupInfo.name==curGroupName)
             showTable(ui->listView->currentIndex());
     }
+    */
     else if(header.right(2)=="09"){
         cmd = "下线";
         for(int i=allMachine.size()-1;i>=0;i--)
@@ -332,9 +343,21 @@ void MainWindow::showLog(MyThread *machine, QByteArray header)
     else{
         cmd = "Other msg";
     }
-
     QString msg = QString("[%1][%2][Machine:%3] => %4").arg(time).arg(groupName).arg(QString(header.left(6))).arg(cmd);
+
     ui->logTextEdit->append(msg);
+}
+
+void MainWindow::showLog(QString group,QString msg)
+{
+    DBG<<"group"<<group<<"msg:"<<msg;
+    if(group==curGroupName)
+        updateTable();
+        //showTable(ui->listView->currentIndex());
+
+    QString time = QTime::currentTime().toString("hh:mm:ss");
+    QString msg2 = QString("[%1][%2] => %4").arg(time).arg(group).arg(msg);
+    ui->logTextEdit->append(msg2);
 }
 
 void MainWindow::updateListView(){
@@ -505,6 +528,7 @@ void MainWindow::tieTwoMachine(){
         Group *g = new Group();
         g->tie(wtie_groupname->text(),a,b);
         allGroup.push_back(g);
+        connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
         wtie_msg->setText("绑定成功。");
         wtie_groupname->clear();
     }
@@ -537,6 +561,10 @@ void MainWindow::showTable(QModelIndex index){
     DBG<<"enter show table";
 
     curGroupName = m_model->data(index).toByteArray();
+    ui->lineEditJiNumber_mode1->setText(curGroupName);
+
+    updateTable();
+        /*
     if(curGroupName.size())
     for(int i=0;i<allGroup.size();i++)
     {
@@ -559,8 +587,106 @@ void MainWindow::showTable(QModelIndex index){
                 ui->tableWidgetvs1->setItem(i,2,new QTableWidgetItem(QString::number(result->at(i))));
             }
 
-            return;
+            break;
         }
     }
+    */
 
+}
+
+void MainWindow::startVS1()
+{
+    curGroupName = m_model->data(ui->listView->currentIndex()).toByteArray();
+    if(curGroupName.size())
+    for(int i=0;i<allGroup.size();i++)
+    {
+        if(allGroup.at(i)->groupInfo.name==curGroupName)
+        {
+            allGroup.at(i)->allData.curMode = AllData::Mode_VS1;
+            allGroup.at(i)->request_b();
+            break;
+        }
+    }
+}
+
+void MainWindow::startVS2(){
+
+}
+
+void MainWindow::startJingdu(){
+
+}
+
+void MainWindow::saveGroupShip(){
+    QFile *file = new QFile("groupShip");
+    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
+    if(ok){
+        DBG<<"write groupShip.";
+        QTextStream out(file);
+        QString n,a,b;
+
+            for(int i=0;i<allGroup.size();i++)
+            {
+                out<<allGroup[i]->groupInfo.name<<" "<<allGroup[i]->groupInfo.machineA_id<<" "<<allGroup[i]->groupInfo.machineB_id<<" ";
+            }
+        }
+        file->close();
+        delete file;
+        file = NULL;
+
+}
+
+void MainWindow::readGroupShip(){
+    QFile *file = new QFile("groupShip");
+    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
+    if(ok){
+        DBG<<"read groupShip.";
+        QTextStream in(file);
+        QString n,a,b;
+
+        while(!in.atEnd())
+        {
+            in>>n>>a>>b;
+            if(!n.size()||!a.size()||!b.size())
+                break;
+            Group *g = new Group();
+            g->tie_byID(n,a,b);
+            allGroup.push_back(g);
+            connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
+        }
+        file->close();
+        delete file;
+        file = NULL;
+    }
+}
+
+void MainWindow::updateTable(){
+    ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
+    ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+    if(curGroupName.size())
+    for(int i=0;i<allGroup.size();i++)
+    {
+        if(allGroup.at(i)->groupInfo.name==curGroupName)
+        {
+            if(!allGroup.at(i)->allData.returnData_FromVS(f_vecotrArr, s_vectorArr))
+                    return;
+            DBG<<"update all table.";
+            //TODO: show all data
+            ui->tableWidgetvs1->clear();
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vecotrArr[i]->size();j++)
+                {
+                    ui->tableWidgetvs1->setItem(j,i,new QTableWidgetItem(QString::number(f_vecotrArr[i]->at(j))));
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+                    ui->tableWidgetvs1->setItem(j,i+7,new QTableWidgetItem(s_vectorArr[i]->at(j)));
+                }
+
+            break;
+        }
+    }
 }
