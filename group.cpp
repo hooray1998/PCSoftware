@@ -124,10 +124,50 @@ QString Group::getMachineB_id(){
 }
 
 void Group::stop(){
-    allData.lastRequest = allData.curAction;
     allData.complete();
+    allData.lastRequest = allData.curAction;
+    allData.curAction = AllData::Action_die;
 }
 
 void Group::setWorker(QString w){
     allData.curWorker  = w;
+}
+
+void Group::logout(MyThread *machine){
+    if(machine == machineA)
+        machineA = NULL;
+    else if(machine == machineB)
+        machineB = NULL;
+    else{
+        DBG<<"Error : Don't have this machine in this group.";
+    }
+}
+
+void Group::login(MyThread *machine){
+    if(machine->getMachineID() == groupInfo.machineA_id)
+    {
+        machineA = machine;
+        machine->setGroup(this);
+    }
+    else if(machine->getMachineID() == groupInfo.machineB_id)
+    {
+        machineB = machine;
+        machine->setGroup(this);
+    }
+    else{
+        DBG<<"Error : Don't have this machine in this group.";
+    }
+}
+
+int Group::getOnlineStatus(){
+    if(machineA)
+        if(machineB)
+            return 3;
+        else
+            return 2;
+    else
+        if(machineB)
+            return 1;
+        else
+            return 0;
 }

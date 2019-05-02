@@ -6,6 +6,7 @@
 #include "xlsxcellrange.h"
 #include "xlsxworksheet.h"
 
+#include <QStandardItemModel>
 #include <QStringListModel>
 #include <QStringList>
 #include <QTime>
@@ -13,6 +14,7 @@
 #include <QColor>
 
 
+#include <QTableWidgetItem>
 #include <QPushButton>
 #include <QComboBox>
 #include <QGridLayout>
@@ -52,6 +54,7 @@ public slots:
     void startVS1();
     void startVS2();
     void startJingdu();
+    void stopDebug();
 
 
     void showLog(QString msg);
@@ -60,6 +63,7 @@ public slots:
 
     void changeStyle();             //更换样式
     void initTcpServer();
+    void initUI();
 
 
     void initIpWidget();
@@ -74,15 +78,26 @@ public slots:
     void showUntieGroupWidget();
     void untieTwoMachine();
 
-    //
+    void initWorkerWidget();
+    void setCurWorker(QString w);
     //设备组
     void getGroupList();//show
     void addGroup();//show a small widget
     void removeGroup();//show a small widget
 
+    bool findMachineInGroup(QString machine, int &index, bool &AorB);
+    bool findGroupInGroup(QString group, int &index);
+
 
     void showTable(QModelIndex index);
     void updateTable();
+    void scrollCurItem(QTableWidgetItem *cur);
+
+
+    //Worker
+    void manageWorker();
+    void readWorkerList();
+    void saveWorkerList();
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -161,6 +176,8 @@ private:
     QPushButton *wuntie_buttonclose;
 
 
+    QStandardItemModel *model;
+
     QStringListModel *m_model;
     QStringListModel *m_model2;
     QStringList groupStringList;
@@ -168,6 +185,9 @@ private:
     QString curGroupName;
 
 
+    int foo;
+    int bar;
+    QStringList groupHeaders;
     QStringList headers;
     QVector<double> *f_vecotrArr[7];//f_vector[0] point to originalVector.
     QVector<QString> *s_vectorArr[3];
@@ -180,6 +200,18 @@ private:
     //change Theme
     QMenu *themeMenu;
 
+    //worker
+    QVector<QString> workerList;
+    QWidget *wworker;
+    QGridLayout *wworker_layout;
+    QLabel *wworker_label;
+    QComboBox *wworker_workerList;
+    QPushButton *wworker_buttonDel;
+    QLabel *wworker_label2;
+    QLineEdit *wworker_lineedit;
+    QPushButton *wworker_buttonAdd;
+    QLabel *wworker_msg;
+    QPushButton *wworker_buttonclose;
 };
 
 #endif // MAINWINDOW_H

@@ -21,6 +21,9 @@ void MyThread::run()
     connect(tcpSocket, &QTcpSocket::disconnected, [=](){
         DBG<<"断开连接";
         die = true;
+        if(group){
+            group->logout(this);
+        }
         emit SendLog(this, QByteArray(machineId+"09"));
         tcpSocket->disconnectFromHost();
     });
@@ -31,8 +34,6 @@ void MyThread::analyzeHeader(){
     QByteArray header = data.left(8);
     mode = header.right(2);
     DBG<<"length is"<<data.size()<<"head"<<header<<"mode"<<mode<<"   all is"<<data;
-
-
 
     if(mode=="01")
     {

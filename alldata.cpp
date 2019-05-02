@@ -4,7 +4,7 @@
 
 AllData::AllData()
 {
-    length_VS2 = 0;
+    length_VS1 = 0;
     length_VS2 = 0;
 
     initValue_VS1_modeVS = 1000;
@@ -15,6 +15,8 @@ AllData::AllData()
     initValue_Yinliu_modeJingdu = 1000;
 
     curWorker = "hoorayitt.";
+    VSCount = -1;
+    curAction = Action_die;
 }
 
 bool AllData::returnData_FromVS(QVector<double> **a,
@@ -101,7 +103,10 @@ double AllData::cal_adjustValue(){
 
     }
     else if(curMode==Mode_Jingdu)
+    {
         expression = Expression_VS2;
+        return cal_expression(expression);
+    }
 
 
 
@@ -158,8 +163,27 @@ void AllData::push_r(double r){
         if(length_VS1 < r_VS1.size())
             length_VS1 = r_VS1.size();
         differential_VS1.push_back(r-b_VS1[length_VS1-1]);
-        adjust_VS1.push_back(cal_adjustValue());
-        final_VS1.push_back(cal_adjustValue());
+        double result = cal_adjustValue();
+        adjust_VS1.push_back(result);
+        if(VSCount==0)
+        {
+            final_VS1.push_back(result);
+            status_VS1.push_back("1");
+        }
+        else if(VSCount==1){
+            double pre = final_VS1.at(final_VS1.size()-1);
+            final_VS1.push_back((result+pre)/2);
+            status_VS1.push_back("2");
+        }
+        else if(VSCount==2)
+        {
+            final_VS1.push_back(result);
+            status_VS1.push_back(QString("%1 <> %2").arg(final_VS1.back()));
+            VSCount = 0;
+            return ;
+        }
+        VSCount ++;
+
     }
     else if(curMode==Mode_VS2)
     {
@@ -169,6 +193,7 @@ void AllData::push_r(double r){
         differential_VS2.push_back(r-b_VS2[length_VS2-1]);
         adjust_VS2.push_back(cal_adjustValue());
         final_VS2.push_back(cal_adjustValue());
+        VSCount ++;
     }
 
 }

@@ -13,6 +13,64 @@ MainWindow::MainWindow(QWidget *parent) :
     setStyle(MainWindow::Style_Silvery);
     setWindowState(Qt::WindowMaximized);
 
+    initUI();
+
+    initIpWidget();
+    initTieGroupWidget();
+    initUntieGroupWidget();
+    initWorkerWidget();
+    initTcpServer();
+
+	//设备组
+
+	//数据处理
+
+    listenButtonClickSlot();//auto to connect
+    readGroupShip();
+    readWorkerList();
+    updateListView();
+    setCurWorker(ui->comboBoxWorker1->currentText());
+
+
+    ui->doubleSpinBoxVS1Value_vsmode->setValue(777.77);
+    ui->doubleSpinBoxVS2Value_vsmode->setValue(999.4);
+
+}
+
+MainWindow::~MainWindow()
+{
+    delete wip;
+    delete wtie;
+    delete wuntie;
+
+    delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    saveGroupShip();
+    saveWorkerList();
+    wip->close();
+    wtie->close();
+    wuntie->close();
+    wworker->close();
+    event->accept();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event){
+    //set layout
+    foo = this->width()/100;
+    bar = this->height()/100;
+    ui->logTextEdit->setFixedWidth(foo*82);
+    ui->listView_2->setFixedHeight(bar*33);
+
+
+    event->accept();
+
+}
+
+void MainWindow::initUI(){
+
     ui->tableWidgetvs1->setRowCount(200);
     ui->tableWidgetvs1->setColumnCount(10);
     ui->tableWidgetvs2->setRowCount(200);
@@ -25,6 +83,38 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
     //ui->tableWidgetvs1->setFixedWidth(ui->tabWidget->width());
+    ui->tableWidgetvs1->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    //test1();
+    ui->tableWidgetvs1->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+
+
+    //ui->listView->setUpdatesEnabled(true);
+    ui->listView_2->setUpdatesEnabled(true);
+
+    ui->comboBoxWorker1->setFixedWidth(140);
+    ui->lineEditJiNumber_mode1->setFixedWidth(140);
+
+
+    //m_model=new QStringListModel();
+    m_model2=new QStringListModel();
+
+    model = new QStandardItemModel;
+    groupHeaders<<"设备组"<<"状态";
+    model->setColumnCount(2);
+
+    ui->tableView->setModel(model);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableView->setShowGrid(false);//主体部分
+    ui->tableView->verticalHeader()->hide();
+    ui->tableView->horizontalHeader()->hide();
+
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    //ui->tableView->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Fixed);
+    //ui->tableView->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
+    //ui->tableView->setColumnWidth(0,20);
 
     red.setColor(QPalette::WindowText, Qt::red);
     black.setColor(QPalette::WindowText, Qt::black);
@@ -44,76 +134,30 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     ui->menu_4->addMenu(themeMenu);
 
-    initIpWidget();
-    initTieGroupWidget();
-    initUntieGroupWidget();
-    initTcpServer();
-
-    ui->listView->setUpdatesEnabled(true);
-    ui->listView_2->setUpdatesEnabled(true);
-
-    ui->comboBoxWorker1->setFixedWidth(140);
-    ui->comboBoxWorker2->setFixedWidth(140);
-    ui->lineEditJiNumber_mode1->setFixedWidth(140);
-    ui->lineEditJiNumber_mode2->setFixedWidth(140);
-    ui->lineEditVS1_mode1->setFixedWidth(140);
-    ui->lineEditVS1_mode2->setFixedWidth(140);
-    ui->lineEditVS2_mode1->setFixedWidth(140);
-    ui->lineEditVS2_mode2->setFixedWidth(140);
-    ui->lineEditYinNumber_mode2->setFixedWidth(140);
-
-
-    m_model=new QStringListModel();
-    m_model2=new QStringListModel();
+    connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem(QTableWidgetItem*)));
 
     connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::showIpWidget);
     connect(ui->actionGroupBound,&QAction::triggered,this,&MainWindow::showTieGroupWidget);
     connect(ui->pushButtonTie,&QPushButton::clicked,this,&MainWindow::showTieGroupWidget);
     connect(ui->actionGroupUnbound,&QAction::triggered,this,&MainWindow::showUntieGroupWidget);
     connect(ui->pushButtonUntie,&QPushButton::clicked,this,&MainWindow::showUntieGroupWidget);
+    connect(ui->actionAdd_Worker,&QAction::triggered,this,&MainWindow::manageWorker);
+    connect(ui->tableView,&QTableView::clicked,this,&MainWindow::showTable);
 
-
-    connect(ui->listView,&QListView::clicked,this,&MainWindow::showTable);
-
+    connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
     connect(ui->pushButtonStartVS1,&QPushButton::clicked,this,&MainWindow::startVS1);
     connect(ui->pushButtonStartVS2,&QPushButton::clicked,this,&MainWindow::startVS2);
 
-	//设备组
+    connect(ui->comboBoxWorker1,&QComboBox::currentTextChanged,this,&MainWindow::setCurWorker);
 
-	//数据处理
-
-    listenButtonClickSlot();//auto to connect
-    readGroupShip();
-    updateListView();
-}
-
-MainWindow::~MainWindow()
-{
-    delete wip;
-    delete wtie;
-    delete wuntie;
-
-    delete ui;
-}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    saveGroupShip();
-    wip->close();
-    wtie->close();
-    wuntie->close();
-}
-
-void MainWindow::resizeEvent(QResizeEvent *event){
-    //set layout
-    ui->logTextEdit->setMinimumWidth(this->width()*5/6);
-    ui->listView_2->setMaximumHeight(this->height()/3);
-
-
+    ui->doubleSpinBoxVS1Value_vsmode->setMaximum(9999);
+    ui->doubleSpinBoxVS2Value_vsmode->setMaximum(9999);
+    ui->doubleSpinBoxVS1Value_jdmode->setMaximum(9999);
+    ui->doubleSpinBoxVS2Value_jdmode->setMaximum(9999);
+    ui->doubleSpinBoxYinliuValue_jdmode->setMaximum(9999);
 
 
 }
-
 
 void MainWindow::changeStyle()
 {
@@ -241,10 +285,35 @@ void MainWindow::showTieGroupWidget(){
     wtie->show();
 }
 void MainWindow::showUntieGroupWidget(){
+    QItemSelectionModel *model_selection = ui->tableView->selectionModel();
+    QModelIndexList IndexList= model_selection->selectedIndexes();
+    QMap<int,int>rowMap;
+    foreach (QModelIndex index, IndexList)
+    {
+        if(! index.isValid()) return;
+        //if(!index.column()==0) return ;
+        rowMap.insert(index.row(),0);
+        //)qDebug()<<"del row..."<<index.row();
+    }
+
+    QMapIterator<int,int> Iterator(rowMap);
+    Iterator.toBack();
+    while(Iterator.hasPrevious())
+    {
+        Iterator.previous();
+        int rowm=Iterator.key();
+        qDebug()<<"delete row..."<<rowm;
+        allGroup.remove(rowm);
+        //file_model->removeRow(rowm);
+    }
+    updateListView();
+
+    /*
     wuntie_msg->clear();
     wuntie->move((this->width()-wuntie->width())/2,(this->height()-wuntie->height())/2);
     wuntie->hide();
     wuntie->show();
+    */
 }
 
 //设备组
@@ -300,36 +369,14 @@ void MainWindow::showLog(MyThread* machine, QByteArray header)
     if(header.right(2)=="01"){
         cmd = "登录";
         //TODO: find group if it is login in now.
-        for(int i=0;i<allGroup.size();i++)
-        {
-            if(allGroup.at(i)->getMachineA_id()==header.left(6))
-            {
-                allGroup.at(i)->setMachineA(machine);
-                groupName = "Group:"+allGroup.at(i)->groupInfo.name;
-                break;
-            }
-            else if(allGroup.at(i)->getMachineB_id()==header.left(6))
-            {
-                allGroup.at(i)->setMachineB(machine);
-                groupName = "Group:"+allGroup.at(i)->groupInfo.name;
-                break;
-            }
+        int index;
+        bool AorB, ok = findMachineInGroup(header.left(6), index, AorB);
+        if(ok){
+            allGroup.at(index)->login(machine);
+            groupName = "Group:"+allGroup.at(index)->groupInfo.name;
         }
         updateListView();
     }
-    /*
-    else if(header.right(2)=="02"){
-        if(machine->getGroup()->getMachineA_id()==machine->getMachineID())
-            cmd = "发送alpha";
-        else if(machine->getGroup()->getMachineB_id()==machine->getMachineID())
-            cmd = "发送beta";
-        else
-            cmd = "Error: Its group haven't the id.正常情况不会出现这条";
-        //shishigengxin
-        if(machine->getGroup()->groupInfo.name==curGroupName)
-            showTable(ui->listView->currentIndex());
-    }
-    */
     else if(header.right(2)=="09"){
         cmd = "下线";
         for(int i=allMachine.size()-1;i>=0;i--)
@@ -337,7 +384,6 @@ void MainWindow::showLog(MyThread* machine, QByteArray header)
             if(allMachine.at(i)->die)
                 allMachine.remove(i);
         }
-    //TODO: delete if it is disconnected.
         updateListView();
     }
     else{
@@ -353,7 +399,6 @@ void MainWindow::showLog(QString group,QString msg)
     DBG<<"group"<<group<<"msg:"<<msg;
     if(group==curGroupName)
         updateTable();
-        //showTable(ui->listView->currentIndex());
 
     QString time = QTime::currentTime().toString("hh:mm:ss");
     QString msg2 = QString("[%1][%2] => %4").arg(time).arg(group).arg(msg);
@@ -363,8 +408,14 @@ void MainWindow::showLog(QString group,QString msg)
 void MainWindow::updateListView(){
     groupStringList.clear();
     singleStringList.clear();
+    model->clear();
+    //model->setHorizontalHeaderLabels(groupHeaders);
     for(int i=0;i<allGroup.size();i++)
+    {
         groupStringList.append(allGroup.at(i)->groupInfo.name);
+        model->setItem(i,0,new QStandardItem(allGroup.at(i)->groupInfo.name));
+        model->setItem(i,1,new QStandardItem("some message in there."));
+    }
 
     for(int i=0;i<allMachine.size();i++)
     {
@@ -372,8 +423,12 @@ void MainWindow::updateListView(){
             singleStringList.append(QString("%1").arg(allMachine.at(i)->getMachineID()));
     }
 
-    m_model->setStringList(groupStringList);
-    ui->listView->setModel(m_model);
+    //m_model->setStringList(groupStringList);
+
+    //ui->listView->setModel(m_model);
+
+
+
     m_model2->setStringList(singleStringList);
     ui->listView_2->setModel(m_model2);
 
@@ -558,53 +613,34 @@ void MainWindow::untieTwoMachine(){
 }
 
 void MainWindow::showTable(QModelIndex index){
-    DBG<<"enter show table";
-
-    curGroupName = m_model->data(index).toByteArray();
+    //curGroupName = m_model->data(index).toByteArray();
+    curGroupName = model->data(index).toByteArray();
     ui->lineEditJiNumber_mode1->setText(curGroupName);
 
     updateTable();
-        /*
-    if(curGroupName.size())
-    for(int i=0;i<allGroup.size();i++)
-    {
-        if(allGroup.at(i)->groupInfo.name==curGroupName)
-        {
-            allGroup.at(i)->allData.returnData(&dataA, &dataB, &result, 0);
-            DBG<<dataA->size()<<dataB->size()<<result->size();
-            //TODO: show all data
-            ui->tableWidgetvs1->clear();
-            for(int i=0;i<dataA->size();i++)
-            {
-                ui->tableWidgetvs1->setItem(i,0,new QTableWidgetItem(QString::number(dataA->at(i))));
-            }
-            for(int i=0;i<dataB->size();i++)
-            {
-                ui->tableWidgetvs1->setItem(i,1,new QTableWidgetItem(QString::number(dataB->at(i))));
-            }
-            for(int i=0;i<result->size();i++)
-            {
-                ui->tableWidgetvs1->setItem(i,2,new QTableWidgetItem(QString::number(result->at(i))));
-            }
-
-            break;
-        }
-    }
-    */
-
 }
 
 void MainWindow::startVS1()
 {
-    curGroupName = m_model->data(ui->listView->currentIndex()).toByteArray();
-    if(curGroupName.size())
-    for(int i=0;i<allGroup.size();i++)
-    {
-        if(allGroup.at(i)->groupInfo.name==curGroupName)
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        //judge if both are online.
+        if(3 == allGroup.at(index)->getOnlineStatus())
         {
-            allGroup.at(i)->allData.curMode = AllData::Mode_VS1;
-            allGroup.at(i)->request_b();
-            break;
+            if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+            {
+                allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
+                allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
+                allGroup.at(index)->allData.VSCount = 0;
+                allGroup.at(index)->request_b();
+            }
+            else{
+                showLog("This group is doing other action.");
+            }
         }
     }
 }
@@ -623,16 +659,16 @@ void MainWindow::saveGroupShip(){
     if(ok){
         DBG<<"write groupShip.";
         QTextStream out(file);
-        QString n,a,b;
 
-            for(int i=0;i<allGroup.size();i++)
-            {
-                out<<allGroup[i]->groupInfo.name<<" "<<allGroup[i]->groupInfo.machineA_id<<" "<<allGroup[i]->groupInfo.machineB_id<<" ";
-            }
+        for(int i=0;i<allGroup.size();i++)
+        {
+            out<<allGroup[i]->groupInfo.name<<" "<<allGroup[i]->groupInfo.machineA_id<<" "<<allGroup[i]->groupInfo.machineB_id<<" ";
+            DBG<<allGroup[i]->groupInfo.name<<" "<<allGroup[i]->groupInfo.machineA_id<<" "<<allGroup[i]->groupInfo.machineB_id<<" ";
         }
-        file->close();
-        delete file;
-        file = NULL;
+    }
+    file->close();
+    delete file;
+    file = NULL;
 
 }
 
@@ -661,32 +697,202 @@ void MainWindow::readGroupShip(){
 }
 
 void MainWindow::updateTable(){
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+
+        if(!allGroup.at(index)->allData.returnData_FromVS(f_vecotrArr, s_vectorArr))
+                return;
+        DBG<<"update all table.";
+        //TODO: show all data
+        ui->tableWidgetvs1->clear();
+
+        for(int i=0;i<7;i++)
+            for(int j=0;j<f_vecotrArr[i]->size();j++)
+            {
+                ui->tableWidgetvs1->setItem(j,i,new QTableWidgetItem(QString::number(f_vecotrArr[i]->at(j))));
+            }
+
+        for(int i=0;i<3;i++)
+            for(int j=0;j<s_vectorArr[i]->size();j++)
+            {
+                ui->tableWidgetvs1->setItem(j,i+7,new QTableWidgetItem(s_vectorArr[i]->at(j)));
+            }
+    }
+
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
-    if(curGroupName.size())
+
+}
+
+bool MainWindow::findGroupInGroup(QString group, int &index){
+
     for(int i=0;i<allGroup.size();i++)
     {
-        if(allGroup.at(i)->groupInfo.name==curGroupName)
+        if(allGroup.at(i)->groupInfo.name == group){
+            index = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool MainWindow::findMachineInGroup(QString machine, int &index, bool &AorB){
+    for(int i=0;i<allGroup.size();i++)
+    {
+        if(allGroup.at(i)->getMachineA_id()==machine)
         {
-            if(!allGroup.at(i)->allData.returnData_FromVS(f_vecotrArr, s_vectorArr))
-                    return;
-            DBG<<"update all table.";
-            //TODO: show all data
-            ui->tableWidgetvs1->clear();
-
-            for(int i=0;i<7;i++)
-                for(int j=0;j<f_vecotrArr[i]->size();j++)
-                {
-                    ui->tableWidgetvs1->setItem(j,i,new QTableWidgetItem(QString::number(f_vecotrArr[i]->at(j))));
-                }
-
-            for(int i=0;i<3;i++)
-                for(int j=0;j<s_vectorArr[i]->size();j++)
-                {
-                    ui->tableWidgetvs1->setItem(j,i+7,new QTableWidgetItem(s_vectorArr[i]->at(j)));
-                }
-
+            index = i;
+            AorB = true;
+            return true;
+            break;
+        }
+        else if(allGroup.at(i)->getMachineB_id()==machine)
+        {
+            index = i;
+            AorB = false;
+            return true;
             break;
         }
     }
+    return false;
+}
+
+void MainWindow::scrollCurItem(QTableWidgetItem *cur){
+    ui->tableWidgetvs1->scrollToItem(cur);
+}
+
+void MainWindow::manageWorker(){
+    wworker_msg->clear();
+    wworker->move((this->width()-wworker->width())/2,(this->height()-wworker->height())/2);
+    wworker->show();
+}
+
+void MainWindow::readWorkerList(){
+    QFile *file = new QFile("workerList");
+    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
+    if(ok){
+        DBG<<"read workerList.";
+        QTextStream in(file);
+        QString n;
+
+        while(!in.atEnd())
+        {
+            in>>n;
+            if(!n.size())
+                break;
+            workerList.push_back(n);
+            wworker_workerList->addItem(n);
+            ui->comboBoxWorker1->addItem(n);
+        }
+        file->close();
+        delete file;
+        file = NULL;
+    }
+
+}
+
+void MainWindow::saveWorkerList(){
+    QFile *file = new QFile("workerList");
+    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
+    if(ok){
+        DBG<<"write workerList.";
+        QTextStream out(file);
+
+            for(int i=0;i<workerList.size();i++)
+            {
+                out<<workerList[i]<<endl;
+            }
+        }
+        file->close();
+        delete file;
+        file = NULL;
+}
+
+void MainWindow::initWorkerWidget(){
+
+    wworker = new QWidget;
+    wworker->resize(400,200);
+
+    wworker_layout = new QGridLayout;
+    wworker_label = new QLabel("工作人员列表：");
+    wworker_workerList = new QComboBox;
+    wworker_buttonDel = new QPushButton("删除");
+    wworker_label2 = new QLabel("新增人员：");
+    wworker_lineedit = new QLineEdit;
+    wworker_buttonAdd = new QPushButton("增加");
+    wworker_msg = new QLabel;
+    wworker_buttonclose = new QPushButton("关闭");
+
+
+    wworker_layout->addWidget(wworker_label,0,0,1,2);
+    wworker_layout->addWidget(wworker_workerList,0,2,1,3);
+    wworker_layout->addWidget(wworker_buttonDel,0,5,1,2);
+    wworker_layout->addWidget(wworker_label2,1,0,1,2);
+    wworker_layout->addWidget(wworker_lineedit,1,2,1,3);
+    wworker_layout->addWidget(wworker_buttonAdd,1,5,1,2);
+    wworker_layout->addWidget(wworker_msg,2,0,2,7);
+    wworker_layout->addWidget(wworker_buttonclose,4,2,1,3);
+    wworker->setLayout(wworker_layout);
+
+   // con7
+    connect(wworker_buttonAdd,&QPushButton::clicked,[=](){
+        QString worker = wworker_lineedit->text();
+        if(worker.size())
+        {
+            if(workerList.contains(worker))
+            {
+                wworker_msg->setText("已经存在。");
+            }
+            else{
+                workerList.push_back(worker);
+                wworker_workerList->addItem(worker);
+                ui->comboBoxWorker1->addItem(worker);
+                wworker_msg->setText("添加成功。");
+                wworker_lineedit->clear();
+            }
+        }
+    });
+    connect(wworker_buttonDel,&QPushButton::clicked,[=](){
+        QString worker = wworker_workerList->currentText();
+        if(worker.size())
+        {
+            if(workerList.contains(worker))
+            {
+                for(int i=0;i<workerList.size();i++)
+                {
+                    if(workerList[i] == worker){
+                        workerList.remove(i);
+                        break;
+                    }
+                }
+                wworker_workerList->removeItem(wworker_workerList->currentIndex());
+                ui->comboBoxWorker1->removeItem(ui->comboBoxWorker1->findText(worker));
+                wworker_msg->setText("移除成功。");
+            }
+            else{
+                wworker_msg->setText("列表中不存在该人员。");
+            }
+        }
+    });
+    connect(wworker_buttonclose, &QPushButton::clicked, wworker, &QWidget::close);
+}
+
+void MainWindow::setCurWorker(QString w){
+    for(int i=0;i<allGroup.size();i++)
+        allGroup[i]->allData.curWorker = w;
+}
+
+void MainWindow::stopDebug(){
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        allGroup[index]->stop();
+        showLog("终止了当前调试");
+    }
+    updateTable();
+
 }

@@ -46,6 +46,7 @@ public:
 
 
     QString curWorker;
+
     double initValue_VS1_modeVS;
     double initValue_VS2_modeVS;
     //VS1
@@ -81,6 +82,7 @@ public:
     double initValue_VS2_modeJingdu;
     double initValue_Yinliu_modeJingdu;
 
+    int VSCount;//记录当前第几次，三次一检查。
     Mode curMode;
     Action curAction;
     Action lastRequest;

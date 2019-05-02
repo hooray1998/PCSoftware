@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QHBoxLayout" name="horizontalLayout_7">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -36,14 +36,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QListView" name="listView">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="dragEnabled">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="QTableView" name="tableView"/>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -71,6 +64,77 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>  机器号：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditJiNumber_mode1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>25</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>  测试人员：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBoxWorker1"/>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonStop">
+          <property name="styleSheet">
+           <string notr="true">background:rgb(204, 0, 0)</string>
+          </property>
+          <property name="text">
+           <string>中止当前调试</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
          <number>0</number>
@@ -97,7 +161,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditVS1_mode1"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_vsmode"/>
             </item>
             <item>
              <spacer name="horizontalSpacer">
@@ -114,26 +178,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>  机器号：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEditJiNumber_mode1"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>  测试人员：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="comboBoxWorker1"/>
             </item>
            </layout>
           </item>
@@ -176,20 +220,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditVS2_mode1">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>145</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_vsmode"/>
             </item>
             <item>
              <spacer name="horizontalSpacer_3">
@@ -203,13 +234,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButtonStop1">
-              <property name="text">
-               <string>中止当前调试</string>
-              </property>
-             </widget>
             </item>
            </layout>
           </item>
@@ -256,7 +280,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditVS1_mode2"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_jdmode"/>
             </item>
             <item>
              <widget class="QLabel" name="label_7">
@@ -266,7 +290,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditVS2_mode2"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_jdmode"/>
             </item>
             <item>
              <widget class="QLabel" name="label_8">
@@ -276,27 +300,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditYinNumber_mode2"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>  机器号：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEditJiNumber_mode2"/>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>  测试人员：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="comboBoxWorker2"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxYinliuValue_jdmode"/>
             </item>
            </layout>
           </item>
@@ -358,12 +362,15 @@
     <property name="title">
      <string>公式</string>
     </property>
+    <addaction name="actionVSFormula"/>
+    <addaction name="actionJDFormula"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
      <string>设置</string>
     </property>
     <addaction name="actionSetIP"/>
+    <addaction name="actionAdd_Worker"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu"/>
@@ -410,6 +417,21 @@
   <action name="actionchange_theme">
    <property name="text">
     <string>change theme</string>
+   </property>
+  </action>
+  <action name="actionAdd_Worker">
+   <property name="text">
+    <string>工作人员</string>
+   </property>
+  </action>
+  <action name="actionVSFormula">
+   <property name="text">
+    <string>VS调试公式</string>
+   </property>
+  </action>
+  <action name="actionJDFormula">
+   <property name="text">
+    <string>精度调试公式</string>
    </property>
   </action>
  </widget>

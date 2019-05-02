@@ -19,6 +19,10 @@ public:
     GroupInfo groupInfo;
     AllData allData;
 
+    void login(MyThread *machine);
+    void logout(MyThread *machine);
+    int getOnlineStatus();
+
     void setMachineA(MyThread* a);
     void setMachineB(MyThread* b);
     QString getMachineA_id();
