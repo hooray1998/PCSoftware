@@ -1,10 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "xlsxdocument.h"
-#include "xlsxformat.h"
-#include "xlsxcellrange.h"
-#include "xlsxworksheet.h"
+
+#include "QTXLSX.h"
 
 #include <QStandardItemModel>
 #include <QStringListModel>
@@ -35,7 +33,6 @@
 #include "group.h"
 #include "mythread.h"
 #include "expression.h"
-#include "vsformula.h"
 
 namespace Ui {
 class MainWindow;
@@ -102,6 +99,9 @@ public slots:
     void showVSFormula();
     void readVSFormulaList();
     void saveVSFormulaList();
+
+    //save to excel
+    void saveTable2Excel();
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -148,7 +148,7 @@ private:
     Expression allExpression;
 
     //Set Ip
-    QDialog *wip;
+    QWidget *wip;
     QGridLayout *wip_layout;
     QLabel *wip_labelip;
     QLabel *wip_labelport;
@@ -158,7 +158,7 @@ private:
 
 
     //Tie group
-    QDialog *wtie;
+    QWidget *wtie;
     QGridLayout *wtie_layout;
     QLabel *wtie_labelA;
     QLabel *wtie_labelB;
@@ -171,7 +171,7 @@ private:
     QPushButton *wtie_buttonclose;
 
     //Untie group
-    QDialog *wuntie;
+    QWidget *wuntie;
     QGridLayout *wuntie_layout;
     QLabel *wuntie_label;
     QLabel *wuntie_msg;
@@ -193,7 +193,7 @@ private:
     int bar;
     QStringList groupHeaders;
     QStringList headers;
-    QVector<double> *f_vecotrArr[7];//f_vector[0] point to originalVector.
+    QVector<double> *f_vectorArr[7];//f_vector[0] point to originalVector.
     QVector<QString> *s_vectorArr[3];
 
 
@@ -206,7 +206,7 @@ private:
 
     //worker
     QVector<QString> workerList;
-    QDialog *wworker;
+    QWidget *wworker;
     QGridLayout *wworker_layout;
     QLabel *wworker_label;
     QComboBox *wworker_workerList;
@@ -220,7 +220,7 @@ private:
 
     //vsFormula
     QVector<QString> vsformulaList;
-    QDialog *wvsformula;
+    QWidget *wvsformula;
     QGridLayout *wvsformula_layout;
     QLabel *wvsformula_rule;
     QLabel *wvsformula_label;

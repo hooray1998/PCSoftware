@@ -1,16 +1,55 @@
+# C++ objects and libs
+*.slo
+*.lo
 *.o
-ComeOnBoy.pro.user
-.qmake.stash
+*.a
+*.la
+*.lai
+*.so
+*.dll
+*.dylib
+
+# Qt-es
+object_script.*.Release
+object_script.*.Debug
+*_plugin_import.cpp
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.qmlc
+*.jsc
+Makefile*
+*build-*
+
+# Qt unit tests
+target_wrapper.*
+
+# QtCreator
+*.autosave
+
+# QtCreator Qml
+*.qmlproject.user
+*.qmlproject.user.*
+
+# QtCreator CMake
+CMakeLists.txt.user*
+
+# QtCreator 4.8< compilation database 
+compile_commands.json
+
+# QtCreator local machine specific files for imported projects
+*creator.user*
+
+*.xlsx
+
+vsformulaList
+
 ComeOnBoy
-alldata.o
-expression.o
-group.o
-groupinfo.o
-main.o
-mainwindow.o
-moc_mainwindow.cpp
-moc_mainwindow.o
-moc_mythread.cpp
-moc_mythread.o
-moc_predefs.h
-mythread.o

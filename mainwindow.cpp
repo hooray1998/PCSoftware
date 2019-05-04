@@ -82,7 +82,7 @@ void MainWindow::initUI(){
     ui->tableWidget_2->setColumnCount(20);
     ui->tabWidget->setCurrentIndex(0);
 
-    headers<<"yuanzhi"<<"b"<<"r"<<"r-b"<<"a"<<"diata"<<"finnal";
+    headers<<"原值"<<"b"<<"r"<<"r-b"<<"a"<<"调整值"<<"最终值"<<"设备状态及备注"<<"日期"<<"工作人员";
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
     //ui->tableWidgetvs1->setFixedWidth(ui->tabWidget->width());
@@ -146,6 +146,7 @@ void MainWindow::initUI(){
     connect(ui->pushButtonUntie,&QPushButton::clicked,this,&MainWindow::showUntieGroupWidget);
     connect(ui->actionAdd_Worker,&QAction::triggered,this,&MainWindow::manageWorker);
     connect(ui->actionVSFormula,&QAction::triggered,this,&MainWindow::showVSFormula);
+    connect(ui->actionSave,&QAction::triggered,this,&MainWindow::saveTable2Excel);
     connect(ui->tableView,&QTableView::clicked,this,&MainWindow::showTable);
 
     connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
@@ -443,7 +444,7 @@ void MainWindow::updateListView(){
 }
 
 void MainWindow::initIpWidget(){
-    wip = new QDialog;
+    wip = new QWidget;
     wip->resize(300,200);
 
     wip_layout = new QGridLayout;
@@ -467,7 +468,7 @@ void MainWindow::initIpWidget(){
 
 }
 void MainWindow::initTieGroupWidget(){
-    wtie = new QDialog;
+    wtie = new QWidget;
     wtie->setWindowTitle("绑定设备");
     wtie->resize(300,200);
 
@@ -494,11 +495,11 @@ void MainWindow::initTieGroupWidget(){
     wtie_layout->addWidget(wtie_buttonclose,4,3,1,2);
     wtie->setLayout(wtie_layout);
     connect(wtie_button,&QPushButton::clicked,this,&MainWindow::tieTwoMachine);
-    connect(wtie_buttonclose,&QPushButton::clicked,wtie,&QDialog::close);
+    connect(wtie_buttonclose,&QPushButton::clicked,wtie,&QWidget::close);
 
 }
 void MainWindow::initUntieGroupWidget(){
-    wuntie = new QDialog;
+    wuntie = new QWidget;
     wtie->setWindowTitle("解绑设备组");
     wtie->resize(300,200);
 
@@ -516,7 +517,7 @@ void MainWindow::initUntieGroupWidget(){
     wuntie_layout->addWidget(wuntie_buttonclose,3,3,1,2);
     wuntie->setLayout(wuntie_layout);
     connect(wuntie_button,&QPushButton::clicked,this,&MainWindow::untieTwoMachine);
-    connect(wuntie_buttonclose,&QPushButton::clicked,wuntie,&QDialog::close);
+    connect(wuntie_buttonclose,&QPushButton::clicked,wuntie,&QWidget::close);
 }
 
 void MainWindow::tieTwoMachine(){
@@ -701,16 +702,16 @@ void MainWindow::updateTable(){
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
 
-        if(!allGroup.at(index)->allData.returnData_FromVS(f_vecotrArr, s_vectorArr))
+        if(!allGroup.at(index)->allData.returnData_FromVS(f_vectorArr, s_vectorArr))
                 return;
         DBG<<"update all table.";
         //TODO: show all data
         ui->tableWidgetvs1->clear();
 
         for(int i=0;i<7;i++)
-            for(int j=0;j<f_vecotrArr[i]->size();j++)
+            for(int j=0;j<f_vectorArr[i]->size();j++)
             {
-                ui->tableWidgetvs1->setItem(j,i,new QTableWidgetItem(QString::number(f_vecotrArr[i]->at(j))));
+                ui->tableWidgetvs1->setItem(j,i,new QTableWidgetItem(QString::number(f_vectorArr[i]->at(j))));
             }
 
         for(int i=0;i<3;i++)
@@ -812,7 +813,7 @@ void MainWindow::saveWorkerList(){
 
 void MainWindow::initWorkerWidget(){
 
-    wworker = new QDialog;
+    wworker = new QWidget;
     wworker->resize(400,200);
 
     wworker_layout = new QGridLayout;
@@ -876,7 +877,7 @@ void MainWindow::initWorkerWidget(){
             }
         }
     });
-    connect(wworker_buttonclose, &QPushButton::clicked, wworker, &QDialog::close);
+    connect(wworker_buttonclose, &QPushButton::clicked, wworker, &QWidget::close);
 }
 
 void MainWindow::setCurWorker(QString w){
@@ -896,7 +897,7 @@ void MainWindow::stopDebug(){
 }
 
 void MainWindow::initVSFormulaWidget(){
-    wvsformula = new QDialog;
+    wvsformula = new QWidget;
     wvsformula->resize(600,400);
     wvsformula->setWindowTitle("VS公式编辑");
 
@@ -962,7 +963,7 @@ void MainWindow::initVSFormulaWidget(){
             }
         }
     });
-    connect(wvsformula_buttonclose, &QPushButton::clicked, wvsformula, &QDialog::close);
+    connect(wvsformula_buttonclose, &QPushButton::clicked, wvsformula, &QWidget::close);
 
 }
 
@@ -1012,4 +1013,46 @@ void MainWindow::saveVSFormulaList(){
         file->close();
         delete file;
         file = NULL;
+}
+
+void MainWindow::saveTable2Excel(){
+
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+
+        QXlsx::Document xlsx("comeon.xlsx");
+        QXlsx::Format blueBackground;
+        blueBackground.setPatternBackgroundColor(Qt::blue);
+        QXlsx::Format greenBackground;
+        greenBackground.setPatternBackgroundColor(Qt::green);
+
+        if(!allGroup.at(index)->allData.returnData_FromVS(f_vectorArr, s_vectorArr))
+                return;
+        DBG<<"update all table.";
+        //TODO: show all data
+        //ui->tableWidgetvs1->clear();
+        for(int i=0;i<10;i++)
+           xlsx.write(1, i+1,headers.at(i));
+
+        for(int i=0;i<7;i++)
+            for(int j=0;j<f_vectorArr[i]->size();j++)
+            {
+                xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+            }
+
+        for(int i=0;i<3;i++)
+            for(int j=0;j<s_vectorArr[i]->size();j++)
+            {
+
+                xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), blueBackground);
+            }
+        xlsx.save();
+    }
+
+    ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
+    ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
 }
