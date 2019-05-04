@@ -1325,13 +1325,9 @@ moc_mainwindow.cpp: 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QStandardItemModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qstandarditemmodel.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
@@ -1342,6 +1338,13 @@ moc_mainwindow.cpp: 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTableWidgetItem \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtablewidget.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1361,7 +1364,6 @@ moc_mainwindow.cpp: 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvalidator.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregularexpression.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qslider.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractslider.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qstyle.h \
@@ -1424,6 +1426,9 @@ moc_mainwindow.cpp: 3rdparty/qtxlsx/src/xlsx/xlsxdocument.h \
 		alldata.h \
 		expression.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		vsformula.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QDialog \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qdialog.h \
 		mainwindow.h \
 		moc_predefs.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/bin/moc
@@ -4743,13 +4748,9 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QStandardItemModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qstandarditemmodel.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
@@ -4760,6 +4761,13 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTableWidgetItem \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtablewidget.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -4779,7 +4787,6 @@ main.o: main.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvalidator.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregularexpression.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qslider.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractslider.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qstyle.h \
@@ -4842,6 +4849,9 @@ main.o: main.cpp mainwindow.h \
 		alldata.h \
 		expression.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		vsformula.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QDialog \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qdialog.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QApplication \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qapplication.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qcoreapplication.h \
@@ -4954,13 +4964,9 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QMap \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QPointF \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QObject \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QStandardItemModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qstandarditemmodel.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qbrush.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qmatrix.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpolygon.h \
@@ -4971,6 +4977,13 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixelformat.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QStringListModel \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QTime \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/QPalette \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qpalette.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTableWidgetItem \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtablewidget.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -4990,7 +5003,6 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qvalidator.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/qregularexpression.h \
-		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtGui/qicon.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qslider.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qabstractslider.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qstyle.h \
@@ -5053,6 +5065,9 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		alldata.h \
 		expression.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtCore/QVector \
+		vsformula.h \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QDialog \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qdialog.h \
 		ui_mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QAction \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qaction.h \
@@ -5081,6 +5096,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QStatusBar \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qstatusbar.h \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTabWidget \
+		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTableView \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTableWidget \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/QTextEdit \
 		../../../SoftWare/qt5.9.3/5.9.3/gcc_64/include/QtWidgets/qtextedit.h \

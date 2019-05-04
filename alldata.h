@@ -82,6 +82,8 @@ public:
     double initValue_VS2_modeJingdu;
     double initValue_Yinliu_modeJingdu;
 
+    double averageValue;
+
     int VSCount;//记录当前第几次，三次一检查。
     Mode curMode;
     Action curAction;

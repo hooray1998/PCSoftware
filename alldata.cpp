@@ -109,13 +109,14 @@ double AllData::cal_adjustValue(){
     }
 
 
+    return 444;
 
 }
 
 double AllData::cal_expression(QString e){//use stack to calculate the expression
     DBG<<"expression final is :"<<e;
     e = "666";
-    return 666;
+    return rand()%10000;
 }
 
 void AllData::push_a(double a){
@@ -139,7 +140,10 @@ void AllData::push_b(double b){
         b_VS1.push_back(b);
         if(length_VS1 < b_VS1.size())
             length_VS1 = b_VS1.size();
-        original_VS1.push_back(initValue_VS1_modeVS);
+        if(VSCount!=2)
+            original_VS1.push_back(initValue_VS1_modeVS);
+        else
+            original_VS1.push_back(final_VS1.back());
         worker_VS1.push_back(curWorker);
         date_VS1.push_back(QDate::currentDate().toString("yy-MM-dd"));
     }
@@ -173,12 +177,13 @@ void AllData::push_r(double r){
         else if(VSCount==1){
             double pre = final_VS1.at(final_VS1.size()-1);
             final_VS1.push_back((result+pre)/2);
+            averageValue = final_VS1.back();//return to A
             status_VS1.push_back("2");
         }
         else if(VSCount==2)
         {
             final_VS1.push_back(result);
-            status_VS1.push_back(QString("%1 <> %2").arg(final_VS1.back()));
+            status_VS1.push_back(QString("%1 <> %2").arg(final_VS1.back()).arg(original_VS1.back()));
             VSCount = 0;
             return ;
         }

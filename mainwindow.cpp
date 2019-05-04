@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initTieGroupWidget();
     initUntieGroupWidget();
     initWorkerWidget();
+    initVSFormulaWidget();
     initTcpServer();
 
 	//设备组
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     listenButtonClickSlot();//auto to connect
     readGroupShip();
     readWorkerList();
+    readVSFormulaList();
     updateListView();
     setCurWorker(ui->comboBoxWorker1->currentText());
 
@@ -50,6 +52,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     saveGroupShip();
     saveWorkerList();
+    saveVSFormulaList();
     wip->close();
     wtie->close();
     wuntie->close();
@@ -142,6 +145,7 @@ void MainWindow::initUI(){
     connect(ui->actionGroupUnbound,&QAction::triggered,this,&MainWindow::showUntieGroupWidget);
     connect(ui->pushButtonUntie,&QPushButton::clicked,this,&MainWindow::showUntieGroupWidget);
     connect(ui->actionAdd_Worker,&QAction::triggered,this,&MainWindow::manageWorker);
+    connect(ui->actionVSFormula,&QAction::triggered,this,&MainWindow::showVSFormula);
     connect(ui->tableView,&QTableView::clicked,this,&MainWindow::showTable);
 
     connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
@@ -275,6 +279,7 @@ void MainWindow::initTcpServer(){
 void MainWindow::showIpWidget()
 {
     wip->move((this->width()-wip->width())/2,(this->height()-wip->height())/2);
+    wip->hide();
     wip->show();
 }
 void MainWindow::showTieGroupWidget(){
@@ -316,16 +321,6 @@ void MainWindow::showUntieGroupWidget(){
     */
 }
 
-//设备组
-void MainWindow::getGroupList(){
-
-}//show
-void MainWindow::addGroup(){
-
-}//show a small widget
-void MainWindow::removeGroup(){
-
-}//show a small widget
 
 void MainWindow::listenButtonClickSlot()
 {
@@ -448,7 +443,7 @@ void MainWindow::updateListView(){
 }
 
 void MainWindow::initIpWidget(){
-    wip = new QWidget;
+    wip = new QDialog;
     wip->resize(300,200);
 
     wip_layout = new QGridLayout;
@@ -472,7 +467,7 @@ void MainWindow::initIpWidget(){
 
 }
 void MainWindow::initTieGroupWidget(){
-    wtie = new QWidget;
+    wtie = new QDialog;
     wtie->setWindowTitle("绑定设备");
     wtie->resize(300,200);
 
@@ -499,11 +494,11 @@ void MainWindow::initTieGroupWidget(){
     wtie_layout->addWidget(wtie_buttonclose,4,3,1,2);
     wtie->setLayout(wtie_layout);
     connect(wtie_button,&QPushButton::clicked,this,&MainWindow::tieTwoMachine);
-    connect(wtie_buttonclose,&QPushButton::clicked,wtie,&QWidget::close);
+    connect(wtie_buttonclose,&QPushButton::clicked,wtie,&QDialog::close);
 
 }
 void MainWindow::initUntieGroupWidget(){
-    wuntie = new QWidget;
+    wuntie = new QDialog;
     wtie->setWindowTitle("解绑设备组");
     wtie->resize(300,200);
 
@@ -521,7 +516,7 @@ void MainWindow::initUntieGroupWidget(){
     wuntie_layout->addWidget(wuntie_buttonclose,3,3,1,2);
     wuntie->setLayout(wuntie_layout);
     connect(wuntie_button,&QPushButton::clicked,this,&MainWindow::untieTwoMachine);
-    connect(wuntie_buttonclose,&QPushButton::clicked,wuntie,&QWidget::close);
+    connect(wuntie_buttonclose,&QPushButton::clicked,wuntie,&QDialog::close);
 }
 
 void MainWindow::tieTwoMachine(){
@@ -613,8 +608,9 @@ void MainWindow::untieTwoMachine(){
 }
 
 void MainWindow::showTable(QModelIndex index){
-    //curGroupName = m_model->data(index).toByteArray();
-    curGroupName = model->data(index).toByteArray();
+
+    //组名在第一列
+    curGroupName = model->data(index.sibling(index.row(),0)).toByteArray();
     ui->lineEditJiNumber_mode1->setText(curGroupName);
 
     updateTable();
@@ -636,6 +632,7 @@ void MainWindow::startVS1()
                 allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
                 allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
                 allGroup.at(index)->allData.VSCount = 0;
+                allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
                 allGroup.at(index)->request_b();
             }
             else{
@@ -768,6 +765,7 @@ void MainWindow::scrollCurItem(QTableWidgetItem *cur){
 void MainWindow::manageWorker(){
     wworker_msg->clear();
     wworker->move((this->width()-wworker->width())/2,(this->height()-wworker->height())/2);
+    wworker->hide();
     wworker->show();
 }
 
@@ -814,7 +812,7 @@ void MainWindow::saveWorkerList(){
 
 void MainWindow::initWorkerWidget(){
 
-    wworker = new QWidget;
+    wworker = new QDialog;
     wworker->resize(400,200);
 
     wworker_layout = new QGridLayout;
@@ -878,7 +876,7 @@ void MainWindow::initWorkerWidget(){
             }
         }
     });
-    connect(wworker_buttonclose, &QPushButton::clicked, wworker, &QWidget::close);
+    connect(wworker_buttonclose, &QPushButton::clicked, wworker, &QDialog::close);
 }
 
 void MainWindow::setCurWorker(QString w){
@@ -895,4 +893,123 @@ void MainWindow::stopDebug(){
     }
     updateTable();
 
+}
+
+void MainWindow::initVSFormulaWidget(){
+    wvsformula = new QDialog;
+    wvsformula->resize(600,400);
+    wvsformula->setWindowTitle("VS公式编辑");
+
+    wvsformula_layout = new QGridLayout;
+    wvsformula_rule = new QLabel("规则");
+    wvsformula_label = new QLabel("VS公式列表：");
+    wvsformula_vsformulaList = new QComboBox;
+    wvsformula_buttonDel = new QPushButton("删除");
+    wvsformula_label2 = new QLabel("新增公式：");
+    wvsformula_lineedit = new QLineEdit;
+    wvsformula_buttonAdd = new QPushButton("增加");
+    wvsformula_msg = new QLabel;
+    wvsformula_buttonclose = new QPushButton("关闭");
+
+
+    wvsformula_layout->addWidget(wvsformula_rule,0,0,2,7);
+    wvsformula_layout->addWidget(wvsformula_label,2,0,1,2);
+    wvsformula_layout->addWidget(wvsformula_vsformulaList,2,2,1,3);
+    wvsformula_layout->addWidget(wvsformula_buttonDel,2,5,1,2);
+    wvsformula_layout->addWidget(wvsformula_label2,3,0,1,2);
+    wvsformula_layout->addWidget(wvsformula_lineedit,3,2,1,3);
+    wvsformula_layout->addWidget(wvsformula_buttonAdd,3,5,1,2);
+    wvsformula_layout->addWidget(wvsformula_msg,4,0,2,7);
+    wvsformula_layout->addWidget(wvsformula_buttonclose,6,2,1,3);
+    wvsformula->setLayout(wvsformula_layout);
+
+   // con7
+    connect(wvsformula_buttonAdd,&QPushButton::clicked,[=](){
+        QString formula = wvsformula_lineedit->text();
+        if(formula.size())
+        {
+            if(vsformulaList.contains(formula))
+            {
+                wvsformula_msg->setText("已经存在。");
+            }
+            else{
+                vsformulaList.push_back(formula);
+                wvsformula_vsformulaList->addItem(formula);
+                ui->comboBoxWorker1->addItem(formula);
+                wvsformula_msg->setText("添加成功。");
+                wvsformula_lineedit->clear();
+            }
+        }
+    });
+    connect(wvsformula_buttonDel,&QPushButton::clicked,[=](){
+        QString formula = wvsformula_vsformulaList->currentText();
+        if(formula.size())
+        {
+            if(vsformulaList.contains(formula))
+            {
+                for(int i=0;i<vsformulaList.size();i++)
+                {
+                    if(vsformulaList[i] == formula){
+                        vsformulaList.remove(i);
+                        break;
+                    }
+                }
+                wvsformula_vsformulaList->removeItem(wvsformula_vsformulaList->currentIndex());
+                wvsformula_msg->setText("移除成功。");
+            }
+            else{
+                wvsformula_msg->setText("Error:5001 不存在该公式。");
+            }
+        }
+    });
+    connect(wvsformula_buttonclose, &QPushButton::clicked, wvsformula, &QDialog::close);
+
+}
+
+
+void MainWindow::showVSFormula(){
+    wvsformula_msg->clear();
+    wvsformula->move((this->width()-wvsformula->width())/2,(this->height()-wvsformula->height())/2);
+    wvsformula->hide();
+    wvsformula->show();
+}
+
+void MainWindow::readVSFormulaList(){
+    QFile *file = new QFile("vsformulaList");
+    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
+    if(ok){
+        DBG<<"read vsformula.";
+        QTextStream in(file);
+        QString n;
+
+        while(!in.atEnd())
+        {
+            in>>n;
+            if(!n.size())
+                break;
+            vsformulaList.push_back(n);
+            wvsformula_vsformulaList->addItem(n);
+        }
+        file->close();
+        delete file;
+        file = NULL;
+    }
+
+}
+
+void MainWindow::saveVSFormulaList(){
+    QFile *file = new QFile("vsformulaList");
+    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
+    if(ok){
+        DBG<<"write workerList.";
+        QTextStream out(file);
+
+            for(int i=0;i<vsformulaList.size();i++)
+            {
+                out<<vsformulaList[i]<<endl;
+            }
+        }
+        file->close();
+        delete file;
+        file = NULL;
 }

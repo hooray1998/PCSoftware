@@ -78,6 +78,11 @@ void Group::analyzeData_r(QByteArray data){
         allData.push_r(data.toDouble());
         emit SendLog(groupInfo.name, "receive r.");
         allData.curAction = AllData::Action_receive_r;
+        if(allData.VSCount==2)
+        {
+            returnFinalResult(allData.averageValue);
+            emit SendLog(groupInfo.name, "将结果返回给了A设备。");
+        }
         request_b();
     }
 }

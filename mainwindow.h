@@ -35,6 +35,7 @@
 #include "group.h"
 #include "mythread.h"
 #include "expression.h"
+#include "vsformula.h"
 
 namespace Ui {
 class MainWindow;
@@ -80,10 +81,8 @@ public slots:
 
     void initWorkerWidget();
     void setCurWorker(QString w);
-    //设备组
-    void getGroupList();//show
-    void addGroup();//show a small widget
-    void removeGroup();//show a small widget
+
+    void initVSFormulaWidget();
 
     bool findMachineInGroup(QString machine, int &index, bool &AorB);
     bool findGroupInGroup(QString group, int &index);
@@ -98,6 +97,11 @@ public slots:
     void manageWorker();
     void readWorkerList();
     void saveWorkerList();
+
+    //VSFormula
+    void showVSFormula();
+    void readVSFormulaList();
+    void saveVSFormulaList();
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -144,7 +148,7 @@ private:
     Expression allExpression;
 
     //Set Ip
-    QWidget *wip;
+    QDialog *wip;
     QGridLayout *wip_layout;
     QLabel *wip_labelip;
     QLabel *wip_labelport;
@@ -154,7 +158,7 @@ private:
 
 
     //Tie group
-    QWidget *wtie;
+    QDialog *wtie;
     QGridLayout *wtie_layout;
     QLabel *wtie_labelA;
     QLabel *wtie_labelB;
@@ -167,7 +171,7 @@ private:
     QPushButton *wtie_buttonclose;
 
     //Untie group
-    QWidget *wuntie;
+    QDialog *wuntie;
     QGridLayout *wuntie_layout;
     QLabel *wuntie_label;
     QLabel *wuntie_msg;
@@ -202,7 +206,7 @@ private:
 
     //worker
     QVector<QString> workerList;
-    QWidget *wworker;
+    QDialog *wworker;
     QGridLayout *wworker_layout;
     QLabel *wworker_label;
     QComboBox *wworker_workerList;
@@ -212,6 +216,21 @@ private:
     QPushButton *wworker_buttonAdd;
     QLabel *wworker_msg;
     QPushButton *wworker_buttonclose;
+
+
+    //vsFormula
+    QVector<QString> vsformulaList;
+    QDialog *wvsformula;
+    QGridLayout *wvsformula_layout;
+    QLabel *wvsformula_rule;
+    QLabel *wvsformula_label;
+    QComboBox *wvsformula_vsformulaList;
+    QPushButton *wvsformula_buttonDel;
+    QLabel *wvsformula_label2;
+    QLineEdit *wvsformula_lineedit;
+    QPushButton *wvsformula_buttonAdd;
+    QLabel *wvsformula_msg;
+    QPushButton *wvsformula_buttonclose;
 };
 
 #endif // MAINWINDOW_H
