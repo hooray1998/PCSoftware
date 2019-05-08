@@ -147,6 +147,7 @@ void MainWindow::initUI(){
     connect(ui->actionAdd_Worker,&QAction::triggered,this,&MainWindow::manageWorker);
     connect(ui->actionVSFormula,&QAction::triggered,this,&MainWindow::showVSFormula);
     connect(ui->actionSave,&QAction::triggered,this,&MainWindow::saveTable2Excel);
+    connect(ui->actionSave_as,&QAction::triggered,this,&MainWindow::saveAsTable2Excel);
     connect(ui->tableView,&QTableView::clicked,this,&MainWindow::showTable);
 
     connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
@@ -293,13 +294,23 @@ void MainWindow::showTieGroupWidget(){
 void MainWindow::showUntieGroupWidget(){
     QItemSelectionModel *model_selection = ui->tableView->selectionModel();
     QModelIndexList IndexList= model_selection->selectedIndexes();
+
+    if(IndexList.size()==0)
+        return ;
+
+    QMessageBox msgBox;
+    msgBox.setText(QString("是否解绑这%1个设备组?").arg(IndexList.size()/2));
+    msgBox.setInformativeText("是否确认解绑?");
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+     if(QMessageBox::Ok != msgBox.exec())
+         return;
+
     QMap<int,int>rowMap;
     foreach (QModelIndex index, IndexList)
     {
         if(! index.isValid()) return;
-        //if(!index.column()==0) return ;
         rowMap.insert(index.row(),0);
-        //)qDebug()<<"del row..."<<index.row();
     }
 
     QMapIterator<int,int> Iterator(rowMap);
@@ -309,17 +320,12 @@ void MainWindow::showUntieGroupWidget(){
         Iterator.previous();
         int rowm=Iterator.key();
         qDebug()<<"delete row..."<<rowm;
+        //showLog(QString("解绑%1").arg(allGroup.at(rowm)->groupInfo.name));
+        allGroup.at(rowm)->untie();
         allGroup.remove(rowm);
-        //file_model->removeRow(rowm);
     }
     updateListView();
 
-    /*
-    wuntie_msg->clear();
-    wuntie->move((this->width()-wuntie->width())/2,(this->height()-wuntie->height())/2);
-    wuntie->hide();
-    wuntie->show();
-    */
 }
 
 
@@ -632,6 +638,7 @@ void MainWindow::startVS1()
             {
                 allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
                 allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
+                allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
                 allGroup.at(index)->allData.VSCount = 0;
                 allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
                 allGroup.at(index)->request_b();
@@ -1020,11 +1027,68 @@ void MainWindow::saveTable2Excel(){
     if(!curGroupName.size())
         return ;
 
+    //这是另存为
+    //QString filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), QDir::homePath(), tr("excel(*.xlsx)"));
+    QString filename = curGroupName + "_" + QTime::currentTime().toString("hh:mm:ss") + ".xlsx";
+
+    if(!filename.size())
+        return ;
+
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
 
-        QXlsx::Document xlsx("comeon.xlsx");
+        QXlsx::Document xlsx(filename);
+        QXlsx::Format blueBackground;
+        blueBackground.setPatternBackgroundColor(Qt::blue);
+        QXlsx::Format greenBackground;
+        greenBackground.setPatternBackgroundColor(Qt::green);
+
+        if(!allGroup.at(index)->allData.returnData_FromVS(f_vectorArr, s_vectorArr))
+                return;
+        DBG<<"update all table.";
+        //TODO: show all data
+        //ui->tableWidgetvs1->clear();
+        for(int i=0;i<10;i++)
+           xlsx.write(1, i+1,headers.at(i));
+
+        for(int i=0;i<7;i++)
+            for(int j=0;j<f_vectorArr[i]->size();j++)
+            {
+                xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+            }
+
+        for(int i=0;i<3;i++)
+            for(int j=0;j<s_vectorArr[i]->size();j++)
+            {
+
+                xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), blueBackground);
+            }
+        xlsx.save();
+    }
+
+    ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
+    ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+}
+
+
+void MainWindow::saveAsTable2Excel(){
+
+    if(!curGroupName.size())
+        return ;
+
+    //这是另存为
+    QString filename = curGroupName + "_" + QTime::currentTime().toString("hh:mm:ss") + ".xlsx";
+    filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), QDir::homePath(), filename);
+
+    if(!filename.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+
+        QXlsx::Document xlsx(filename);
         QXlsx::Format blueBackground;
         blueBackground.setPatternBackgroundColor(Qt::blue);
         QXlsx::Format greenBackground;

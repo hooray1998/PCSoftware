@@ -10,6 +10,8 @@
 #include <QTime>
 #include <QPalette>
 #include <QColor>
+#include <QMessageBox>
+#include <QFileDialog>
 
 
 #include <QTableWidgetItem>
@@ -102,6 +104,7 @@ public slots:
 
     //save to excel
     void saveTable2Excel();
+    void saveAsTable2Excel();
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

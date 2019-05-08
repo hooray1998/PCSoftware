@@ -1,9 +1,11 @@
 #include "alldata.h"
+#include "calexpression.cpp"
 
 #define DBG qDebug()<<__FILE__<<" "<<__FUNCTION__<<"()"<<__LINE__
 
 AllData::AllData()
 {
+
     length_VS1 = 0;
     length_VS2 = 0;
 
@@ -82,7 +84,7 @@ double AllData::cal_adjustValue(){
 
         expression = expression.split("a").join(QString::number(a));
         expression = expression.split("b").join(QString::number(b));
-        expression = expression.split("r").join(QString::number(r));
+        expression = expression.split("c").join(QString::number(r));
 
         return cal_expression(expression);
 
@@ -97,7 +99,7 @@ double AllData::cal_adjustValue(){
 
         expression = expression.split("a").join(QString::number(a));
         expression = expression.split("b").join(QString::number(b));
-        expression = expression.split("r").join(QString::number(r));
+        expression = expression.split("c").join(QString::number(r));
 
         return cal_expression(expression);
 
@@ -114,9 +116,13 @@ double AllData::cal_adjustValue(){
 }
 
 double AllData::cal_expression(QString e){//use stack to calculate the expression
-    DBG<<"expression final is :"<<e;
-    e = "666";
-    return rand()%10000;
+    e.append('#');
+    QByteArray ba = e.toLatin1();
+    double r = calExpression(ba.data());
+    DBG<<"expression is"<<ba.data();
+    DBG<<"expression final is :"<<r;
+
+    return r;
 }
 
 void AllData::push_a(double a){

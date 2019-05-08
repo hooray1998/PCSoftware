@@ -98,8 +98,10 @@ void Group::tie(QString gname, MyThread *a, MyThread *b){
 }
 
 void Group::untie(){
-    machineA->setGroup(NULL);
-    machineB->setGroup(NULL);
+    if(machineA)
+        machineA->setGroup(NULL);
+    if(machineB)
+        machineB->setGroup(NULL);
     machineA = NULL;
     machineB = NULL;
 }
