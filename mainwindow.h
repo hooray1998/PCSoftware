@@ -105,6 +105,7 @@ public slots:
     //save to excel
     void saveTable2Excel();
     void saveAsTable2Excel();
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -132,7 +133,11 @@ public:
     void updateListView();
     void setStyle(Style style);
 
-	//数据处理
+    //保存退出时状态
+    void saveExitStatus();
+    void readExitStatus();
+
+    //数据处理
 
 
 private:

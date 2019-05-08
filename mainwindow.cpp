@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     readGroupShip();
     readWorkerList();
     readVSFormulaList();
+    readExitStatus();
     updateListView();
     setCurWorker(ui->comboBoxWorker1->currentText());
 
@@ -50,6 +51,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    saveExitStatus();
     saveGroupShip();
     saveWorkerList();
     saveVSFormulaList();
@@ -909,7 +911,7 @@ void MainWindow::initVSFormulaWidget(){
     wvsformula->setWindowTitle("VS公式编辑");
 
     wvsformula_layout = new QGridLayout;
-    wvsformula_rule = new QLabel("规则");
+    wvsformula_rule = new QLabel("规则: a-显示值 b-初值 c-末值");
     wvsformula_label = new QLabel("VS公式列表：");
     wvsformula_vsformulaList = new QComboBox;
     wvsformula_buttonDel = new QPushButton("删除");
@@ -941,11 +943,35 @@ void MainWindow::initVSFormulaWidget(){
                 wvsformula_msg->setText("已经存在。");
             }
             else{
-                vsformulaList.push_back(formula);
-                wvsformula_vsformulaList->addItem(formula);
-                ui->comboBoxWorker1->addItem(formula);
-                wvsformula_msg->setText("添加成功。");
-                wvsformula_lineedit->clear();
+
+                QString charList = "abc+-*/().";
+                bool ok = true;
+                for(int i=0;i<formula.size();i++) {
+                    if(!formula[i].isDigit()&&!charList.contains(formula[i]))
+                    {
+                        wvsformula_msg->setText(QString("存在非法字符'%1'").arg(formula[i]));
+                        ok = false;
+                        break;
+                    }
+                }
+                int kuohao = 0;
+                for(int i=0;i<formula.size();i++) {
+                    if(formula[i] == '(')
+                        kuohao++;
+                    else if(formula[i] == ')')
+                        kuohao--;
+                }
+                if(kuohao){
+                    wvsformula_msg->setText(QString("括号不匹配"));
+                    ok = false;
+                }
+
+                if(ok){
+                    vsformulaList.push_back(formula);
+                    wvsformula_vsformulaList->addItem(formula);
+                    wvsformula_msg->setText("添加成功。");
+                    wvsformula_lineedit->clear();
+                }
             }
         }
     });
@@ -1009,7 +1035,7 @@ void MainWindow::saveVSFormulaList(){
     QFile *file = new QFile("vsformulaList");
     bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
     if(ok){
-        DBG<<"write workerList.";
+        DBG<<"write vsformulaList.";
         QTextStream out(file);
 
             for(int i=0;i<vsformulaList.size();i++)
@@ -1027,9 +1053,7 @@ void MainWindow::saveTable2Excel(){
     if(!curGroupName.size())
         return ;
 
-    //这是另存为
-    //QString filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), QDir::homePath(), tr("excel(*.xlsx)"));
-    QString filename = curGroupName + "_" + QTime::currentTime().toString("hh:mm:ss") + ".xlsx";
+    QString filename = curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
 
     if(!filename.size())
         return ;
@@ -1078,8 +1102,8 @@ void MainWindow::saveAsTable2Excel(){
         return ;
 
     //这是另存为
-    QString filename = curGroupName + "_" + QTime::currentTime().toString("hh:mm:ss") + ".xlsx";
-    filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), QDir::homePath(), filename);
+    QString filename = curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
+    filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), QDir::homePath()+'/'+filename, tr(".xlsx"));
 
     if(!filename.size())
         return ;
@@ -1119,4 +1143,40 @@ void MainWindow::saveAsTable2Excel(){
 
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+}
+
+void MainWindow::saveExitStatus(){
+
+    QFile *file = new QFile("exitStatus");
+    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
+    if(ok){
+            DBG<<"write exitStatus.";
+            QTextStream out(file);
+
+            out<<ui->comboBoxWorker1->currentIndex()<<' '<<wvsformula_vsformulaList->currentIndex();
+        }
+        file->close();
+        delete file;
+        file = NULL;
+}
+
+void MainWindow::readExitStatus(){
+    QFile *file = new QFile("exitStatus");
+    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
+    if(ok){
+        DBG<<"read exitStatus.";
+        QTextStream in(file);
+
+        while(!in.atEnd())
+        {
+            int worker,formula;
+            in>>worker>>formula;
+            ui->comboBoxWorker1->setCurrentIndex(worker);
+            wvsformula_vsformulaList->setCurrentIndex(formula);
+        }
+        file->close();
+        delete file;
+        file = NULL;
+    }
+
 }
