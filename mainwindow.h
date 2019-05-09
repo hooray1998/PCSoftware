@@ -151,6 +151,7 @@ private:
 	//设备组
     Group *curGroup;
     QVector<Group*> allGroup;
+    QVector<QString> allGroupLog;
 
 	//数据处理
     Expression allExpression;

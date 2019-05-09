@@ -47,9 +47,11 @@ public:
 
 
 
+    bool meishuile;
 private:
     MyThread *machineA;
     MyThread *machineB;
+
 };
 
 #endif // GROUP_H

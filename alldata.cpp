@@ -9,6 +9,9 @@ AllData::AllData()
     length_VS1 = 0;
     length_VS2 = 0;
 
+    vs1_ok = false;
+    vs2_ok = false;
+
     initValue_VS1_modeVS = 1000;
     initValue_VS2_modeVS = 1000;
 
@@ -21,10 +24,10 @@ AllData::AllData()
     curAction = Action_die;
 }
 
-bool AllData::returnData_FromVS(QVector<double> **a,
+bool AllData::returnData_FromVS(Mode mode, QVector<double> **a,
                                 QVector<QString> **b){
 
-    if(curMode==Mode_VS1){
+    if(mode==Mode_VS1){
         a[0] = &original_VS1;
         a[1] = &b_VS1;
         a[2] = &r_VS1;
@@ -36,19 +39,19 @@ bool AllData::returnData_FromVS(QVector<double> **a,
         b[1] = &date_VS1;
         b[2] = &worker_VS1;
     }
-    else if(curMode==Mode_VS2){
+    else if(mode==Mode_VS2){
         a[0] = &original_VS2;
-        a[2] = &b_VS2;
+        a[1] = &b_VS2;
         a[2] = &r_VS2;
         a[3] = &differential_VS2;
         a[4] = &a_VS2;
         a[5] = &adjust_VS2;
         a[6] = &final_VS2;
         b[0] = &status_VS2;
-        b[2] = &date_VS2;
+        b[1] = &date_VS2;
         b[2] = &worker_VS2;
     }
-    else if(curMode==Mode_Jingdu){
+    else if(mode==Mode_Jingdu){
         a[0] = &original_VS1;
         a[1] = &b_VS1;
         a[2] = &r_VS1;
@@ -77,14 +80,14 @@ double AllData::cal_adjustValue(){
     {
         expression = Expression_VS1;
         DBG<<length_VS1<<" "<<expression;
-        double a = a_VS1[length_VS1-1];
-        double b = b_VS1[length_VS1-1];
-        double r = r_VS1[length_VS1-1];
+        double a = a_VS1.back();
+        double b = b_VS1.back();
+        double r = r_VS1.back();
 
 
         expression = expression.split("a").join(QString::number(a));
         expression = expression.split("b").join(QString::number(b));
-        expression = expression.split("c").join(QString::number(r));
+        expression = expression.split("r").join(QString::number(r));
 
         return cal_expression(expression);
 
@@ -92,14 +95,15 @@ double AllData::cal_adjustValue(){
     else if(curMode==Mode_VS2)
     {
         expression = Expression_VS2;
-        double a = a_VS2[length_VS2-1];
-        double b = b_VS2[length_VS2-1];
-        double r = r_VS2[length_VS2-1];
+
+        double a = a_VS2.back();
+        double b = b_VS2.back();
+        double r = r_VS2.back();
 
 
         expression = expression.split("a").join(QString::number(a));
         expression = expression.split("b").join(QString::number(b));
-        expression = expression.split("c").join(QString::number(r));
+        expression = expression.split("r").join(QString::number(r));
 
         return cal_expression(expression);
 
@@ -158,7 +162,10 @@ void AllData::push_b(double b){
         b_VS2.push_back(b);
         if(length_VS2 < b_VS2.size())
             length_VS2 = b_VS2.size();
-        original_VS1.push_back(initValue_VS2_modeVS);
+        if(VSCount!=2)
+            original_VS2.push_back(initValue_VS2_modeVS);
+        else
+            original_VS2.push_back(final_VS2.back());
         worker_VS2.push_back(curWorker);
         date_VS2.push_back(QDate::currentDate().toString("yy-MM-dd"));
     }
@@ -189,7 +196,18 @@ void AllData::push_r(double r){
         else if(VSCount==2)
         {
             final_VS1.push_back(result);
-            status_VS1.push_back(QString("%1 <> %2").arg(final_VS1.back()).arg(original_VS1.back()));
+            int a = final_VS1.back();
+            int b = original_VS1.back() - a;
+            if(b<0)
+                b = -b;
+            if(b<10000)
+            {
+                status_VS1.push_back(QString("OK"));
+                vs1_ok = true;
+            }
+            else
+                status_VS1.push_back(QString("%1 <> %2").arg(final_VS1.back()).arg(original_VS1.back()));
+
             VSCount = 0;
             return ;
         }
@@ -202,9 +220,40 @@ void AllData::push_r(double r){
         if(length_VS2 < r_VS2.size())
             length_VS2 = r_VS2.size();
         differential_VS2.push_back(r-b_VS2[length_VS2-1]);
-        adjust_VS2.push_back(cal_adjustValue());
-        final_VS2.push_back(cal_adjustValue());
+        double result = cal_adjustValue();
+        adjust_VS2.push_back(result);
+        if(VSCount==0)
+        {
+            final_VS2.push_back(result);
+            status_VS2.push_back("1");
+        }
+        else if(VSCount==1){
+            double pre = final_VS2.at(final_VS2.size()-1);
+            final_VS2.push_back((result+pre)/2);
+            averageValue = final_VS2.back();//return to A
+            status_VS2.push_back("2");
+        }
+        else if(VSCount==2)
+        {
+            final_VS2.push_back(result);
+            int a = final_VS2.back();
+            int b = original_VS2.back() - a;
+            if(b<0)
+                b = -b;
+            if(b<5000)
+            {
+                status_VS2.push_back(QString("OK"));
+                vs2_ok = true;
+            }
+            else
+                status_VS2.push_back(QString("%1 <> %2").arg(final_VS2.back()).arg(original_VS2.back()));
+
+            VSCount = 0;
+            return ;
+        }
         VSCount ++;
+
+
     }
 
 }

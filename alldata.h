@@ -12,9 +12,9 @@ class AllData
 public:
     AllData();
     enum Mode{
-        Mode_VS1,
-        Mode_VS2,
-        Mode_Jingdu
+        Mode_VS1 = 1,
+        Mode_VS2 = 2,
+        Mode_Jingdu = 3
     };
     enum Action{
         Action_die=0,
@@ -29,7 +29,7 @@ public:
 
     //original
     void saveToExcel();
-    bool returnData_FromVS(QVector<double> **a,
+    bool returnData_FromVS(Mode mode, QVector<double> **a,
                     QVector<QString> **b);
 
 
@@ -62,6 +62,7 @@ public:
     QVector<QString> worker_VS1;
     QString Expression_VS1;
     int length_VS1;
+    bool vs1_ok;
 
     //VS2
     QVector<double> original_VS2;
@@ -76,6 +77,7 @@ public:
     QVector<QString> worker_VS2;
     QString Expression_VS2;
     int length_VS2;
+    bool vs2_ok;
 
 
     double initValue_VS1_modeJingdu;

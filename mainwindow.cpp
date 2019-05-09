@@ -325,6 +325,7 @@ void MainWindow::showUntieGroupWidget(){
         //showLog(QString("解绑%1").arg(allGroup.at(rowm)->groupInfo.name));
         allGroup.at(rowm)->untie();
         allGroup.remove(rowm);
+        allGroupLog.remove(rowm);
     }
     updateListView();
 
@@ -377,6 +378,26 @@ void MainWindow::showLog(MyThread* machine, QByteArray header)
         bool AorB, ok = findMachineInGroup(header.left(6), index, AorB);
         if(ok){
             allGroup.at(index)->login(machine);
+            int status = allGroup.at(index)->getOnlineStatus();
+            QString newlog;
+            switch (status) {
+            case 3:
+                newlog = "均已上线";
+                break;
+            case 2:
+                newlog = "设备B未上线";
+                break;
+            case 1:
+                newlog = "设备A未上线";
+                break;
+            case 0:
+                newlog = "均未上线";
+                break;
+            default:
+                newlog = "不会出现这句005";
+                break;
+            }
+            allGroupLog[index] = newlog;
             groupName = "Group:"+allGroup.at(index)->groupInfo.name;
         }
         updateListView();
@@ -407,6 +428,28 @@ void MainWindow::showLog(QString group,QString msg)
     QString time = QTime::currentTime().toString("hh:mm:ss");
     QString msg2 = QString("[%1][%2] => %4").arg(time).arg(group).arg(msg);
     ui->logTextEdit->append(msg2);
+
+    for(int i=0;i<allGroup.size();i++){
+        if(group == allGroup[i]->groupInfo.name){
+            allGroupLog[i].clear();
+            allGroupLog[i] = msg;
+            model->setItem(i,1,new QStandardItem(allGroupLog.at(i)));
+        }
+    }
+
+    if(msg=="VS1调试ok"){
+        for(int i=0;i<allGroup.size();i++){
+            if(group == allGroup[i]->groupInfo.name){
+                allGroup.at(i)->allData.curMode = AllData::Mode_VS2;
+                allGroup.at(i)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
+                allGroup.at(i)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
+                allGroup.at(i)->allData.VSCount = 0;
+                allGroup.at(i)->allData.vs2_ok = false;
+                allGroup.at(i)->allData.curWorker = ui->comboBoxWorker1->currentText();
+                allGroup.at(i)->request_b();
+            }
+        }
+    }
 }
 
 void MainWindow::updateListView(){
@@ -418,7 +461,7 @@ void MainWindow::updateListView(){
     {
         groupStringList.append(allGroup.at(i)->groupInfo.name);
         model->setItem(i,0,new QStandardItem(allGroup.at(i)->groupInfo.name));
-        model->setItem(i,1,new QStandardItem("some message in there."));
+        model->setItem(i,1,new QStandardItem(allGroupLog.at(i)));
     }
 
     for(int i=0;i<allMachine.size();i++)
@@ -427,7 +470,6 @@ void MainWindow::updateListView(){
             singleStringList.append(QString("%1").arg(allMachine.at(i)->getMachineID()));
     }
 
-    //m_model->setStringList(groupStringList);
 
     //ui->listView->setModel(m_model);
 
@@ -587,6 +629,7 @@ void MainWindow::tieTwoMachine(){
         Group *g = new Group();
         g->tie(wtie_groupname->text(),a,b);
         allGroup.push_back(g);
+        allGroupLog.push_back(QString("new group"));
         connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
         wtie_msg->setText("绑定成功。");
         wtie_groupname->clear();
@@ -603,6 +646,7 @@ void MainWindow::untieTwoMachine(){
         {
             g = allGroup.at(i);
             allGroup.remove(i);
+            allGroupLog.remove(i);
         }
     if(!g)
     {
@@ -636,12 +680,17 @@ void MainWindow::startVS1()
         //judge if both are online.
         if(3 == allGroup.at(index)->getOnlineStatus())
         {
-            if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+            if(allGroup.at(index)->meishuile)//没水了继续
+            {
+                allGroup.at(index)->request_b();
+            }
+            else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
             {
                 allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
                 allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
                 allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
                 allGroup.at(index)->allData.VSCount = 0;
+                allGroup.at(index)->allData.vs1_ok = false;
                 allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
                 allGroup.at(index)->request_b();
             }
@@ -654,6 +703,35 @@ void MainWindow::startVS1()
 
 void MainWindow::startVS2(){
 
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        //judge if both are online.
+        if(3 == allGroup.at(index)->getOnlineStatus())
+        {
+            if(allGroup.at(index)->meishuile)//没水了继续
+            {
+                allGroup.at(index)->meishuile = false;
+                allGroup.at(index)->request_b();
+            }
+            else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+            {
+                allGroup.at(index)->allData.curMode = AllData::Mode_VS2;
+                allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
+                allGroup.at(index)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
+                allGroup.at(index)->allData.VSCount = 0;
+                allGroup.at(index)->allData.vs2_ok = false;
+                allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+                allGroup.at(index)->request_b();
+            }
+            else{
+                showLog("This group is doing other action.");
+            }
+        }
+    }
 }
 
 void MainWindow::startJingdu(){
@@ -695,6 +773,7 @@ void MainWindow::readGroupShip(){
             Group *g = new Group();
             g->tie_byID(n,a,b);
             allGroup.push_back(g);
+            allGroupLog.push_back(QString("均未上线"));
             connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
         }
         file->close();
@@ -711,23 +790,36 @@ void MainWindow::updateTable(){
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
 
-        if(!allGroup.at(index)->allData.returnData_FromVS(f_vectorArr, s_vectorArr))
-                return;
-        DBG<<"update all table.";
         //TODO: show all data
-        ui->tableWidgetvs1->clear();
+        QTableWidget *curTable;
 
-        for(int i=0;i<7;i++)
-            for(int j=0;j<f_vectorArr[i]->size();j++)
-            {
-                ui->tableWidgetvs1->setItem(j,i,new QTableWidgetItem(QString::number(f_vectorArr[i]->at(j))));
-            }
+        AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
+        for(int i=0;i<3;i++){
+            AllData::Mode mode = m[i];
+            if(!allGroup.at(index)->allData.returnData_FromVS(mode, f_vectorArr, s_vectorArr))
+                    return;
+            if(mode==AllData::Mode_VS1)
+                curTable = ui->tableWidgetvs1;
+            else if(mode==AllData::Mode_VS2)
+                curTable = ui->tableWidgetvs2;
+            else if(mode==AllData::Mode_Jingdu)
+                curTable = ui->tableWidget_2;
 
-        for(int i=0;i<3;i++)
-            for(int j=0;j<s_vectorArr[i]->size();j++)
-            {
-                ui->tableWidgetvs1->setItem(j,i+7,new QTableWidgetItem(s_vectorArr[i]->at(j)));
-            }
+            curTable->clear();
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vectorArr[i]->size();j++)
+                {
+                     curTable->setItem(j,i,new QTableWidgetItem(QString::number(f_vectorArr[i]->at(j))));
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+                    curTable->setItem(j,i+7,new QTableWidgetItem(s_vectorArr[i]->at(j)));
+                }
+
+        }
     }
 
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
@@ -911,7 +1003,7 @@ void MainWindow::initVSFormulaWidget(){
     wvsformula->setWindowTitle("VS公式编辑");
 
     wvsformula_layout = new QGridLayout;
-    wvsformula_rule = new QLabel("规则: a-显示值 b-初值 c-末值");
+    wvsformula_rule = new QLabel("规则: a-显示值 b-初值 r-末值");
     wvsformula_label = new QLabel("VS公式列表：");
     wvsformula_vsformulaList = new QComboBox;
     wvsformula_buttonDel = new QPushButton("删除");
@@ -944,7 +1036,7 @@ void MainWindow::initVSFormulaWidget(){
             }
             else{
 
-                QString charList = "abc+-*/().";
+                QString charList = "abr+-*/().";
                 bool ok = true;
                 for(int i=0;i<formula.size();i++) {
                     if(!formula[i].isDigit()&&!charList.contains(formula[i]))
@@ -1062,37 +1154,83 @@ void MainWindow::saveTable2Excel(){
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
 
-        QXlsx::Document xlsx(filename);
         QXlsx::Format blueBackground;
         blueBackground.setPatternBackgroundColor(Qt::blue);
         QXlsx::Format greenBackground;
         greenBackground.setPatternBackgroundColor(Qt::green);
 
-        if(!allGroup.at(index)->allData.returnData_FromVS(f_vectorArr, s_vectorArr))
-                return;
-        DBG<<"update all table.";
-        //TODO: show all data
-        //ui->tableWidgetvs1->clear();
-        for(int i=0;i<10;i++)
-           xlsx.write(1, i+1,headers.at(i));
+        AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
 
-        for(int i=0;i<7;i++)
-            for(int j=0;j<f_vectorArr[i]->size();j++)
-            {
-                xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
-            }
+        if(ui->tabWidget->currentIndex()==0){//vs
+            QXlsx::Document xlsx("vs调试_"+filename);
 
-        for(int i=0;i<3;i++)
-            for(int j=0;j<s_vectorArr[i]->size();j++)
-            {
+            if(!allGroup.at(index)->allData.returnData_FromVS(m[0], f_vectorArr, s_vectorArr))
+                    return;
 
-                xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), blueBackground);
-            }
-        xlsx.save();
+            for(int i=0;i<10;i++)
+               xlsx.write(1, i+1,headers.at(i));
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vectorArr[i]->size();j++)
+                {
+                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+
+                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+                }
+            int lastLen = s_vectorArr[0]->size()+3;
+
+            if(!allGroup.at(index)->allData.returnData_FromVS(m[1], f_vectorArr, s_vectorArr))
+                    return;
+            for(int i=0;i<10;i++)
+               xlsx.write(1+lastLen, i+1,headers.at(i));
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vectorArr[i]->size();j++)
+                {
+                    xlsx.write(j+2+lastLen,i+1,f_vectorArr[i]->at(j), blueBackground);
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+
+                    xlsx.write(j+2+lastLen,i+8,s_vectorArr[i]->at(j), blueBackground);
+                }
+
+            xlsx.save();
+        }
+        else{//精度调试
+            QXlsx::Document xlsx("精度调试_"+filename);
+
+
+            if(!allGroup.at(index)->allData.returnData_FromVS(m[2], f_vectorArr, s_vectorArr))
+                    return;
+
+            for(int i=0;i<10;i++)
+               xlsx.write(1, i+1,headers.at(i));
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vectorArr[i]->size();j++)
+                {
+                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+
+                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+                }
+            xlsx.save();
+        }
+
     }
 
-    ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
-    ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
 }
 
 
@@ -1112,37 +1250,83 @@ void MainWindow::saveAsTable2Excel(){
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
 
-        QXlsx::Document xlsx(filename);
         QXlsx::Format blueBackground;
         blueBackground.setPatternBackgroundColor(Qt::blue);
         QXlsx::Format greenBackground;
         greenBackground.setPatternBackgroundColor(Qt::green);
 
-        if(!allGroup.at(index)->allData.returnData_FromVS(f_vectorArr, s_vectorArr))
-                return;
-        DBG<<"update all table.";
-        //TODO: show all data
-        //ui->tableWidgetvs1->clear();
-        for(int i=0;i<10;i++)
-           xlsx.write(1, i+1,headers.at(i));
+        AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
 
-        for(int i=0;i<7;i++)
-            for(int j=0;j<f_vectorArr[i]->size();j++)
-            {
-                xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
-            }
+        if(ui->tabWidget->currentIndex()==0){//vs
+            QXlsx::Document xlsx("vs调试_"+filename);
 
-        for(int i=0;i<3;i++)
-            for(int j=0;j<s_vectorArr[i]->size();j++)
-            {
+            if(!allGroup.at(index)->allData.returnData_FromVS(m[0], f_vectorArr, s_vectorArr))
+                    return;
 
-                xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), blueBackground);
-            }
-        xlsx.save();
+            for(int i=0;i<10;i++)
+               xlsx.write(1, i+1,headers.at(i));
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vectorArr[i]->size();j++)
+                {
+                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+
+                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+                }
+            int lastLen = s_vectorArr[0]->size()+3;
+
+            if(!allGroup.at(index)->allData.returnData_FromVS(m[1], f_vectorArr, s_vectorArr))
+                    return;
+            for(int i=0;i<10;i++)
+               xlsx.write(1+lastLen, i+1,headers.at(i));
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vectorArr[i]->size();j++)
+                {
+                    xlsx.write(j+2+lastLen,i+1,f_vectorArr[i]->at(j), blueBackground);
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+
+                    xlsx.write(j+2+lastLen,i+8,s_vectorArr[i]->at(j), blueBackground);
+                }
+
+            xlsx.save();
+        }
+        else{//精度调试
+            QXlsx::Document xlsx("精度调试_"+filename);
+
+
+            if(!allGroup.at(index)->allData.returnData_FromVS(m[2], f_vectorArr, s_vectorArr))
+                    return;
+
+            for(int i=0;i<10;i++)
+               xlsx.write(1, i+1,headers.at(i));
+
+            for(int i=0;i<7;i++)
+                for(int j=0;j<f_vectorArr[i]->size();j++)
+                {
+                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+                }
+
+            for(int i=0;i<3;i++)
+                for(int j=0;j<s_vectorArr[i]->size();j++)
+                {
+
+                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+                }
+            xlsx.save();
+        }
+
     }
 
-    ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
-    ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
 }
 
 void MainWindow::saveExitStatus(){

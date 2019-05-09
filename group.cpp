@@ -5,24 +5,31 @@ Group::Group()
 {
     machineA = NULL;
     machineB = NULL;
+    meishuile = false;
 }
 
 void Group::request_a(){
     QByteArray header = "04";
     machineA->WriteData(header);
     allData.curAction = AllData::Action_receive_a;
+    if(allData.lastRequest==AllData::Action_receive_a)
+        allData.lastRequest = AllData::Action_die;
 }
 
 void Group::request_b(){
     QByteArray header = "06";
     machineB->WriteData(header);
     allData.curAction = AllData::Action_receive_b;
+    if(allData.lastRequest==AllData::Action_receive_b)
+        allData.lastRequest = AllData::Action_die;
 }
 
 void Group::request_r(){
     QByteArray header = "07";
     machineB->WriteData(header);
     allData.curAction = AllData::Action_receive_r;
+    if(allData.lastRequest==AllData::Action_receive_r)
+        allData.lastRequest = AllData::Action_die;
 }
 
 void Group::returnFinalResult(double final){
@@ -56,7 +63,8 @@ void Group::analyzeData_b(QByteArray data){
         //TODO:
         double number = data.left(8).toDouble();
         if(number<100){
-            emit SendLog(groupInfo.name, "mei shui le.");
+            emit SendLog(groupInfo.name, "没水了。");
+            meishuile = true;
         }
         else{
             allData.push_b(data.right(8).toDouble());
@@ -83,7 +91,24 @@ void Group::analyzeData_r(QByteArray data){
             returnFinalResult(allData.averageValue);
             emit SendLog(groupInfo.name, "将结果返回给了A设备。");
         }
-        request_b();
+        if(allData.curMode==AllData::Mode_VS1){
+            if(allData.vs1_ok){
+                allData.vs1_ok = false;
+                emit SendLog(groupInfo.name, "VS1调试ok");
+            }
+            else{
+                request_b();
+            }
+        }
+        else if(allData.curMode==AllData::Mode_VS2){
+            if(allData.vs2_ok){
+                allData.vs2_ok = false;
+                emit SendLog(groupInfo.name, "VS2调试ok");
+            }
+            else{
+                request_b();
+            }
+        }
     }
 }
 
