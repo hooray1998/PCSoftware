@@ -90,12 +90,11 @@ void MainWindow::initUI(){
     //ui->tableWidgetvs1->setFixedWidth(ui->tabWidget->width());
     ui->tableWidgetvs1->setEditTriggers(QAbstractItemView::NoEditTriggers);
     //test1();
-    ui->tableWidgetvs1->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidgetvs1->horizontalHeader()->setSectionResizeMode(7,QHeaderView::Stretch);
     ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
 
 
-    //ui->listView->setUpdatesEnabled(true);
     ui->listView_2->setUpdatesEnabled(true);
 
     ui->comboBoxWorker1->setFixedWidth(140);
@@ -139,7 +138,9 @@ void MainWindow::initUI(){
     }
     ui->menu_4->addMenu(themeMenu);
 
-    connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem(QTableWidgetItem*)));
+    connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem1(QTableWidgetItem*)));
+    connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
+    connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
 
     connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::showIpWidget);
     connect(ui->actionGroupBound,&QAction::triggered,this,&MainWindow::showTieGroupWidget);
@@ -153,8 +154,8 @@ void MainWindow::initUI(){
     connect(ui->tableView,&QTableView::clicked,this,&MainWindow::showTable);
 
     connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
-    connect(ui->pushButtonStartVS1,&QPushButton::clicked,this,&MainWindow::startVS1);
-    connect(ui->pushButtonStartVS2,&QPushButton::clicked,this,&MainWindow::startVS2);
+    connect(ui->pushButtonStartVS1,SIGNAL(clicked(bool)),this,SLOT(startVS1()));
+    connect(ui->pushButtonStartVS2,SIGNAL(clicked(bool)),this,SLOT(startVS2()));
 
     connect(ui->comboBoxWorker1,&QComboBox::currentTextChanged,this,&MainWindow::setCurWorker);
 
@@ -363,6 +364,9 @@ void MainWindow::showLog(QString msg)
 void MainWindow::showLog(MyThread* machine, QByteArray header)
 {
 
+    int index;
+    bool AorB, ok = findMachineInGroup(header.left(6), index, AorB);
+
     QString time = QTime::currentTime().toString("hh:mm:ss");
     QString groupName;
     QString cmd;
@@ -371,11 +375,10 @@ void MainWindow::showLog(MyThread* machine, QByteArray header)
     else
         groupName = "Group:"+machine->getGroup()->groupInfo.name;
 
+
     if(header.right(2)=="01"){
         cmd = "登录";
         //TODO: find group if it is login in now.
-        int index;
-        bool AorB, ok = findMachineInGroup(header.left(6), index, AorB);
         if(ok){
             allGroup.at(index)->login(machine);
             int status = allGroup.at(index)->getOnlineStatus();
@@ -399,6 +402,7 @@ void MainWindow::showLog(MyThread* machine, QByteArray header)
             }
             allGroupLog[index] = newlog;
             groupName = "Group:"+allGroup.at(index)->groupInfo.name;
+
         }
         updateListView();
     }
@@ -409,11 +413,37 @@ void MainWindow::showLog(MyThread* machine, QByteArray header)
             if(allMachine.at(i)->die)
                 allMachine.remove(i);
         }
+        if(ok){
+            int status = allGroup.at(index)->getOnlineStatus();
+            QString newlog;
+            switch (status) {
+            case 3:
+                newlog = "均已上线";
+                break;
+            case 2:
+                newlog = "设备B未上线";
+                break;
+            case 1:
+                newlog = "设备A未上线";
+                break;
+            case 0:
+                newlog = "均未上线";
+                break;
+            default:
+                newlog = "不会出现这句005";
+                break;
+            }
+            allGroupLog[index] = newlog;
+            groupName = "Group:"+allGroup.at(index)->groupInfo.name;
+
+        }
         updateListView();
     }
     else{
         cmd = "Other msg";
     }
+
+
     QString msg = QString("[%1][%2][Machine:%3] => %4").arg(time).arg(groupName).arg(QString(header.left(6))).arg(cmd);
 
     ui->logTextEdit->append(msg);
@@ -429,27 +459,15 @@ void MainWindow::showLog(QString group,QString msg)
     QString msg2 = QString("[%1][%2] => %4").arg(time).arg(group).arg(msg);
     ui->logTextEdit->append(msg2);
 
-    for(int i=0;i<allGroup.size();i++){
-        if(group == allGroup[i]->groupInfo.name){
-            allGroupLog[i].clear();
-            allGroupLog[i] = msg;
-            model->setItem(i,1,new QStandardItem(allGroupLog.at(i)));
-        }
+    int index;
+    if(findGroupInGroup(group, index)){
+        allGroupLog[index].clear();
+        allGroupLog[index] = msg;
+        model->setItem(index,1,new QStandardItem(allGroupLog.at(index)));
     }
 
-    if(msg=="VS1调试ok"){
-        for(int i=0;i<allGroup.size();i++){
-            if(group == allGroup[i]->groupInfo.name){
-                allGroup.at(i)->allData.curMode = AllData::Mode_VS2;
-                allGroup.at(i)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
-                allGroup.at(i)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
-                allGroup.at(i)->allData.VSCount = 0;
-                allGroup.at(i)->allData.vs2_ok = false;
-                allGroup.at(i)->allData.curWorker = ui->comboBoxWorker1->currentText();
-                allGroup.at(i)->request_b();
-            }
-        }
-    }
+    if(msg=="VS1调试ok")
+        startVS2(index);
 }
 
 void MainWindow::updateListView(){
@@ -668,6 +686,29 @@ void MainWindow::showTable(QModelIndex index){
 
     updateTable();
 }
+void MainWindow::startVS1(int index){
+
+    if(3 == allGroup.at(index)->getOnlineStatus())
+    {
+        if(allGroup.at(index)->meishuile)//没水了继续
+        {
+            allGroup.at(index)->request_b();
+        }
+        else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+        {
+            allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
+            allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
+            allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
+            allGroup.at(index)->allData.VSCount = 0;
+            allGroup.at(index)->allData.vs1_ok = false;
+            allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+            allGroup.at(index)->request_b();
+        }
+        else{
+            showLog("该设备组正在进行其他动作，调试禁止。");
+        }
+    }
+}
 
 void MainWindow::startVS1()
 {
@@ -695,8 +736,34 @@ void MainWindow::startVS1()
                 allGroup.at(index)->request_b();
             }
             else{
-                showLog("This group is doing other action.");
+                showLog("该设备组正在进行其他动作，调试禁止。");
             }
+        }
+    }
+}
+
+void MainWindow::startVS2(int index){
+
+    //judge if both are online.
+    if(3 == allGroup.at(index)->getOnlineStatus())
+    {
+        if(allGroup.at(index)->meishuile)//没水了继续
+        {
+            allGroup.at(index)->meishuile = false;
+            allGroup.at(index)->request_b();
+        }
+        else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+        {
+            allGroup.at(index)->allData.curMode = AllData::Mode_VS2;
+            allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
+            allGroup.at(index)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
+            allGroup.at(index)->allData.VSCount = 0;
+            allGroup.at(index)->allData.vs2_ok = false;
+            allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+            allGroup.at(index)->request_b();
+        }
+        else{
+            showLog("该设备组正在进行其他动作，调试禁止。");
         }
     }
 }
@@ -728,12 +795,15 @@ void MainWindow::startVS2(){
                 allGroup.at(index)->request_b();
             }
             else{
-                showLog("This group is doing other action.");
+                showLog("该设备组正在进行其他动作，调试禁止。");
             }
         }
     }
 }
 
+void MainWindow::startJingdu(int index){
+
+}
 void MainWindow::startJingdu(){
 
 }
@@ -860,10 +930,16 @@ bool MainWindow::findMachineInGroup(QString machine, int &index, bool &AorB){
     return false;
 }
 
-void MainWindow::scrollCurItem(QTableWidgetItem *cur){
+void MainWindow::scrollCurItem1(QTableWidgetItem *cur){
     ui->tableWidgetvs1->scrollToItem(cur);
 }
 
+void MainWindow::scrollCurItem2(QTableWidgetItem *cur){
+    ui->tableWidgetvs2->scrollToItem(cur);
+}
+void MainWindow::scrollCurItem3(QTableWidgetItem *cur){
+    ui->tableWidget_2->scrollToItem(cur);
+}
 void MainWindow::manageWorker(){
     wworker_msg->clear();
     wworker->move((this->width()-wworker->width())/2,(this->height()-wworker->height())/2);

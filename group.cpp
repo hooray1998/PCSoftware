@@ -94,6 +94,7 @@ void Group::analyzeData_r(QByteArray data){
         if(allData.curMode==AllData::Mode_VS1){
             if(allData.vs1_ok){
                 allData.vs1_ok = false;
+                allData.curAction=AllData::Action_die;
                 emit SendLog(groupInfo.name, "VS1调试ok");
             }
             else{
@@ -103,6 +104,7 @@ void Group::analyzeData_r(QByteArray data){
         else if(allData.curMode==AllData::Mode_VS2){
             if(allData.vs2_ok){
                 allData.vs2_ok = false;
+                allData.curAction=AllData::Action_die;
                 emit SendLog(groupInfo.name, "VS2调试ok");
             }
             else{

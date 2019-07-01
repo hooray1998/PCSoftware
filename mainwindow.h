@@ -54,6 +54,9 @@ public slots:
     void startVS1();
     void startVS2();
     void startJingdu();
+    void startVS1(int index);
+    void startVS2(int index);
+    void startJingdu(int index);
     void stopDebug();
 
 
@@ -89,7 +92,9 @@ public slots:
 
     void showTable(QModelIndex index);
     void updateTable();
-    void scrollCurItem(QTableWidgetItem *cur);
+    void scrollCurItem1(QTableWidgetItem *cur);
+    void scrollCurItem2(QTableWidgetItem *cur);
+    void scrollCurItem3(QTableWidgetItem *cur);
 
 
     //Worker
