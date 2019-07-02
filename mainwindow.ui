@@ -172,7 +172,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_vsmode"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_vsmode">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>99999.990000000005239</double>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer">
@@ -231,7 +238,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_vsmode"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_vsmode">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>99999.990000000005239</double>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer_3">
@@ -298,7 +312,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_jdmode"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_jdmode">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>99999.990000000005239</double>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_7">
@@ -308,7 +329,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_jdmode"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_jdmode">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>99999.990000000005239</double>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_8">
@@ -318,7 +346,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBoxYinliuValue_jdmode"/>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxYinliuValue_jdmode">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>99999.990000000005239</double>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="pushButtonJingduConfig">

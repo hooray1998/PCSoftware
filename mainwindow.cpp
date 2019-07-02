@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->doubleSpinBoxVS1Value_vsmode->setValue(777.77);
     ui->doubleSpinBoxVS2Value_vsmode->setValue(999.4);
+	ui->doubleSpinBoxYinliuValue_jdmode->setValue(1.026);
 
 }
 
@@ -168,8 +169,8 @@ void MainWindow::initUI(){
 
     ui->doubleSpinBoxVS1Value_vsmode->setMaximum(9999);
     ui->doubleSpinBoxVS2Value_vsmode->setMaximum(9999);
-    ui->doubleSpinBoxVS1Value_jdmode->setMaximum(9999);
-    ui->doubleSpinBoxVS2Value_jdmode->setMaximum(9999);
+    ui->doubleSpinBoxVS1Value_jdmode->setMaximum(99999);
+    ui->doubleSpinBoxVS2Value_jdmode->setMaximum(99999);
     ui->doubleSpinBoxYinliuValue_jdmode->setMaximum(9999);
 
 
@@ -861,6 +862,13 @@ void MainWindow::updateTable(){
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
 
+		//TODO:更新精度调试的三个输入框，分别为上一次的VS调试的最终值,引流值为最新的值
+		if(allGroup.at(index)->allData.final_VS1.size())
+			ui->doubleSpinBoxVS1Value_jdmode->setValue(allGroup.at(index)->allData.final_VS1.back());
+		if(allGroup.at(index)->allData.final_VS2.size())
+			ui->doubleSpinBoxVS2Value_jdmode->setValue(allGroup.at(index)->allData.final_VS2.back());
+		ui->doubleSpinBoxYinliuValue_jdmode->setValue(allGroup.at(index)->allData.initValue_Yinliu_modeJingdu);
+
         //TODO: show all data
         QTableWidget *curTable;
 
@@ -1472,6 +1480,7 @@ void MainWindow::startJingdu(){
                 allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = ui->doubleSpinBoxYinliuValue_jdmode->value();
 				//TODO: 暂时没有用公式
                 //allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
+                allGroup.at(index)->allData.jingdu_step = 0;
                 allGroup.at(index)->allData.JingduCount = 0;
                 allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
                 allGroup.at(index)->request_b();

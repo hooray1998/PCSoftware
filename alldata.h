@@ -85,6 +85,13 @@ public:
 	//===========================================================
 	//  精度调试
 	//===========================================================
+	double Threshold1;
+	double Threshold2;
+
+	double range1;
+	double range2;
+	double range3;
+	double range4;
 
     double initValue_VS1_modeJingdu;
     double initValue_VS2_modeJingdu;
