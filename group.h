@@ -42,7 +42,9 @@ public:
     void analyzeData_a(QByteArray data);
     void analyzeData_b(QByteArray data);
     void analyzeData_r(QByteArray data);
+
     void returnFinalResult(double final);
+	void returnThreeResult();
 
 
 

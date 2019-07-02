@@ -51,10 +51,10 @@ signals:
     void changeStyle(const QString &qssFile);
 
 public slots:
-    void startVS1();
+    void startVS1(); //开启当前设备
     void startVS2();
     void startJingdu();
-    void startVS1(int index);
+    void startVS1(int index); //指定设备启动
     void startVS2(int index);
     void startJingdu(int index);
     void stopDebug();
@@ -145,6 +145,7 @@ public:
     //数据处理
 
 
+
 private:
     Ui::MainWindow *ui;
 
@@ -207,7 +208,8 @@ private:
     int bar;
     QStringList groupHeaders;
     QStringList headers;
-    QVector<double> *f_vectorArr[7];//f_vector[0] point to originalVector.
+    QStringList headers2;
+    QVector<double> *f_vectorArr[16];//f_vector[0] point to originalVector.
     QVector<QString> *s_vectorArr[3];
 
 

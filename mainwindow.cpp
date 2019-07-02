@@ -15,14 +15,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initUI();
 
+    //初始化其他设置窗口
     initIpWidget();
     initTieGroupWidget();
     initUntieGroupWidget();
     initWorkerWidget();
     initVSFormulaWidget();
     initTcpServer();
-
-	//设备组
 
 	//数据处理
 
@@ -81,17 +80,24 @@ void MainWindow::initUI(){
     ui->tableWidgetvs2->setRowCount(200);
     ui->tableWidgetvs2->setColumnCount(10);
     ui->tableWidget_2->setRowCount(200);
-    ui->tableWidget_2->setColumnCount(20);
+    ui->tableWidget_2->setColumnCount(19);
     ui->tabWidget->setCurrentIndex(0);
 
-    headers<<"原值"<<"b"<<"r"<<"r-b"<<"a"<<"调整值"<<"最终值"<<"设备状态及备注"<<"日期"<<"工作人员";
+    headers<<"原值"<<"b"<<"r"<<"r-b"<<"a"<<"调整值"<<"最终值"<<"备注"<<"日期"<<"工作人员";
+	//headers2<<"VS1"<<"VS2"<<"引流系数"<<"VS1（调）"<<"VS2（调）"<<"引流系数（调）"<<"0周期引流量初值"<<"0周期引流量末值"<<"0周期引流量实际值"<<"0周期引流量显示值"<<"0周期引流量精度"<<"1周期注入量初值"<<"1周期注入量末值"<<"1周期注入量实际值"<<"1周期注入量显示值"<<"1周期注入量精度"<<"设备状态及备注"<<"日期"<<"工作人员";
+	headers2<<"VS1"<<"VS2"<<"引流系数"<<"VS1-调"<<"VS2-调"<<"引流系数-调"<<"引-初值"<<"引-末值"<<"引-实际值"<<"引-显示值"<<"引-精度"<<"注-初值"<<"注-末值"<<"注-实际值"<<"注-显示值"<<"注-精度"<<"备注"<<"日期"<<"工作人员";
+
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+    ui->tableWidget_2->setHorizontalHeaderLabels(headers2);
     //ui->tableWidgetvs1->setFixedWidth(ui->tabWidget->width());
     ui->tableWidgetvs1->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    //test1();
     ui->tableWidgetvs1->horizontalHeader()->setSectionResizeMode(7,QHeaderView::Stretch);
-    ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidgetvs1->horizontalHeader()->setSectionResizeMode(8,QHeaderView::Stretch);
+    //ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidgetvs2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(7,QHeaderView::Stretch);
+    ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(8,QHeaderView::Stretch);
 
 
 
@@ -156,6 +162,7 @@ void MainWindow::initUI(){
     connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
     connect(ui->pushButtonStartVS1,SIGNAL(clicked(bool)),this,SLOT(startVS1()));
     connect(ui->pushButtonStartVS2,SIGNAL(clicked(bool)),this,SLOT(startVS2()));
+    connect(ui->pushButtonStartJingdu,SIGNAL(clicked(bool)),this,SLOT(startJingdu()));
 
     connect(ui->comboBoxWorker1,&QComboBox::currentTextChanged,this,&MainWindow::setCurWorker);
 
@@ -705,7 +712,7 @@ void MainWindow::startVS1(int index){
             allGroup.at(index)->request_b();
         }
         else{
-            showLog("该设备组正在进行其他动作，调试禁止。");
+            showLog("该设备组正在进行其他动作，禁止启动调试。");
         }
     }
 }
@@ -736,7 +743,7 @@ void MainWindow::startVS1()
                 allGroup.at(index)->request_b();
             }
             else{
-                showLog("该设备组正在进行其他动作，调试禁止。");
+                showLog("该设备组正在进行其他动作，禁止启动调试。");
             }
         }
     }
@@ -763,7 +770,7 @@ void MainWindow::startVS2(int index){
             allGroup.at(index)->request_b();
         }
         else{
-            showLog("该设备组正在进行其他动作，调试禁止。");
+            showLog("该设备组正在进行其他动作，禁止启动调试。");
         }
     }
 }
@@ -795,18 +802,12 @@ void MainWindow::startVS2(){
                 allGroup.at(index)->request_b();
             }
             else{
-                showLog("该设备组正在进行其他动作，调试禁止。");
+                showLog("该设备组正在进行其他动作，禁止启动调试。");
             }
         }
     }
 }
 
-void MainWindow::startJingdu(int index){
-
-}
-void MainWindow::startJingdu(){
-
-}
 
 void MainWindow::saveGroupShip(){
     QFile *file = new QFile("groupShip");
@@ -868,25 +869,30 @@ void MainWindow::updateTable(){
             AllData::Mode mode = m[i];
             if(!allGroup.at(index)->allData.returnData_FromVS(mode, f_vectorArr, s_vectorArr))
                     return;
+
+            int column = 7;
             if(mode==AllData::Mode_VS1)
                 curTable = ui->tableWidgetvs1;
             else if(mode==AllData::Mode_VS2)
                 curTable = ui->tableWidgetvs2;
-            else if(mode==AllData::Mode_Jingdu)
+            else if(mode==AllData::Mode_Jingdu){
+                column = 16;
                 curTable = ui->tableWidget_2;
+            }
 
             curTable->clear();
 
-            for(int i=0;i<7;i++)
+            for(int i=0;i<column;i++)
                 for(int j=0;j<f_vectorArr[i]->size();j++)
                 {
                      curTable->setItem(j,i,new QTableWidgetItem(QString::number(f_vectorArr[i]->at(j))));
+					 DBG<<j<<' '<<i<<QString::number(f_vectorArr[i]->at(j));
                 }
 
             for(int i=0;i<3;i++)
                 for(int j=0;j<s_vectorArr[i]->size();j++)
                 {
-                    curTable->setItem(j,i+7,new QTableWidgetItem(s_vectorArr[i]->at(j)));
+                    curTable->setItem(j,i+column,new QTableWidgetItem(s_vectorArr[i]->at(j)));
                 }
 
         }
@@ -894,6 +900,7 @@ void MainWindow::updateTable(){
 
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+    ui->tableWidget_2->setHorizontalHeaderLabels(headers2);
 
 }
 
@@ -1290,7 +1297,7 @@ void MainWindow::saveTable2Excel(){
             for(int i=0;i<10;i++)
                xlsx.write(1, i+1,headers.at(i));
 
-            for(int i=0;i<7;i++)
+            for(int i=0;i<16;i++)
                 for(int j=0;j<f_vectorArr[i]->size();j++)
                 {
                     xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
@@ -1386,7 +1393,7 @@ void MainWindow::saveAsTable2Excel(){
             for(int i=0;i<10;i++)
                xlsx.write(1, i+1,headers.at(i));
 
-            for(int i=0;i<7;i++)
+            for(int i=0;i<16;i++)
                 for(int j=0;j<f_vectorArr[i]->size();j++)
                 {
                     xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
@@ -1396,7 +1403,7 @@ void MainWindow::saveAsTable2Excel(){
                 for(int j=0;j<s_vectorArr[i]->size();j++)
                 {
 
-                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+                    xlsx.write(j+2,i+17,s_vectorArr[i]->at(j), greenBackground);
                 }
             xlsx.save();
         }
@@ -1438,5 +1445,45 @@ void MainWindow::readExitStatus(){
         delete file;
         file = NULL;
     }
+
+}
+
+void MainWindow::startJingdu(){
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        //judge if both are online.
+        if(3 == allGroup.at(index)->getOnlineStatus())
+        {
+			//TODO:看三个值是否有效,当VS结束时赋予这些值
+			//if(ui->doubleSpinBoxVS1Value_jdmode->value()>0 && ui->doubleSpinBoxVS2Value_jdmode->value()>0 && ui->doubleSpinBoxYinliuValue_jdmode->value()>0)
+            if(allGroup.at(index)->meishuile)//没水了继续
+            {
+                allGroup.at(index)->request_b();
+            }
+            else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+            {
+                allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
+                allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();
+                allGroup.at(index)->allData.initValue_VS2_modeJingdu = ui->doubleSpinBoxVS2Value_jdmode->value();
+                allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = ui->doubleSpinBoxYinliuValue_jdmode->value();
+				//TODO: 暂时没有用公式
+                //allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
+                allGroup.at(index)->allData.JingduCount = 0;
+                allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+                allGroup.at(index)->request_b();
+            }
+            else{
+                showLog("该设备组正在进行其他动作，禁止启动调试。");
+            }
+        }
+    }
+
+}
+
+void MainWindow::startJingdu(int index){
 
 }

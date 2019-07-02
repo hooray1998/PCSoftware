@@ -148,7 +148,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -268,6 +268,13 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
+             <widget class="QPushButton" name="pushButtonStartJingdu">
+              <property name="text">
+               <string>开始精度调试</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -312,6 +319,13 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxYinliuValue_jdmode"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonJingduConfig">
+              <property name="text">
+               <string>其他参数调整</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
