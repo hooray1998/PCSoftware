@@ -715,11 +715,7 @@ void MainWindow::startVS1(int index){
 	//judge if both are online.
     if(3 == allGroup.at(index)->getOnlineStatus())
     {
-        if(allGroup.at(index)->meishuile)//没水了继续
-        {
-            allGroup.at(index)->request_b();
-        }
-        else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+        if(allGroup.at(index)->allData.curAction==AllData::Action_die)
         {
             allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
             allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
@@ -754,12 +750,7 @@ void MainWindow::startVS2(int index){
     //judge if both are online.
     if(3 == allGroup.at(index)->getOnlineStatus())
     {
-        if(allGroup.at(index)->meishuile)//没水了继续
-        {
-            allGroup.at(index)->meishuile = false;
-            allGroup.at(index)->request_b();
-        }
-        else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+		if(allGroup.at(index)->allData.curAction==AllData::Action_die)
         {
             allGroup.at(index)->allData.curMode = AllData::Mode_VS2;
             allGroup.at(index)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
@@ -1303,11 +1294,7 @@ void MainWindow::startJingdu(int index){
 	{
 		//TODO:看三个值是否有效,当VS结束时赋予这些值
 		//if(ui->doubleSpinBoxVS1Value_jdmode->value()>0 && ui->doubleSpinBoxVS2Value_jdmode->value()>0 && ui->doubleSpinBoxYinliuValue_jdmode->value()>0)
-		if(allGroup.at(index)->meishuile)//没水了继续
-		{
-			allGroup.at(index)->request_b();
-		}
-		else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+		if(allGroup.at(index)->allData.curAction==AllData::Action_die)
 		{
 			allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
 			allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();

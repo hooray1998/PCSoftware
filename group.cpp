@@ -5,7 +5,6 @@ Group::Group()
 {
     machineA = NULL;
     machineB = NULL;
-    meishuile = false;
 }
 
 void Group::request_a(){
@@ -69,7 +68,8 @@ void Group::analyzeData_b(QByteArray data){
         double number = data.left(8).toDouble();
         if(number<allData.minWater){
             emit SendLog(groupInfo.name, QString("没水了。（当前水量%1 < %2）").arg(number).arg(allData.minWater));
-            meishuile = true;
+			allData.complete();
+			allData.curAction = AllData::Action_die;
         }
         else{
             allData.push_b(data.right(8).toDouble());
