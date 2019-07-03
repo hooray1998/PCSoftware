@@ -35,8 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setCurWorker(ui->comboBoxWorker1->currentText());
 
 
-    ui->doubleSpinBoxVS1Value_vsmode->setValue(777.77);
-    ui->doubleSpinBoxVS2Value_vsmode->setValue(999.4);
+    ui->doubleSpinBoxVS1Value_vsmode->setValue(debugInitValue.VS1_vsmode);
+    ui->doubleSpinBoxVS2Value_vsmode->setValue(debugInitValue.VS2_vsmode);
+	//ui->doubleSpinBoxYinliuValue_jdmode->setValue(debugInitValue.flow_jingdu);
 
 }
 
@@ -178,6 +179,7 @@ void MainWindow::initUI(){
 
     connect(ui->comboBoxWorker1,&QComboBox::currentTextChanged,this,&MainWindow::setCurWorker);
 
+	//TODO: 修改掉
     ui->doubleSpinBoxVS1Value_vsmode->setMaximum(9999);
     ui->doubleSpinBoxVS2Value_vsmode->setMaximum(9999);
     ui->doubleSpinBoxVS1Value_jdmode->setMaximum(99999);
@@ -710,6 +712,7 @@ void MainWindow::showTable(QModelIndex index){
 }
 void MainWindow::startVS1(int index){
 
+	//judge if both are online.
     if(3 == allGroup.at(index)->getOnlineStatus())
     {
         if(allGroup.at(index)->meishuile)//没水了继续
@@ -719,11 +722,16 @@ void MainWindow::startVS1(int index){
         else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
         {
             allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
-            allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
             allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
             allGroup.at(index)->allData.VSCount = 0;
             allGroup.at(index)->allData.vs1_ok = false;
             allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+
+            allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
+			allGroup.at(index)->allData.minWater = debugInitValue.minWater;
+			allGroup.at(index)->allData.range_vsmode = debugInitValue.range_vsmode;
+
+
             allGroup.at(index)->request_b();
         }
         else{
@@ -734,33 +742,10 @@ void MainWindow::startVS1(int index){
 
 void MainWindow::startVS1()
 {
-    if(!curGroupName.size())
-        return ;
-
+    if(!curGroupName.size()) return ;
     int index;
-    bool ok = findGroupInGroup(curGroupName, index);
-    if(ok){
-        //judge if both are online.
-        if(3 == allGroup.at(index)->getOnlineStatus())
-        {
-            if(allGroup.at(index)->meishuile)//没水了继续
-            {
-                allGroup.at(index)->request_b();
-            }
-            else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
-            {
-                allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
-                allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
-                allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
-                allGroup.at(index)->allData.VSCount = 0;
-                allGroup.at(index)->allData.vs1_ok = false;
-                allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
-                allGroup.at(index)->request_b();
-            }
-            else{
-                showLog("该设备组正在进行其他动作，禁止启动调试。");
-            }
-        }
+    if(findGroupInGroup(curGroupName, index)){
+		startVS1(index);
     }
 }
 
@@ -777,11 +762,15 @@ void MainWindow::startVS2(int index){
         else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
         {
             allGroup.at(index)->allData.curMode = AllData::Mode_VS2;
-            allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
             allGroup.at(index)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
             allGroup.at(index)->allData.VSCount = 0;
             allGroup.at(index)->allData.vs2_ok = false;
             allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+
+            allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
+			allGroup.at(index)->allData.minWater = debugInitValue.minWater;
+			allGroup.at(index)->allData.range_vsmode = debugInitValue.range_vsmode;
+
             allGroup.at(index)->request_b();
         }
         else{
@@ -792,38 +781,12 @@ void MainWindow::startVS2(int index){
 
 void MainWindow::startVS2(){
 
-    if(!curGroupName.size())
-        return ;
-
+    if(!curGroupName.size()) return ;
     int index;
-    bool ok = findGroupInGroup(curGroupName, index);
-    if(ok){
-        //judge if both are online.
-        if(3 == allGroup.at(index)->getOnlineStatus())
-        {
-            if(allGroup.at(index)->meishuile)//没水了继续
-            {
-                allGroup.at(index)->meishuile = false;
-                allGroup.at(index)->request_b();
-            }
-            else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
-            {
-                allGroup.at(index)->allData.curMode = AllData::Mode_VS2;
-                allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
-                allGroup.at(index)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
-                allGroup.at(index)->allData.VSCount = 0;
-                allGroup.at(index)->allData.vs2_ok = false;
-                allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
-                allGroup.at(index)->request_b();
-            }
-            else{
-                showLog("该设备组正在进行其他动作，禁止启动调试。");
-            }
-        }
-    }
+	if(findGroupInGroup(curGroupName, index)){
+		startVS2(index);
+	}
 }
-
-
 
 void MainWindow::updateTable(){
     if(!curGroupName.size())
@@ -832,6 +795,8 @@ void MainWindow::updateTable(){
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
+		ui->doubleSpinBoxVS1Value_vsmode->setValue(debugInitValue.VS1_vsmode);
+		ui->doubleSpinBoxVS2Value_vsmode->setValue(debugInitValue.VS2_vsmode);
 
 		//TODO:更新精度调试的三个输入框，分别为上一次的VS调试的最终值,引流值为最新的值
 		if(allGroup.at(index)->allData.final_VS1.size())
@@ -1324,43 +1289,51 @@ void MainWindow::saveAsTable2Excel(){
 
 
 void MainWindow::startJingdu(){
-    if(!curGroupName.size())
-        return ;
-
+    if(!curGroupName.size()) return ;
     int index;
-    bool ok = findGroupInGroup(curGroupName, index);
-    if(ok){
-        //judge if both are online.
-        if(3 == allGroup.at(index)->getOnlineStatus())
-        {
-			//TODO:看三个值是否有效,当VS结束时赋予这些值
-			//if(ui->doubleSpinBoxVS1Value_jdmode->value()>0 && ui->doubleSpinBoxVS2Value_jdmode->value()>0 && ui->doubleSpinBoxYinliuValue_jdmode->value()>0)
-            if(allGroup.at(index)->meishuile)//没水了继续
-            {
-                allGroup.at(index)->request_b();
-            }
-            else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
-            {
-                allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
-                allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();
-                allGroup.at(index)->allData.initValue_VS2_modeJingdu = ui->doubleSpinBoxVS2Value_jdmode->value();
-                allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = ui->doubleSpinBoxYinliuValue_jdmode->value();
-				//TODO: 暂时没有用公式
-                //allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
-                allGroup.at(index)->allData.jingdu_step = 0;
-                allGroup.at(index)->allData.JingduCount = 0;
-                allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
-                allGroup.at(index)->request_b();
-            }
-            else{
-                showLog("该设备组正在进行其他动作，禁止启动调试。");
-            }
-        }
+    if(findGroupInGroup(curGroupName, index)){
+		startJingdu(index);
     }
-
 }
 
 void MainWindow::startJingdu(int index){
+
+	//judge if both are online.
+	if(3 == allGroup.at(index)->getOnlineStatus())
+	{
+		//TODO:看三个值是否有效,当VS结束时赋予这些值
+		//if(ui->doubleSpinBoxVS1Value_jdmode->value()>0 && ui->doubleSpinBoxVS2Value_jdmode->value()>0 && ui->doubleSpinBoxYinliuValue_jdmode->value()>0)
+		if(allGroup.at(index)->meishuile)//没水了继续
+		{
+			allGroup.at(index)->request_b();
+		}
+		else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+		{
+			allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
+			allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();
+			allGroup.at(index)->allData.initValue_VS2_modeJingdu = ui->doubleSpinBoxVS2Value_jdmode->value();
+			allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = debugInitValue.flow_jingdu;
+
+			allGroup.at(index)->allData.minWater = debugInitValue.minWater;
+            allGroup.at(index)->allData.Threshold1 = debugInitValue.threshold1;
+            allGroup.at(index)->allData.Threshold2 = debugInitValue.threshold2;
+
+			allGroup.at(index)->allData.range1 = debugInitValue.range1;
+			allGroup.at(index)->allData.range2 = debugInitValue.range2;
+			allGroup.at(index)->allData.range3 = debugInitValue.range3;
+			allGroup.at(index)->allData.range4 = debugInitValue.range4;
+
+			//TODO: 暂时没有用公式
+			//allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
+			allGroup.at(index)->allData.jingdu_step = 0;
+			allGroup.at(index)->allData.JingduCount = 0;
+			allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+			allGroup.at(index)->request_b();
+		}
+		else{
+			showLog("该设备组正在进行其他动作，禁止启动调试。");
+		}
+	}
 
 }
 

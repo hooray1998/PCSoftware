@@ -14,20 +14,23 @@ AllData::AllData()
     vs2_ok = false;
     jingdu_step = 0;
 
-    initValue_VS1_modeVS = 1000;
-    initValue_VS2_modeVS = 1000;
+    initValue_VS1_modeVS = 0;
+    initValue_VS2_modeVS = 0;
 
-    initValue_VS1_modeJingdu = 1000;
-    initValue_VS2_modeJingdu = 1000;
-    initValue_Yinliu_modeJingdu = 1.626;
+	minWater = 0;
+	range_vsmode = 0;
 
-	Threshold1 = 3000;
-	Threshold2 = 3000;
+    initValue_VS1_modeJingdu = 0;
+    initValue_VS2_modeJingdu = 0;
+    initValue_Yinliu_modeJingdu = 0;
 
-	range1 = 300;
-	range2 = 30000;
-	range3 = 300;
-	range4 = 30000;
+	Threshold1 = 0;
+	Threshold2 = 0;
+
+	range1 = 0;
+	range2 = 0;
+	range3 = 0;
+	range4 = 0;
 
     curWorker = "hoorayitt.";
 	JingduCount = 0;
@@ -251,7 +254,7 @@ void AllData::push_r(double r){
             int b = original_VS1.back() - a;
             if(b<0)
                 b = -b;
-            if(b<10000)
+            if(b<range_vsmode)
             {
                 status_VS1.push_back(QString("OK"));
                 vs1_ok = true;
@@ -420,7 +423,7 @@ void AllData::cal_finalValues_JingduMode(){
 				JingduCount = -2;
 			}
 			else{
-				status_Jingdu.push_back("这两组不满足");
+                status_Jingdu.push_back(QString("这两组不满足. (%1<%2和%3<%4没有同时满足)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 			}
 		}
 		else if(JingduCount==3){

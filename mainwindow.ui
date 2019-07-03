@@ -148,7 +148,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -173,6 +173,9 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_vsmode">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
               <property name="decimals">
                <number>3</number>
               </property>
@@ -239,6 +242,9 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_vsmode">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
               <property name="decimals">
                <number>3</number>
               </property>
@@ -313,6 +319,9 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_jdmode">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
               <property name="decimals">
                <number>3</number>
               </property>
@@ -330,6 +339,9 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_jdmode">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
               <property name="decimals">
                <number>3</number>
               </property>
@@ -347,6 +359,9 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxYinliuValue_jdmode">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
               <property name="decimals">
                <number>3</number>
               </property>
