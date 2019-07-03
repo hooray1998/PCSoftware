@@ -14,20 +14,23 @@ AllData::AllData()
     vs2_ok = false;
     jingdu_step = 0;
 
-    initValue_VS1_modeVS = 1000;
-    initValue_VS2_modeVS = 1000;
+    initValue_VS1_modeVS = 0;
+    initValue_VS2_modeVS = 0;
 
-    initValue_VS1_modeJingdu = 1000;
-    initValue_VS2_modeJingdu = 1000;
-    initValue_Yinliu_modeJingdu = 1.626;
+	minWater = 0;
+	range_vsmode = 0;
 
-	Threshold1 = 3000;
-	Threshold2 = 3000;
+    initValue_VS1_modeJingdu = 0;
+    initValue_VS2_modeJingdu = 0;
+    initValue_Yinliu_modeJingdu = 0;
 
-	range1 = 300;
-	range2 = 30000;
-	range3 = 300;
-	range4 = 30000;
+	Threshold1 = 0;
+	Threshold2 = 0;
+
+	range1 = 0;
+	range2 = 0;
+	range3 = 0;
+	range4 = 0;
 
     curWorker = "hoorayitt.";
 	JingduCount = 0;
@@ -98,7 +101,7 @@ double AllData::cal_adjustValue(){
     if(curMode==Mode_VS1)
     {
         expression = Expression_VS1;
-        DBG<<length_VS1<<" "<<expression;
+        DBG<<length_VS1<<" ======================="<<expression;
         double a = a_VS1.back();
         double b = b_VS1.back();
         double r = r_VS1.back();
@@ -139,16 +142,15 @@ double AllData::cal_adjustValue(){
 double AllData::cal_expression(QString e){//use stack to calculate the expression
     e.append('#');
     QByteArray ba = e.toLatin1();
-	Result s= calExpression(ba.data());
-    double r = s.value; 
-	if(s.flag){
-		QMessageBox::warning(NULL,"公式计算错误",QString(s.msg));
+	Result *s= calExpression(ba.data());
+	DBG<<s->flag<<s->msg<<s->value;
+    double r = s->value;
+    if(s->flag){
+		QMessageBox::warning(NULL,"公式计算错误",QString(s->msg));
 		complete();
 		curAction = Action_die;
 		return 0;
 	}
-    DBG<<"expression is"<<ba.data();
-    DBG<<"expression final is :"<<r;
 
     return r;
 }
@@ -232,6 +234,7 @@ void AllData::push_r(double r){
             length_VS1 = r_VS1.size();
         differential_VS1.push_back(r-b_VS1[length_VS1-1]);
         double result = cal_adjustValue();
+		if(curAction==Action_die) return;
         adjust_VS1.push_back(result);
         if(VSCount==0)
         {
@@ -251,7 +254,7 @@ void AllData::push_r(double r){
             int b = original_VS1.back() - a;
             if(b<0)
                 b = -b;
-            if(b<10000)
+            if(b<range_vsmode)
             {
                 status_VS1.push_back(QString("OK"));
                 vs1_ok = true;
@@ -272,6 +275,7 @@ void AllData::push_r(double r){
             length_VS2 = r_VS2.size();
         differential_VS2.push_back(r-b_VS2[length_VS2-1]);
         double result = cal_adjustValue();
+		if(curAction==Action_die) return;
         adjust_VS2.push_back(result);
         if(VSCount==0)
         {
@@ -408,18 +412,18 @@ void AllData::cal_finalValues_JingduMode(){
 			double C11 = accuracy0_Jingdu.back();
 			double C16 = accuracy1_Jingdu.back();
 
-			DBG<<"step1第一次判断："<<"B11-C11="<<abs(B11-C11)<<"<>"<<Threshold1<<"\t  B16-C16="<<abs(B16-C16)<<"<>"<<Threshold2;
+			//DBG<<"step1第一次判断："<<"B11-C11="<<abs(B11-C11)<<"<>"<<Threshold1<<"\t  B16-C16="<<abs(B16-C16)<<"<>"<<Threshold2;
 			if(abs(B11-C11)<Threshold1 && abs(B16-C16)<Threshold2){
 				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功");
+                status_Jingdu.push_back(QString("step1成功,这一组和上一组符合(%1<%2并且%3<%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 			}
 			else{
-				status_Jingdu.push_back("这两组不满足");
+                status_Jingdu.push_back(QString("这两组不满足 (%1>%2 或者 %3>%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 			}
 		}
 		else if(JingduCount==3){
@@ -438,7 +442,7 @@ void AllData::cal_finalValues_JingduMode(){
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功,上一组和上上一组符合");
+                status_Jingdu.push_back(QString("step1成功,上一组和上上一组符合(%1<%2并且%3<%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 
@@ -447,7 +451,7 @@ void AllData::cal_finalValues_JingduMode(){
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功,当前组和上上一组符合");
+                status_Jingdu.push_back(QString("step1成功,当前组和上上一组符合(%1<%2并且%3<%4)").arg(abs(D11-B11)).arg(Threshold1).arg(abs(D16-B16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 
@@ -456,12 +460,12 @@ void AllData::cal_finalValues_JingduMode(){
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功,当前组和上一组符合");
+                status_Jingdu.push_back(QString("step1成功,当前组和上一组符合(%1<%2并且%3<%4)").arg(abs(D11-C11)).arg(Threshold1).arg(abs(D16-C16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 
 			}else{
-				status_Jingdu.push_back("step1精度不稳,请检查");
+                status_Jingdu.push_back(QString("step1精度不稳,请检查. (%1,%2,%3>%4和%5,%6,%7>%8至少三个成立)").arg(abs(B11-C11)).arg(abs(B11-D11)).arg(C11-D11).arg(Threshold1).arg(abs(B16-C16)).arg(B16-D16).arg(C16-D16).arg(Threshold2));
 				jingdu_step  = -1;
 				return;
 			}
@@ -486,7 +490,7 @@ void AllData::cal_finalValues_JingduMode(){
 			double B16 = accuracy1_Jingdu[length_Jingdu-2];
 			double C11 = accuracy0_Jingdu.back();
 			double C16 = accuracy1_Jingdu.back();
-			DBG<<"step2第一次判断："<<"(B11,C11)="<<B11<<','<<C11<<"<>("<<range1<<","<<range2<<")\t (B16,C16)="<<B16<<","<<C16<<"<>("<<range3<<","<<range4<<")";
+			//DBG<<"step2第一次判断："<<"(B11,C11)="<<B11<<','<<C11<<"<>("<<range1<<","<<range2<<")\t (B16,C16)="<<B16<<","<<C16<<"<>("<<range3<<","<<range4<<")";
 
 			if(min(B11,C11)>=range1 && max(B11,C11)<range2 && min(B16,C16)>=range3 && max(B16,C16)<=range4 ){
 				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
@@ -495,6 +499,7 @@ void AllData::cal_finalValues_JingduMode(){
 
 				jingdu_step ++;
 				status_Jingdu.push_back("成功");
+                //status_Jingdu.push_back(QString("step1成功,这一组和上一组符合(%1<%2并且%3<%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 				return;
 			}
 			else{

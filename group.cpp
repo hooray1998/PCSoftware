@@ -5,7 +5,6 @@ Group::Group()
 {
     machineA = NULL;
     machineB = NULL;
-    meishuile = false;
 }
 
 void Group::request_a(){
@@ -47,7 +46,6 @@ void Group::returnThreeResult(){
 
 }
 void Group::analyzeData_a(QByteArray data){
-    DBG<<"reveice data from a:"<<data;
 
     if(allData.curAction!=AllData::Action_request_a){// request a
         emit SendLog(groupInfo.name, "receive a and leave it.");
@@ -62,16 +60,16 @@ void Group::analyzeData_a(QByteArray data){
 }
 
 void Group::analyzeData_b(QByteArray data){
-    DBG<<"reveice data from b:"<<data;
     if(allData.curAction!=AllData::Action_request_b){// request b
         emit SendLog(groupInfo.name, "receive b and leave it.");
         //allData.lastRequest = AllData::Action_die;
     }
     else{
         double number = data.left(8).toDouble();
-        if(number<100){
-            emit SendLog(groupInfo.name, "没水了。");
-            meishuile = true;
+        if(number<allData.minWater){
+            emit SendLog(groupInfo.name, QString("没水了。（当前水量%1 < %2）").arg(number).arg(allData.minWater));
+			allData.complete();
+			allData.curAction = AllData::Action_die;
         }
         else{
             allData.push_b(data.right(8).toDouble());
@@ -83,7 +81,6 @@ void Group::analyzeData_b(QByteArray data){
 }
 
 void Group::analyzeData_r(QByteArray data){
-    DBG<<"reveice data from r:"<<data;
     if(allData.curAction!=AllData::Action_request_r){// request r
         emit SendLog(groupInfo.name, "receive r and leave it.");
         //allData.lastRequest = AllData::Action_die;
@@ -91,6 +88,7 @@ void Group::analyzeData_r(QByteArray data){
     else{
         allData.push_r(data.toDouble());
         emit SendLog(groupInfo.name, "receive r.");
+		if(allData.curAction==AllData::Action_die) return;
         allData.curAction = AllData::Action_receive_r;
         //OK: 判断当前的模式和行为,不同的模式不同
         if(allData.curMode==AllData::Mode_VS1||allData.curMode==AllData::Mode_VS2){

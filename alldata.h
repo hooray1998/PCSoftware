@@ -50,6 +50,12 @@ public:
 
     double initValue_VS1_modeVS;
     double initValue_VS2_modeVS;
+
+	double minWater;
+	double range_vsmode;
+
+
+
     //VS1
     QVector<double> original_VS1;
     QVector<double> b_VS1;
