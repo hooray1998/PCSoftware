@@ -171,12 +171,12 @@ double Operat(double a, char t, double b)//运算a t b。
 			return a/b;
     }
 }
-Result calExpression(char *s)
+Result* calExpression(char *s)
 {
-	
+	error = false;
 
     input(s);//将表达式存储
-	if(error) return Result(true, errorMsg, 0);
+	if(error) return new Result(true, errorMsg, 0);
     int n=0;
     Ch.push('#');
 
@@ -199,7 +199,7 @@ Result calExpression(char *s)
                 break;
             }
             case'=':{//去括号
-				if(error) return Result(true, errorMsg, 0);
+				if(error) return new Result(true, errorMsg, 0);
                 Ch.pop();
                 n++;//读取下一个
                 break;
@@ -215,12 +215,12 @@ Result calExpression(char *s)
                 a = Num.top();
                 Num.pop();
                 Num.push(Operat(a,t,b));//将结果压栈
-				if(error) return Result(true, errorMsg, 0);
+				if(error) return new Result(true, errorMsg, 0);
 
                 break;
             }
             }
         }
     }
-    return Result(false, errorMsg,Num.top());
+    return new Result(false, errorMsg,Num.top());
 }

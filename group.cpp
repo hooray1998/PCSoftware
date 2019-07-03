@@ -88,6 +88,7 @@ void Group::analyzeData_r(QByteArray data){
     else{
         allData.push_r(data.toDouble());
         emit SendLog(groupInfo.name, "receive r.");
+		if(allData.curAction==AllData::Action_die) return;
         allData.curAction = AllData::Action_receive_r;
         //OK: 判断当前的模式和行为,不同的模式不同
         if(allData.curMode==AllData::Mode_VS1||allData.curMode==AllData::Mode_VS2){

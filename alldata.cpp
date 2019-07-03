@@ -98,7 +98,7 @@ double AllData::cal_adjustValue(){
     if(curMode==Mode_VS1)
     {
         expression = Expression_VS1;
-        DBG<<length_VS1<<" "<<expression;
+        DBG<<length_VS1<<" ======================="<<expression;
         double a = a_VS1.back();
         double b = b_VS1.back();
         double r = r_VS1.back();
@@ -139,10 +139,11 @@ double AllData::cal_adjustValue(){
 double AllData::cal_expression(QString e){//use stack to calculate the expression
     e.append('#');
     QByteArray ba = e.toLatin1();
-	Result s= calExpression(ba.data());
-    double r = s.value; 
-	if(s.flag){
-		QMessageBox::warning(NULL,"公式计算错误",QString(s.msg));
+	Result *s= calExpression(ba.data());
+	DBG<<s->flag<<s->msg<<s->value;
+    double r = s->value;
+    if(s->flag){
+		QMessageBox::warning(NULL,"公式计算错误",QString(s->msg));
 		complete();
 		curAction = Action_die;
 		return 0;
@@ -230,6 +231,7 @@ void AllData::push_r(double r){
             length_VS1 = r_VS1.size();
         differential_VS1.push_back(r-b_VS1[length_VS1-1]);
         double result = cal_adjustValue();
+		if(curAction==Action_die) return;
         adjust_VS1.push_back(result);
         if(VSCount==0)
         {
@@ -270,6 +272,7 @@ void AllData::push_r(double r){
             length_VS2 = r_VS2.size();
         differential_VS2.push_back(r-b_VS2[length_VS2-1]);
         double result = cal_adjustValue();
+		if(curAction==Action_die) return;
         adjust_VS2.push_back(result);
         if(VSCount==0)
         {

@@ -103,8 +103,11 @@ void MainWindow::initUI(){
 
 
     ui->tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(16,QHeaderView::Stretch);
-    ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(17,QHeaderView::Stretch);
+    //ui->tableWidget_2->setAutoScroll(true);
+    //ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(16,QHeaderView::Stretch);
+    //ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(17,QHeaderView::Stretch);
+    ui->tableWidget_2->setColumnWidth(16,200);
+    ui->tableWidget_2->setColumnWidth(17,200);
 
     ui->listView_2->setUpdatesEnabled(true);
 
@@ -1533,7 +1536,7 @@ void MainWindow::changeComment1(QModelIndex modelIndex){
             bool ok;
             QString text = QInputDialog::getText(this, tr("修改备注"),
                                                  tr("新的备注:"), QLineEdit::Normal,
-                                                 modelIndex.data(), &ok);
+                                                 modelIndex.data().toString(), &ok);
             if (ok && !text.isEmpty()){
                 allGroup.at(index)->allData.status_VS1.replace(modelIndex.row(),text);
                 updateTable();
@@ -1558,7 +1561,7 @@ void MainWindow::changeComment2(QModelIndex modelIndex){
             bool ok;
             QString text = QInputDialog::getText(this, tr("修改备注"),
                                                  tr("新的备注:"), QLineEdit::Normal,
-                                                 modelIndex.data(), &ok);
+                                                 modelIndex.data().toString(), &ok);
             if (ok && !text.isEmpty()){
                 allGroup.at(index)->allData.status_VS2.replace(modelIndex.row(),text);
                 updateTable();
@@ -1582,7 +1585,7 @@ void MainWindow::changeComment3(QModelIndex modelIndex){
             bool ok;
             QString text = QInputDialog::getText(this, tr("修改备注"),
                                                  tr("新的备注:"), QLineEdit::Normal,
-                                                 modelIndex.data(), &ok);
+                                                 modelIndex.data().toString(), &ok);
             if (ok && !text.isEmpty()){
                 allGroup.at(index)->allData.status_Jingdu.replace(modelIndex.row(),text);
                 updateTable();
