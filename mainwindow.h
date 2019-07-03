@@ -3,6 +3,7 @@
 
 
 #include "QTXLSX.h"
+#include "setting.h"
 
 #include <QStandardItemModel>
 #include <QStringListModel>
@@ -32,6 +33,12 @@
 #include <QFileInfoList>
 #include <QDir>
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
+#include <QJsonValue>
+
 #include "group.h"
 #include "mythread.h"
 #include "expression.h"
@@ -49,6 +56,32 @@ protected:
     void resizeEvent(QResizeEvent *event);
 signals:
     void changeStyle(const QString &qssFile);
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+    //样式枚举
+    enum Style {
+        Style_Silvery = 0,          //银色样式
+        Style_Blue = 1,             //蓝色样式
+        Style_LightBlue = 2,        //淡蓝色样式
+        Style_DarkBlue = 3,         //深蓝色样式
+        Style_Gray = 4,             //灰色样式
+        Style_LightGray = 5,        //浅灰色样式
+        Style_DarkGray = 6,         //深灰色样式
+        Style_Black = 7,            //黑色样式
+        Style_LightBlack = 8,       //浅黑色样式
+        Style_DarkBlack = 9,        //深黑色样式
+        Style_PSBlack = 10,         //PS黑色样式
+        Style_FlatBlack = 11,       //黑色扁平样式
+        Style_FlatWhite = 12        //白色扁平样式
+    };
+
+
+
+    //数据处理
+
 
 public slots:
     void startVS1(); //开启当前设备
@@ -68,6 +101,7 @@ public slots:
     void initTcpServer();
     void initUI();
 
+    void showSetting();
 
     void initIpWidget();
     void showIpWidget();
@@ -96,54 +130,32 @@ public slots:
     void scrollCurItem2(QTableWidgetItem *cur);
     void scrollCurItem3(QTableWidgetItem *cur);
 
+    void readConfig();
+    void saveConfig();
 
     //Worker
     void manageWorker();
-    void readWorkerList();
-    void saveWorkerList();
+	void readWorkerList();
+	void saveWorkerList();
 
     //VSFormula
     void showVSFormula();
-    void readVSFormulaList();
-    void saveVSFormulaList();
+	void readVSFormulaList();
+	void saveVSFormulaList();
 
-    //save to excel
-    void saveTable2Excel();
-    void saveAsTable2Excel();
+	void readGroupShip();
+	void saveGroupShip();
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-    //样式枚举
-    enum Style {
-        Style_Silvery = 0,          //银色样式
-        Style_Blue = 1,             //蓝色样式
-        Style_LightBlue = 2,        //淡蓝色样式
-        Style_DarkBlue = 3,         //深蓝色样式
-        Style_Gray = 4,             //灰色样式
-        Style_LightGray = 5,        //浅灰色样式
-        Style_DarkGray = 6,         //深灰色样式
-        Style_Black = 7,            //黑色样式
-        Style_LightBlack = 8,       //浅黑色样式
-        Style_DarkBlack = 9,        //深黑色样式
-        Style_PSBlack = 10,         //PS黑色样式
-        Style_FlatBlack = 11,       //黑色扁平样式
-        Style_FlatWhite = 12        //白色扁平样式
-    };
-
-
-    void readGroupShip();
-    void saveGroupShip();
     void updateListView();
     void setStyle(Style style);
 
     //保存退出时状态
-    void saveExitStatus();
-    void readExitStatus();
+	void saveExitStatus();
+	void readExitStatus();
 
-    //数据处理
-
+    //save to excel
+    void saveTable2Excel();
+    void saveAsTable2Excel();
 
 
 private:
@@ -247,6 +259,8 @@ private:
     QPushButton *wvsformula_buttonAdd;
     QLabel *wvsformula_msg;
     QPushButton *wvsformula_buttonclose;
+
+	Setting debugInitValue;
 };
 
 #endif // MAINWINDOW_H

@@ -50,9 +50,8 @@ compile_commands.json
 
 *.xlsx
 
-vsformulaList
 
 ComeOnBoy
-exitStatus
 
 .tags
+config.json

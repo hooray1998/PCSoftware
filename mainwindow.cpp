@@ -26,17 +26,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	//数据处理
 
     listenButtonClickSlot();//auto to connect
-    readGroupShip();
-    readWorkerList();
-    readVSFormulaList();
-    readExitStatus();
+    readConfig();
+    //readGroupShip();
+    //readWorkerList();
+    //readVSFormulaList();
+    //readExitStatus();
     updateListView();
     setCurWorker(ui->comboBoxWorker1->currentText());
 
 
     ui->doubleSpinBoxVS1Value_vsmode->setValue(777.77);
     ui->doubleSpinBoxVS2Value_vsmode->setValue(999.4);
-	ui->doubleSpinBoxYinliuValue_jdmode->setValue(1.026);
 
 }
 
@@ -51,10 +51,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    saveExitStatus();
-    saveGroupShip();
-    saveWorkerList();
-    saveVSFormulaList();
+    //saveExitStatus();
+    //saveGroupShip();
+    //saveWorkerList();
+    //saveVSFormulaList();
+	saveConfig();
     wip->close();
     wtie->close();
     wuntie->close();
@@ -101,6 +102,9 @@ void MainWindow::initUI(){
     ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(8,QHeaderView::Stretch);
 
 
+    ui->tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(16,QHeaderView::Stretch);
+    ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(17,QHeaderView::Stretch);
 
     ui->listView_2->setUpdatesEnabled(true);
 
@@ -149,6 +153,7 @@ void MainWindow::initUI(){
     connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
     connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
 
+    connect(ui->actionSetting,&QAction::triggered,this,&MainWindow::showSetting);
     connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::showIpWidget);
     connect(ui->actionGroupBound,&QAction::triggered,this,&MainWindow::showTieGroupWidget);
     connect(ui->pushButtonTie,&QPushButton::clicked,this,&MainWindow::showTieGroupWidget);
@@ -170,9 +175,13 @@ void MainWindow::initUI(){
     ui->doubleSpinBoxVS1Value_vsmode->setMaximum(9999);
     ui->doubleSpinBoxVS2Value_vsmode->setMaximum(9999);
     ui->doubleSpinBoxVS1Value_jdmode->setMaximum(99999);
-    ui->doubleSpinBoxVS2Value_jdmode->setMaximum(99999);
-    ui->doubleSpinBoxYinliuValue_jdmode->setMaximum(9999);
 
+    ui->doubleSpinBoxVS1Value_jdmode->setMinimum(-99999);
+    ui->doubleSpinBoxVS2Value_jdmode->setMinimum(-99999);
+    ui->doubleSpinBoxYinliuValue_jdmode->setMaximum(9999);
+    ui->doubleSpinBoxYinliuValue_jdmode->setMinimum(-9999);
+
+    ui->actionSave_as->setEnabled(false);
 
 }
 
@@ -894,7 +903,6 @@ void MainWindow::updateTable(){
                 for(int j=0;j<f_vectorArr[i]->size();j++)
                 {
                      curTable->setItem(j,i,new QTableWidgetItem(QString::number(f_vectorArr[i]->at(j))));
-					 DBG<<j<<' '<<i<<QString::number(f_vectorArr[i]->at(j));
                 }
 
             for(int i=0;i<3;i++)
@@ -953,7 +961,7 @@ void MainWindow::scrollCurItem2(QTableWidgetItem *cur){
     ui->tableWidgetvs2->scrollToItem(cur);
 }
 void MainWindow::scrollCurItem3(QTableWidgetItem *cur){
-    ui->tableWidget_2->scrollToItem(cur);
+    //ui->tableWidget_2->scrollToItem(cur);
 }
 void MainWindow::manageWorker(){
     wworker_msg->clear();
@@ -1236,91 +1244,101 @@ void MainWindow::saveTable2Excel(){
     if(!curGroupName.size())
         return ;
 
-    QString filename = curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
-
-    if(!filename.size())
-        return ;
-
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
-    if(ok){
+	if(ok){
 
-        QXlsx::Format blueBackground;
-        blueBackground.setPatternBackgroundColor(Qt::blue);
-        QXlsx::Format greenBackground;
-        greenBackground.setPatternBackgroundColor(Qt::green);
+		if(allGroup.at(index)->allData.curAction!=AllData::Action::Action_die){
+            QMessageBox::warning(this, "调试正在进行中","当前调试还未结束,不可中途保存");
+			return;
+		}
+		QXlsx::Format blueBackground;
+		blueBackground.setPatternBackgroundColor(Qt::blue);
+		QXlsx::Format greenBackground;
+		greenBackground.setPatternBackgroundColor(Qt::green);
 
-        AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
+		AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
 
-        if(ui->tabWidget->currentIndex()==0){//vs
-            QXlsx::Document xlsx("vs调试_"+filename);
+		if(ui->tabWidget->currentIndex()==0){//vs
 
-            if(!allGroup.at(index)->allData.returnData_FromVS(m[0], f_vectorArr, s_vectorArr))
-                    return;
+            QString filename = debugInitValue.savePath + "VS调试_" + curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
 
-            for(int i=0;i<10;i++)
-               xlsx.write(1, i+1,headers.at(i));
+			if(!filename.size())
+				return ;
+			filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), filename, tr(".xlsx"));
+			QXlsx::Document xlsx(filename);
 
-            for(int i=0;i<7;i++)
-                for(int j=0;j<f_vectorArr[i]->size();j++)
-                {
-                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
-                }
+			if(!allGroup.at(index)->allData.returnData_FromVS(m[0], f_vectorArr, s_vectorArr))
+				return;
 
-            for(int i=0;i<3;i++)
-                for(int j=0;j<s_vectorArr[i]->size();j++)
-                {
+			for(int i=0;i<10;i++)
+				xlsx.write(1, i+1,headers.at(i));
 
-                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
-                }
-            int lastLen = s_vectorArr[0]->size()+3;
+			for(int i=0;i<7;i++)
+				for(int j=0;j<f_vectorArr[i]->size();j++)
+				{
+					xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+				}
 
-            if(!allGroup.at(index)->allData.returnData_FromVS(m[1], f_vectorArr, s_vectorArr))
-                    return;
-            for(int i=0;i<10;i++)
-               xlsx.write(1+lastLen, i+1,headers.at(i));
+			for(int i=0;i<3;i++)
+				for(int j=0;j<s_vectorArr[i]->size();j++)
+				{
 
-            for(int i=0;i<7;i++)
-                for(int j=0;j<f_vectorArr[i]->size();j++)
-                {
-                    xlsx.write(j+2+lastLen,i+1,f_vectorArr[i]->at(j), blueBackground);
-                }
+					xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+				}
+			int lastLen = s_vectorArr[0]->size()+3;
 
-            for(int i=0;i<3;i++)
-                for(int j=0;j<s_vectorArr[i]->size();j++)
-                {
+			if(!allGroup.at(index)->allData.returnData_FromVS(m[1], f_vectorArr, s_vectorArr))
+				return;
+			for(int i=0;i<10;i++)
+				xlsx.write(1+lastLen, i+1,headers.at(i));
 
-                    xlsx.write(j+2+lastLen,i+8,s_vectorArr[i]->at(j), blueBackground);
-                }
+			for(int i=0;i<7;i++)
+				for(int j=0;j<f_vectorArr[i]->size();j++)
+				{
+					xlsx.write(j+2+lastLen,i+1,f_vectorArr[i]->at(j), blueBackground);
+				}
 
-            xlsx.save();
-        }
-        else{//精度调试
-            QXlsx::Document xlsx("精度调试_"+filename);
+			for(int i=0;i<3;i++)
+				for(int j=0;j<s_vectorArr[i]->size();j++)
+				{
+
+					xlsx.write(j+2+lastLen,i+8,s_vectorArr[i]->at(j), blueBackground);
+				}
+
+			xlsx.save();
+		}
+		else{//精度调试
+            QString filename = debugInitValue.savePath + "精度调试_" + curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
+
+			if(!filename.size())
+				return ;
+			filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), filename, tr(".xlsx"));
+			QXlsx::Document xlsx(filename);
 
 
-            if(!allGroup.at(index)->allData.returnData_FromVS(m[2], f_vectorArr, s_vectorArr))
-                    return;
+			if(!allGroup.at(index)->allData.returnData_FromVS(m[2], f_vectorArr, s_vectorArr))
+				return;
 
-            for(int i=0;i<10;i++)
-               xlsx.write(1, i+1,headers.at(i));
+			for(int i=0;i<19;i++)
+				xlsx.write(1, i+1,headers2.at(i));
 
-            for(int i=0;i<16;i++)
-                for(int j=0;j<f_vectorArr[i]->size();j++)
-                {
-                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
-                }
+			for(int i=0;i<16;i++)
+				for(int j=0;j<f_vectorArr[i]->size();j++)
+				{
+					xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+				}
 
-            for(int i=0;i<3;i++)
-                for(int j=0;j<s_vectorArr[i]->size();j++)
-                {
+			for(int i=0;i<3;i++)
+				for(int j=0;j<s_vectorArr[i]->size();j++)
+				{
 
-                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
-                }
-            xlsx.save();
-        }
+					xlsx.write(j+2,i+17,s_vectorArr[i]->at(j), greenBackground);
+				}
+			xlsx.save();
+		}
 
-    }
+	}
 
 }
 
@@ -1332,7 +1350,7 @@ void MainWindow::saveAsTable2Excel(){
 
     //这是另存为
     QString filename = curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
-    filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), QDir::homePath()+'/'+filename, tr(".xlsx"));
+    filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), "/home/"+filename, tr(".xlsx"));
 
     if(!filename.size())
         return ;
@@ -1495,4 +1513,160 @@ void MainWindow::startJingdu(){
 
 void MainWindow::startJingdu(int index){
 
+}
+
+
+void MainWindow::readConfig(){
+	
+	QFile loadFile("./config.json");
+
+	if(!loadFile.open(QIODevice::ReadOnly))
+	{
+		qDebug() << "could't open projects json";
+		return;
+	}
+
+	QByteArray allData = loadFile.readAll();
+	loadFile.close();
+
+	QJsonParseError json_error;
+	QJsonDocument jsonDoc(QJsonDocument::fromJson(allData, &json_error));
+
+	if(json_error.error != QJsonParseError::NoError)
+	{
+		qDebug() << "json error!";
+		return;
+	}
+
+	QJsonObject rootObj = jsonDoc.object();
+
+
+	QJsonArray workers = rootObj.value("工作人员列表").toArray();
+	for(int i = 0; i< workers.size(); i++)
+	{
+		QString worker = workers.at(i).toString();
+		workerList.push_back(worker);
+		wworker_workerList->addItem(worker);
+		ui->comboBoxWorker1->addItem(worker);
+	}
+
+
+	QJsonArray formulas = rootObj.value("VS公式列表").toArray();
+	for(int i = 0; i< formulas.size(); i++)
+	{
+		QString formula = formulas.at(i).toString();
+		vsformulaList.push_back(formula);
+		wvsformula_vsformulaList->addItem(formula);
+	}
+
+
+	QJsonArray groupShip = rootObj.value("设备组列表").toArray();
+	for(int i=0;i<groupShip.size();i++){
+		Group *g = new Group();
+		QString n = groupShip.at(i).toObject().value("设备组名称").toString();
+		QString a = groupShip.at(i).toObject().value("设备A").toString();
+		QString b = groupShip.at(i).toObject().value("设备B").toString();
+		g->tie_byID(n,a,b);
+		allGroup.push_back(g);
+		allGroupLog.push_back(QString("均未上线"));
+		connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
+	}
+
+	QJsonObject exitStatus = rootObj.value("退出时状态").toObject();
+    ui->comboBoxWorker1->setCurrentIndex(exitStatus.value("当前工作人员").toInt());
+    wvsformula_vsformulaList->setCurrentIndex(exitStatus.value("当前VS公式").toInt());
+
+    debugInitValue.savePath = rootObj.value("表格默认保存路径").toString();
+
+	if(rootObj.contains("调试相关的参数")){
+	QJsonObject debugValues = rootObj.value("调试相关的参数").toObject();
+
+	debugInitValue.minWater = debugValues.value("最低水量阈值").toDouble();
+	debugInitValue.VS1_vsmode = debugValues.value("VS1原值").toDouble();
+	debugInitValue.VS2_vsmode = debugValues.value("VS2原值").toDouble();
+	debugInitValue.range_vsmode = debugValues.value("最大稳定距离").toDouble();
+	debugInitValue.flow_jingdu = debugValues.value("默认引流系数").toDouble();
+	debugInitValue.threshold1 = debugValues.value("Threshold1").toDouble();
+	debugInitValue.threshold2 = debugValues.value("Threshold2").toDouble();
+	debugInitValue.range1 = debugValues.value("range1").toDouble();
+	debugInitValue.range2 = debugValues.value("range2").toDouble();
+	debugInitValue.range3 = debugValues.value("range3").toDouble();
+	debugInitValue.range4 = debugValues.value("range4").toDouble();
+
+	}
+
+	debugInitValue.readValueToWidget();
+}
+
+void MainWindow::saveConfig(){
+
+	QFile file("./config.json");
+	if(!file.open(QIODevice::WriteOnly)){
+		qDebug()<<"File open error.";
+	}
+
+	QJsonObject rootObject;
+
+	QJsonObject exitStatus;
+	exitStatus.insert("当前工作人员",ui->comboBoxWorker1->currentIndex());
+	exitStatus.insert("当前VS公式",wvsformula_vsformulaList->currentIndex());
+
+	DBG<<"当前状态";
+	DBG<<ui->comboBoxWorker1->currentIndex();
+	DBG<<wvsformula_vsformulaList->currentIndex();
+
+	QJsonArray workers;
+	for(int i=0;i<workerList.size();i++)
+	{
+		workers.append(workerList[i]);
+	}
+
+	QJsonArray vsFormula;
+	for(int i=0;i<vsformulaList.size();i++)
+	{
+		vsFormula.append(vsformulaList[i]);
+	}
+
+	QJsonArray groupShip;
+	for(int i=0;i<allGroup.size();i++)
+	{
+		QJsonObject curGroup;
+		curGroup.insert("设备组名称",allGroup[i]->groupInfo.name);
+		curGroup.insert("设备A",allGroup[i]->groupInfo.machineA_id);
+		curGroup.insert("设备B",allGroup[i]->groupInfo.machineB_id);
+		groupShip.append(curGroup);
+	}
+
+	QJsonObject debugValues;
+
+	debugValues.insert("最低水量阈值",debugInitValue.minWater);
+	debugValues.insert("VS1原值",debugInitValue.VS1_vsmode);
+	debugValues.insert("VS2原值",debugInitValue.VS2_vsmode);
+	debugValues.insert("最大稳定距离",debugInitValue.range_vsmode);
+	debugValues.insert("默认引流系数",debugInitValue.flow_jingdu);
+	debugValues.insert("Threshold1",debugInitValue.threshold1);
+	debugValues.insert("Threshold2",debugInitValue.threshold2);
+	debugValues.insert("range1",debugInitValue.range1);
+	debugValues.insert("range2",debugInitValue.range2);
+	debugValues.insert("range3",debugInitValue.range3);
+	debugValues.insert("range4",debugInitValue.range4);
+
+	rootObject.insert("退出时状态", exitStatus);
+	rootObject.insert("工作人员列表", workers);
+	rootObject.insert("VS公式列表", vsFormula);
+	rootObject.insert("设备组列表", groupShip);
+    rootObject.insert("表格默认保存路径", debugInitValue.savePath);
+    rootObject.insert("调试相关的参数", debugValues);
+
+
+	QJsonDocument jsonDoc;
+	jsonDoc.setObject(rootObject);
+	file.write(jsonDoc.toJson());
+	file.close();
+	qDebug()<<"配置保存成功";
+
+}
+
+void MainWindow::showSetting(){
+    debugInitValue.show();
 }

@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QDebug>
 #include <QDate>
+#include <QMessageBox>
 
 
 class AllData

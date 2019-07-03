@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1281</width>
+    <width>1288</width>
     <height>728</height>
    </rect>
   </property>
@@ -355,13 +355,6 @@
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QPushButton" name="pushButtonJingduConfig">
-              <property name="text">
-               <string>其他参数调整</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
@@ -393,7 +386,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1281</width>
+     <width>1288</width>
      <height>31</height>
     </rect>
    </property>
@@ -402,21 +395,6 @@
      <string>文件</string>
     </property>
     <addaction name="actionSave"/>
-    <addaction name="actionSave_as"/>
-   </widget>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>调试</string>
-    </property>
-    <addaction name="actionVs"/>
-    <addaction name="actionJingdu"/>
-   </widget>
-   <widget class="QMenu" name="menu_2">
-    <property name="title">
-     <string>设备</string>
-    </property>
-    <addaction name="actionGroupBound"/>
-    <addaction name="actionGroupUnbound"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -431,17 +409,16 @@
     </property>
     <addaction name="actionSetIP"/>
     <addaction name="actionAdd_Worker"/>
+    <addaction name="actionSetting"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menu"/>
-   <addaction name="menu_2"/>
    <addaction name="menu_3"/>
    <addaction name="menu_4"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave">
    <property name="text">
-    <string>保存</string>
+    <string>保存当前表格</string>
    </property>
   </action>
   <action name="actionSave_as">
@@ -492,6 +469,11 @@
   <action name="actionJDFormula">
    <property name="text">
     <string>精度调试公式</string>
+   </property>
+  </action>
+  <action name="actionSetting">
+   <property name="text">
+    <string>调试参数修改</string>
    </property>
   </action>
  </widget>

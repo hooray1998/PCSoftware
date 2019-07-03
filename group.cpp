@@ -40,6 +40,10 @@ void Group::returnFinalResult(double final){
 
 void Group::returnThreeResult(){
 	//TODO::返回三个值
+    QByteArray header = "08" + QString::asprintf("%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu).toLocal8Bit();
+    machineA->WriteData(header);
+    allData.curAction = AllData::Action_return;
+	emit SendLog(groupInfo.name, "回复给了A三个调整后的精度系数");
 
 }
 void Group::analyzeData_a(QByteArray data){
@@ -127,6 +131,7 @@ void Group::analyzeData_r(QByteArray data){
 				allData.JingduCount++;
                 allData.curAction=AllData::Action_die;
                 emit SendLog(groupInfo.name, "精度step1 is ok");
+				returnThreeResult();
 				request_b();
 			}
             else{
