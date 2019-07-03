@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initUI();
 
+    //初始化其他设置窗口
     initIpWidget();
     initTieGroupWidget();
     initUntieGroupWidget();
@@ -22,15 +23,14 @@ MainWindow::MainWindow(QWidget *parent) :
     initVSFormulaWidget();
     initTcpServer();
 
-	//设备组
-
 	//数据处理
 
     listenButtonClickSlot();//auto to connect
-    readGroupShip();
-    readWorkerList();
-    readVSFormulaList();
-    readExitStatus();
+    readConfig();
+    //readGroupShip();
+    //readWorkerList();
+    //readVSFormulaList();
+    //readExitStatus();
     updateListView();
     setCurWorker(ui->comboBoxWorker1->currentText());
 
@@ -51,10 +51,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    saveExitStatus();
-    saveGroupShip();
-    saveWorkerList();
-    saveVSFormulaList();
+    //saveExitStatus();
+    //saveGroupShip();
+    //saveWorkerList();
+    //saveVSFormulaList();
+	saveConfig();
     wip->close();
     wtie->close();
     wuntie->close();
@@ -81,19 +82,29 @@ void MainWindow::initUI(){
     ui->tableWidgetvs2->setRowCount(200);
     ui->tableWidgetvs2->setColumnCount(10);
     ui->tableWidget_2->setRowCount(200);
-    ui->tableWidget_2->setColumnCount(20);
+    ui->tableWidget_2->setColumnCount(19);
     ui->tabWidget->setCurrentIndex(0);
 
-    headers<<"原值"<<"b"<<"r"<<"r-b"<<"a"<<"调整值"<<"最终值"<<"设备状态及备注"<<"日期"<<"工作人员";
+    headers<<"原值"<<"b"<<"r"<<"r-b"<<"a"<<"调整值"<<"最终值"<<"备注"<<"日期"<<"工作人员";
+	//headers2<<"VS1"<<"VS2"<<"引流系数"<<"VS1（调）"<<"VS2（调）"<<"引流系数（调）"<<"0周期引流量初值"<<"0周期引流量末值"<<"0周期引流量实际值"<<"0周期引流量显示值"<<"0周期引流量精度"<<"1周期注入量初值"<<"1周期注入量末值"<<"1周期注入量实际值"<<"1周期注入量显示值"<<"1周期注入量精度"<<"设备状态及备注"<<"日期"<<"工作人员";
+	headers2<<"VS1"<<"VS2"<<"引流系数"<<"VS1-调"<<"VS2-调"<<"引流系数-调"<<"引-初值"<<"引-末值"<<"引-实际值"<<"引-显示值"<<"引-精度"<<"注-初值"<<"注-末值"<<"注-实际值"<<"注-显示值"<<"注-精度"<<"备注"<<"日期"<<"工作人员";
+
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+    ui->tableWidget_2->setHorizontalHeaderLabels(headers2);
     //ui->tableWidgetvs1->setFixedWidth(ui->tabWidget->width());
     ui->tableWidgetvs1->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    //test1();
     ui->tableWidgetvs1->horizontalHeader()->setSectionResizeMode(7,QHeaderView::Stretch);
-    ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidgetvs1->horizontalHeader()->setSectionResizeMode(8,QHeaderView::Stretch);
+    //ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidgetvs2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(7,QHeaderView::Stretch);
+    ui->tableWidgetvs2->horizontalHeader()->setSectionResizeMode(8,QHeaderView::Stretch);
 
 
+    ui->tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(16,QHeaderView::Stretch);
+    ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(17,QHeaderView::Stretch);
 
     ui->listView_2->setUpdatesEnabled(true);
 
@@ -142,6 +153,7 @@ void MainWindow::initUI(){
     connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
     connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
 
+    connect(ui->actionSetting,&QAction::triggered,this,&MainWindow::showSetting);
     connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::showIpWidget);
     connect(ui->actionGroupBound,&QAction::triggered,this,&MainWindow::showTieGroupWidget);
     connect(ui->pushButtonTie,&QPushButton::clicked,this,&MainWindow::showTieGroupWidget);
@@ -156,15 +168,20 @@ void MainWindow::initUI(){
     connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
     connect(ui->pushButtonStartVS1,SIGNAL(clicked(bool)),this,SLOT(startVS1()));
     connect(ui->pushButtonStartVS2,SIGNAL(clicked(bool)),this,SLOT(startVS2()));
+    connect(ui->pushButtonStartJingdu,SIGNAL(clicked(bool)),this,SLOT(startJingdu()));
 
     connect(ui->comboBoxWorker1,&QComboBox::currentTextChanged,this,&MainWindow::setCurWorker);
 
     ui->doubleSpinBoxVS1Value_vsmode->setMaximum(9999);
     ui->doubleSpinBoxVS2Value_vsmode->setMaximum(9999);
-    ui->doubleSpinBoxVS1Value_jdmode->setMaximum(9999);
-    ui->doubleSpinBoxVS2Value_jdmode->setMaximum(9999);
-    ui->doubleSpinBoxYinliuValue_jdmode->setMaximum(9999);
+    ui->doubleSpinBoxVS1Value_jdmode->setMaximum(99999);
 
+    ui->doubleSpinBoxVS1Value_jdmode->setMinimum(-99999);
+    ui->doubleSpinBoxVS2Value_jdmode->setMinimum(-99999);
+    ui->doubleSpinBoxYinliuValue_jdmode->setMaximum(9999);
+    ui->doubleSpinBoxYinliuValue_jdmode->setMinimum(-9999);
+
+    ui->actionSave_as->setEnabled(false);
 
 }
 
@@ -705,7 +722,7 @@ void MainWindow::startVS1(int index){
             allGroup.at(index)->request_b();
         }
         else{
-            showLog("该设备组正在进行其他动作，调试禁止。");
+            showLog("该设备组正在进行其他动作，禁止启动调试。");
         }
     }
 }
@@ -736,7 +753,7 @@ void MainWindow::startVS1()
                 allGroup.at(index)->request_b();
             }
             else{
-                showLog("该设备组正在进行其他动作，调试禁止。");
+                showLog("该设备组正在进行其他动作，禁止启动调试。");
             }
         }
     }
@@ -763,7 +780,7 @@ void MainWindow::startVS2(int index){
             allGroup.at(index)->request_b();
         }
         else{
-            showLog("该设备组正在进行其他动作，调试禁止。");
+            showLog("该设备组正在进行其他动作，禁止启动调试。");
         }
     }
 }
@@ -795,18 +812,12 @@ void MainWindow::startVS2(){
                 allGroup.at(index)->request_b();
             }
             else{
-                showLog("该设备组正在进行其他动作，调试禁止。");
+                showLog("该设备组正在进行其他动作，禁止启动调试。");
             }
         }
     }
 }
 
-void MainWindow::startJingdu(int index){
-
-}
-void MainWindow::startJingdu(){
-
-}
 
 void MainWindow::saveGroupShip(){
     QFile *file = new QFile("groupShip");
@@ -860,6 +871,13 @@ void MainWindow::updateTable(){
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
 
+		//TODO:更新精度调试的三个输入框，分别为上一次的VS调试的最终值,引流值为最新的值
+		if(allGroup.at(index)->allData.final_VS1.size())
+			ui->doubleSpinBoxVS1Value_jdmode->setValue(allGroup.at(index)->allData.final_VS1.back());
+		if(allGroup.at(index)->allData.final_VS2.size())
+			ui->doubleSpinBoxVS2Value_jdmode->setValue(allGroup.at(index)->allData.final_VS2.back());
+		ui->doubleSpinBoxYinliuValue_jdmode->setValue(allGroup.at(index)->allData.initValue_Yinliu_modeJingdu);
+
         //TODO: show all data
         QTableWidget *curTable;
 
@@ -868,16 +886,20 @@ void MainWindow::updateTable(){
             AllData::Mode mode = m[i];
             if(!allGroup.at(index)->allData.returnData_FromVS(mode, f_vectorArr, s_vectorArr))
                     return;
+
+            int column = 7;
             if(mode==AllData::Mode_VS1)
                 curTable = ui->tableWidgetvs1;
             else if(mode==AllData::Mode_VS2)
                 curTable = ui->tableWidgetvs2;
-            else if(mode==AllData::Mode_Jingdu)
+            else if(mode==AllData::Mode_Jingdu){
+                column = 16;
                 curTable = ui->tableWidget_2;
+            }
 
             curTable->clear();
 
-            for(int i=0;i<7;i++)
+            for(int i=0;i<column;i++)
                 for(int j=0;j<f_vectorArr[i]->size();j++)
                 {
                      curTable->setItem(j,i,new QTableWidgetItem(QString::number(f_vectorArr[i]->at(j))));
@@ -886,7 +908,7 @@ void MainWindow::updateTable(){
             for(int i=0;i<3;i++)
                 for(int j=0;j<s_vectorArr[i]->size();j++)
                 {
-                    curTable->setItem(j,i+7,new QTableWidgetItem(s_vectorArr[i]->at(j)));
+                    curTable->setItem(j,i+column,new QTableWidgetItem(s_vectorArr[i]->at(j)));
                 }
 
         }
@@ -894,6 +916,7 @@ void MainWindow::updateTable(){
 
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
     ui->tableWidgetvs2->setHorizontalHeaderLabels(headers);
+    ui->tableWidget_2->setHorizontalHeaderLabels(headers2);
 
 }
 
@@ -938,7 +961,7 @@ void MainWindow::scrollCurItem2(QTableWidgetItem *cur){
     ui->tableWidgetvs2->scrollToItem(cur);
 }
 void MainWindow::scrollCurItem3(QTableWidgetItem *cur){
-    ui->tableWidget_2->scrollToItem(cur);
+    //ui->tableWidget_2->scrollToItem(cur);
 }
 void MainWindow::manageWorker(){
     wworker_msg->clear();
@@ -1221,91 +1244,101 @@ void MainWindow::saveTable2Excel(){
     if(!curGroupName.size())
         return ;
 
-    QString filename = curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
-
-    if(!filename.size())
-        return ;
-
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
-    if(ok){
+	if(ok){
 
-        QXlsx::Format blueBackground;
-        blueBackground.setPatternBackgroundColor(Qt::blue);
-        QXlsx::Format greenBackground;
-        greenBackground.setPatternBackgroundColor(Qt::green);
+		if(allGroup.at(index)->allData.curAction!=AllData::Action::Action_die){
+            QMessageBox::warning(this, "调试正在进行中","当前调试还未结束,不可中途保存");
+			return;
+		}
+		QXlsx::Format blueBackground;
+		blueBackground.setPatternBackgroundColor(Qt::blue);
+		QXlsx::Format greenBackground;
+		greenBackground.setPatternBackgroundColor(Qt::green);
 
-        AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
+		AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
 
-        if(ui->tabWidget->currentIndex()==0){//vs
-            QXlsx::Document xlsx("vs调试_"+filename);
+		if(ui->tabWidget->currentIndex()==0){//vs
 
-            if(!allGroup.at(index)->allData.returnData_FromVS(m[0], f_vectorArr, s_vectorArr))
-                    return;
+            QString filename = debugInitValue.savePath + "VS调试_" + curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
 
-            for(int i=0;i<10;i++)
-               xlsx.write(1, i+1,headers.at(i));
+			if(!filename.size())
+				return ;
+			filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), filename, tr(".xlsx"));
+			QXlsx::Document xlsx(filename);
 
-            for(int i=0;i<7;i++)
-                for(int j=0;j<f_vectorArr[i]->size();j++)
-                {
-                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
-                }
+			if(!allGroup.at(index)->allData.returnData_FromVS(m[0], f_vectorArr, s_vectorArr))
+				return;
 
-            for(int i=0;i<3;i++)
-                for(int j=0;j<s_vectorArr[i]->size();j++)
-                {
+			for(int i=0;i<10;i++)
+				xlsx.write(1, i+1,headers.at(i));
 
-                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
-                }
-            int lastLen = s_vectorArr[0]->size()+3;
+			for(int i=0;i<7;i++)
+				for(int j=0;j<f_vectorArr[i]->size();j++)
+				{
+					xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+				}
 
-            if(!allGroup.at(index)->allData.returnData_FromVS(m[1], f_vectorArr, s_vectorArr))
-                    return;
-            for(int i=0;i<10;i++)
-               xlsx.write(1+lastLen, i+1,headers.at(i));
+			for(int i=0;i<3;i++)
+				for(int j=0;j<s_vectorArr[i]->size();j++)
+				{
 
-            for(int i=0;i<7;i++)
-                for(int j=0;j<f_vectorArr[i]->size();j++)
-                {
-                    xlsx.write(j+2+lastLen,i+1,f_vectorArr[i]->at(j), blueBackground);
-                }
+					xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+				}
+			int lastLen = s_vectorArr[0]->size()+3;
 
-            for(int i=0;i<3;i++)
-                for(int j=0;j<s_vectorArr[i]->size();j++)
-                {
+			if(!allGroup.at(index)->allData.returnData_FromVS(m[1], f_vectorArr, s_vectorArr))
+				return;
+			for(int i=0;i<10;i++)
+				xlsx.write(1+lastLen, i+1,headers.at(i));
 
-                    xlsx.write(j+2+lastLen,i+8,s_vectorArr[i]->at(j), blueBackground);
-                }
+			for(int i=0;i<7;i++)
+				for(int j=0;j<f_vectorArr[i]->size();j++)
+				{
+					xlsx.write(j+2+lastLen,i+1,f_vectorArr[i]->at(j), blueBackground);
+				}
 
-            xlsx.save();
-        }
-        else{//精度调试
-            QXlsx::Document xlsx("精度调试_"+filename);
+			for(int i=0;i<3;i++)
+				for(int j=0;j<s_vectorArr[i]->size();j++)
+				{
+
+					xlsx.write(j+2+lastLen,i+8,s_vectorArr[i]->at(j), blueBackground);
+				}
+
+			xlsx.save();
+		}
+		else{//精度调试
+            QString filename = debugInitValue.savePath + "精度调试_" + curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
+
+			if(!filename.size())
+				return ;
+			filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), filename, tr(".xlsx"));
+			QXlsx::Document xlsx(filename);
 
 
-            if(!allGroup.at(index)->allData.returnData_FromVS(m[2], f_vectorArr, s_vectorArr))
-                    return;
+			if(!allGroup.at(index)->allData.returnData_FromVS(m[2], f_vectorArr, s_vectorArr))
+				return;
 
-            for(int i=0;i<10;i++)
-               xlsx.write(1, i+1,headers.at(i));
+			for(int i=0;i<19;i++)
+				xlsx.write(1, i+1,headers2.at(i));
 
-            for(int i=0;i<7;i++)
-                for(int j=0;j<f_vectorArr[i]->size();j++)
-                {
-                    xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
-                }
+			for(int i=0;i<16;i++)
+				for(int j=0;j<f_vectorArr[i]->size();j++)
+				{
+					xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+				}
 
-            for(int i=0;i<3;i++)
-                for(int j=0;j<s_vectorArr[i]->size();j++)
-                {
+			for(int i=0;i<3;i++)
+				for(int j=0;j<s_vectorArr[i]->size();j++)
+				{
 
-                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
-                }
-            xlsx.save();
-        }
+					xlsx.write(j+2,i+17,s_vectorArr[i]->at(j), greenBackground);
+				}
+			xlsx.save();
+		}
 
-    }
+	}
 
 }
 
@@ -1317,7 +1350,7 @@ void MainWindow::saveAsTable2Excel(){
 
     //这是另存为
     QString filename = curGroupName + "_" +QDate::currentDate().toString("yyyyMMdd") +'_'+ QTime::currentTime().toString("hhmmss") + ".xlsx";
-    filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), QDir::homePath()+'/'+filename, tr(".xlsx"));
+    filename = QFileDialog::getSaveFileName(this, tr("Save Excel"), "/home/"+filename, tr(".xlsx"));
 
     if(!filename.size())
         return ;
@@ -1386,7 +1419,7 @@ void MainWindow::saveAsTable2Excel(){
             for(int i=0;i<10;i++)
                xlsx.write(1, i+1,headers.at(i));
 
-            for(int i=0;i<7;i++)
+            for(int i=0;i<16;i++)
                 for(int j=0;j<f_vectorArr[i]->size();j++)
                 {
                     xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
@@ -1396,7 +1429,7 @@ void MainWindow::saveAsTable2Excel(){
                 for(int j=0;j<s_vectorArr[i]->size();j++)
                 {
 
-                    xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+                    xlsx.write(j+2,i+17,s_vectorArr[i]->at(j), greenBackground);
                 }
             xlsx.save();
         }
@@ -1439,4 +1472,201 @@ void MainWindow::readExitStatus(){
         file = NULL;
     }
 
+}
+
+void MainWindow::startJingdu(){
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        //judge if both are online.
+        if(3 == allGroup.at(index)->getOnlineStatus())
+        {
+			//TODO:看三个值是否有效,当VS结束时赋予这些值
+			//if(ui->doubleSpinBoxVS1Value_jdmode->value()>0 && ui->doubleSpinBoxVS2Value_jdmode->value()>0 && ui->doubleSpinBoxYinliuValue_jdmode->value()>0)
+            if(allGroup.at(index)->meishuile)//没水了继续
+            {
+                allGroup.at(index)->request_b();
+            }
+            else if(allGroup.at(index)->allData.curAction==AllData::Action_die)
+            {
+                allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
+                allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();
+                allGroup.at(index)->allData.initValue_VS2_modeJingdu = ui->doubleSpinBoxVS2Value_jdmode->value();
+                allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = ui->doubleSpinBoxYinliuValue_jdmode->value();
+				//TODO: 暂时没有用公式
+                //allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
+                allGroup.at(index)->allData.jingdu_step = 0;
+                allGroup.at(index)->allData.JingduCount = 0;
+                allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
+                allGroup.at(index)->request_b();
+            }
+            else{
+                showLog("该设备组正在进行其他动作，禁止启动调试。");
+            }
+        }
+    }
+
+}
+
+void MainWindow::startJingdu(int index){
+
+}
+
+
+void MainWindow::readConfig(){
+	
+	QFile loadFile("./config.json");
+
+	if(!loadFile.open(QIODevice::ReadOnly))
+	{
+		qDebug() << "could't open projects json";
+		return;
+	}
+
+	QByteArray allData = loadFile.readAll();
+	loadFile.close();
+
+	QJsonParseError json_error;
+	QJsonDocument jsonDoc(QJsonDocument::fromJson(allData, &json_error));
+
+	if(json_error.error != QJsonParseError::NoError)
+	{
+		qDebug() << "json error!";
+		return;
+	}
+
+	QJsonObject rootObj = jsonDoc.object();
+
+
+	QJsonArray workers = rootObj.value("工作人员列表").toArray();
+	for(int i = 0; i< workers.size(); i++)
+	{
+		QString worker = workers.at(i).toString();
+		workerList.push_back(worker);
+		wworker_workerList->addItem(worker);
+		ui->comboBoxWorker1->addItem(worker);
+	}
+
+
+	QJsonArray formulas = rootObj.value("VS公式列表").toArray();
+	for(int i = 0; i< formulas.size(); i++)
+	{
+		QString formula = formulas.at(i).toString();
+		vsformulaList.push_back(formula);
+		wvsformula_vsformulaList->addItem(formula);
+	}
+
+
+	QJsonArray groupShip = rootObj.value("设备组列表").toArray();
+	for(int i=0;i<groupShip.size();i++){
+		Group *g = new Group();
+		QString n = groupShip.at(i).toObject().value("设备组名称").toString();
+		QString a = groupShip.at(i).toObject().value("设备A").toString();
+		QString b = groupShip.at(i).toObject().value("设备B").toString();
+		g->tie_byID(n,a,b);
+		allGroup.push_back(g);
+		allGroupLog.push_back(QString("均未上线"));
+		connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
+	}
+
+	QJsonObject exitStatus = rootObj.value("退出时状态").toObject();
+    ui->comboBoxWorker1->setCurrentIndex(exitStatus.value("当前工作人员").toInt());
+    wvsformula_vsformulaList->setCurrentIndex(exitStatus.value("当前VS公式").toInt());
+
+    debugInitValue.savePath = rootObj.value("表格默认保存路径").toString();
+
+	if(rootObj.contains("调试相关的参数")){
+	QJsonObject debugValues = rootObj.value("调试相关的参数").toObject();
+
+	debugInitValue.minWater = debugValues.value("最低水量阈值").toDouble();
+	debugInitValue.VS1_vsmode = debugValues.value("VS1原值").toDouble();
+	debugInitValue.VS2_vsmode = debugValues.value("VS2原值").toDouble();
+	debugInitValue.range_vsmode = debugValues.value("最大稳定距离").toDouble();
+	debugInitValue.flow_jingdu = debugValues.value("默认引流系数").toDouble();
+	debugInitValue.threshold1 = debugValues.value("Threshold1").toDouble();
+	debugInitValue.threshold2 = debugValues.value("Threshold2").toDouble();
+	debugInitValue.range1 = debugValues.value("range1").toDouble();
+	debugInitValue.range2 = debugValues.value("range2").toDouble();
+	debugInitValue.range3 = debugValues.value("range3").toDouble();
+	debugInitValue.range4 = debugValues.value("range4").toDouble();
+
+	}
+
+	debugInitValue.readValueToWidget();
+}
+
+void MainWindow::saveConfig(){
+
+	QFile file("./config.json");
+	if(!file.open(QIODevice::WriteOnly)){
+		qDebug()<<"File open error.";
+	}
+
+	QJsonObject rootObject;
+
+	QJsonObject exitStatus;
+	exitStatus.insert("当前工作人员",ui->comboBoxWorker1->currentIndex());
+	exitStatus.insert("当前VS公式",wvsformula_vsformulaList->currentIndex());
+
+	DBG<<"当前状态";
+	DBG<<ui->comboBoxWorker1->currentIndex();
+	DBG<<wvsformula_vsformulaList->currentIndex();
+
+	QJsonArray workers;
+	for(int i=0;i<workerList.size();i++)
+	{
+		workers.append(workerList[i]);
+	}
+
+	QJsonArray vsFormula;
+	for(int i=0;i<vsformulaList.size();i++)
+	{
+		vsFormula.append(vsformulaList[i]);
+	}
+
+	QJsonArray groupShip;
+	for(int i=0;i<allGroup.size();i++)
+	{
+		QJsonObject curGroup;
+		curGroup.insert("设备组名称",allGroup[i]->groupInfo.name);
+		curGroup.insert("设备A",allGroup[i]->groupInfo.machineA_id);
+		curGroup.insert("设备B",allGroup[i]->groupInfo.machineB_id);
+		groupShip.append(curGroup);
+	}
+
+	QJsonObject debugValues;
+
+	debugValues.insert("最低水量阈值",debugInitValue.minWater);
+	debugValues.insert("VS1原值",debugInitValue.VS1_vsmode);
+	debugValues.insert("VS2原值",debugInitValue.VS2_vsmode);
+	debugValues.insert("最大稳定距离",debugInitValue.range_vsmode);
+	debugValues.insert("默认引流系数",debugInitValue.flow_jingdu);
+	debugValues.insert("Threshold1",debugInitValue.threshold1);
+	debugValues.insert("Threshold2",debugInitValue.threshold2);
+	debugValues.insert("range1",debugInitValue.range1);
+	debugValues.insert("range2",debugInitValue.range2);
+	debugValues.insert("range3",debugInitValue.range3);
+	debugValues.insert("range4",debugInitValue.range4);
+
+	rootObject.insert("退出时状态", exitStatus);
+	rootObject.insert("工作人员列表", workers);
+	rootObject.insert("VS公式列表", vsFormula);
+	rootObject.insert("设备组列表", groupShip);
+    rootObject.insert("表格默认保存路径", debugInitValue.savePath);
+    rootObject.insert("调试相关的参数", debugValues);
+
+
+	QJsonDocument jsonDoc;
+	jsonDoc.setObject(rootObject);
+	file.write(jsonDoc.toJson());
+	file.close();
+	qDebug()<<"配置保存成功";
+
+}
+
+void MainWindow::showSetting(){
+    debugInitValue.show();
 }

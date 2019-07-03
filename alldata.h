@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QDebug>
 #include <QDate>
+#include <QMessageBox>
 
 
 class AllData
@@ -28,7 +29,6 @@ public:
     };
 
     //original
-    void saveToExcel();
     bool returnData_FromVS(Mode mode, QVector<double> **a,
                     QVector<QString> **b);
 
@@ -42,6 +42,7 @@ public:
     double cal_adjustValue();//Mode curMode. gen ju dang qian de mo shi ,
     double cal_expression(QString e);
 
+	void cal_finalValues_JingduMode();
     void complete();//let all vector length same.
 
 
@@ -79,17 +80,62 @@ public:
     int length_VS2;
     bool vs2_ok;
 
+	double averageValue;
+
+
+	//===========================================================
+	//  精度调试
+	//===========================================================
+	double Threshold1;
+	double Threshold2;
+
+	double range1;
+	double range2;
+	double range3;
+	double range4;
 
     double initValue_VS1_modeJingdu;
     double initValue_VS2_modeJingdu;
     double initValue_Yinliu_modeJingdu;
 
-    double averageValue;
 
-    int VSCount;//记录当前第几次，三次一检查。
+    //原值
+    QVector<double> originalVS1_Jingdu;
+    QVector<double> originalVS2_Jingdu;
+    QVector<double> originalFlow_Jingdu;
+	//调整值
+    QVector<double> adjustVS1_Jingdu;
+    QVector<double> adjustVS2_Jingdu;
+    QVector<double> adjustFlow_Jingdu;
+	//0周期
+    QVector<double> b0_Jingdu;
+    QVector<double> r0_Jingdu;
+    QVector<double> differential0_Jingdu;
+    QVector<double> a0_Jingdu;
+    QVector<double> accuracy0_Jingdu;
+	//1周期
+    QVector<double> b1_Jingdu;
+    QVector<double> r1_Jingdu;
+    QVector<double> differential1_Jingdu;
+    QVector<double> a1_Jingdu;
+    QVector<double> accuracy1_Jingdu;
+	//备注
+    QVector<QString> status_Jingdu;
+    QVector<QString> date_Jingdu;
+    QVector<QString> worker_Jingdu;
+
+    QString Expression_Jingdu;
+    int length_Jingdu;
+
+	int jingdu_step;
+
+    int VSCount;//记录第几次，三次一检查。
+
+	int JingduCount;
+
     Mode curMode;
     Action curAction;
-    Action lastRequest;
+    //Action lastRequest;
     bool saved;
 
 };

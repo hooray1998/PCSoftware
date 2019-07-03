@@ -33,7 +33,8 @@ SOURCES += \
     alldata.cpp \
     groupinfo.cpp \
     group.cpp \
-    mythread.cpp
+    mythread.cpp \
+    setting.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,10 +42,12 @@ HEADERS += \
     alldata.h \
     groupinfo.h \
     group.h \
-    mythread.h
+    mythread.h \
+    setting.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    setting.ui
 
 RESOURCES += \
     other/qss.qrc \
