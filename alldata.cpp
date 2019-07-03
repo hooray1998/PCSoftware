@@ -147,8 +147,6 @@ double AllData::cal_expression(QString e){//use stack to calculate the expressio
 		curAction = Action_die;
 		return 0;
 	}
-    DBG<<"expression is"<<ba.data();
-    DBG<<"expression final is :"<<r;
 
     return r;
 }

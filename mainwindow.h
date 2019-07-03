@@ -5,6 +5,7 @@
 #include "QTXLSX.h"
 #include "setting.h"
 
+#include <QInputDialog>
 #include <QStandardItemModel>
 #include <QStringListModel>
 #include <QStringList>
@@ -130,28 +131,23 @@ public slots:
     void scrollCurItem2(QTableWidgetItem *cur);
     void scrollCurItem3(QTableWidgetItem *cur);
 
+    void changeComment1(QModelIndex index);
+    void changeComment2(QModelIndex index);
+    void changeComment3(QModelIndex index);
+
     void readConfig();
     void saveConfig();
 
     //Worker
     void manageWorker();
-	void readWorkerList();
-	void saveWorkerList();
 
     //VSFormula
     void showVSFormula();
-	void readVSFormulaList();
-	void saveVSFormulaList();
 
-	void readGroupShip();
-	void saveGroupShip();
 
     void updateListView();
     void setStyle(Style style);
 
-    //保存退出时状态
-	void saveExitStatus();
-	void readExitStatus();
 
     //save to excel
     void saveTable2Excel();

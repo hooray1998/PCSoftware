@@ -152,6 +152,9 @@ void MainWindow::initUI(){
     connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem1(QTableWidgetItem*)));
     connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
     connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
+    connect(ui->tableWidgetvs1,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment1(QModelIndex)));
+    connect(ui->tableWidgetvs2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment2(QModelIndex)));
+    connect(ui->tableWidget_2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment3(QModelIndex)));
 
     connect(ui->actionSetting,&QAction::triggered,this,&MainWindow::showSetting);
     connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::showIpWidget);
@@ -339,7 +342,6 @@ void MainWindow::showUntieGroupWidget(){
     {
         Iterator.previous();
         int rowm=Iterator.key();
-        qDebug()<<"delete row..."<<rowm;
         //showLog(QString("解绑%1").arg(allGroup.at(rowm)->groupInfo.name));
         allGroup.at(rowm)->untie();
         allGroup.remove(rowm);
@@ -819,49 +821,6 @@ void MainWindow::startVS2(){
 }
 
 
-void MainWindow::saveGroupShip(){
-    QFile *file = new QFile("groupShip");
-    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
-    if(ok){
-        DBG<<"write groupShip.";
-        QTextStream out(file);
-
-        for(int i=0;i<allGroup.size();i++)
-        {
-            out<<allGroup[i]->groupInfo.name<<" "<<allGroup[i]->groupInfo.machineA_id<<" "<<allGroup[i]->groupInfo.machineB_id<<" ";
-            DBG<<allGroup[i]->groupInfo.name<<" "<<allGroup[i]->groupInfo.machineA_id<<" "<<allGroup[i]->groupInfo.machineB_id<<" ";
-        }
-    }
-    file->close();
-    delete file;
-    file = NULL;
-
-}
-
-void MainWindow::readGroupShip(){
-    QFile *file = new QFile("groupShip");
-    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
-    if(ok){
-        DBG<<"read groupShip.";
-        QTextStream in(file);
-        QString n,a,b;
-
-        while(!in.atEnd())
-        {
-            in>>n>>a>>b;
-            if(!n.size()||!a.size()||!b.size())
-                break;
-            Group *g = new Group();
-            g->tie_byID(n,a,b);
-            allGroup.push_back(g);
-            allGroupLog.push_back(QString("均未上线"));
-            connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
-        }
-        file->close();
-        delete file;
-        file = NULL;
-    }
-}
 
 void MainWindow::updateTable(){
     if(!curGroupName.size())
@@ -960,55 +919,17 @@ void MainWindow::scrollCurItem1(QTableWidgetItem *cur){
 void MainWindow::scrollCurItem2(QTableWidgetItem *cur){
     ui->tableWidgetvs2->scrollToItem(cur);
 }
+
 void MainWindow::scrollCurItem3(QTableWidgetItem *cur){
+    ui->tableWidget_2->scroll(cur->row(),1);
     //ui->tableWidget_2->scrollToItem(cur);
 }
+
 void MainWindow::manageWorker(){
     wworker_msg->clear();
     wworker->move((this->width()-wworker->width())/2,(this->height()-wworker->height())/2);
     wworker->hide();
     wworker->show();
-}
-
-void MainWindow::readWorkerList(){
-    QFile *file = new QFile("workerList");
-    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
-    if(ok){
-        DBG<<"read workerList.";
-        QTextStream in(file);
-        QString n;
-
-        while(!in.atEnd())
-        {
-            in>>n;
-            if(!n.size())
-                break;
-            workerList.push_back(n);
-            wworker_workerList->addItem(n);
-            ui->comboBoxWorker1->addItem(n);
-        }
-        file->close();
-        delete file;
-        file = NULL;
-    }
-
-}
-
-void MainWindow::saveWorkerList(){
-    QFile *file = new QFile("workerList");
-    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
-    if(ok){
-        DBG<<"write workerList.";
-        QTextStream out(file);
-
-            for(int i=0;i<workerList.size();i++)
-            {
-                out<<workerList[i]<<endl;
-            }
-        }
-        file->close();
-        delete file;
-        file = NULL;
 }
 
 void MainWindow::initWorkerWidget(){
@@ -1191,7 +1112,6 @@ void MainWindow::initVSFormulaWidget(){
 
 }
 
-
 void MainWindow::showVSFormula(){
     wvsformula_msg->clear();
     wvsformula->move((this->width()-wvsformula->width())/2,(this->height()-wvsformula->height())/2);
@@ -1199,45 +1119,6 @@ void MainWindow::showVSFormula(){
     wvsformula->show();
 }
 
-void MainWindow::readVSFormulaList(){
-    QFile *file = new QFile("vsformulaList");
-    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
-    if(ok){
-        DBG<<"read vsformula.";
-        QTextStream in(file);
-        QString n;
-
-        while(!in.atEnd())
-        {
-            in>>n;
-            if(!n.size())
-                break;
-            vsformulaList.push_back(n);
-            wvsformula_vsformulaList->addItem(n);
-        }
-        file->close();
-        delete file;
-        file = NULL;
-    }
-
-}
-
-void MainWindow::saveVSFormulaList(){
-    QFile *file = new QFile("vsformulaList");
-    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
-    if(ok){
-        DBG<<"write vsformulaList.";
-        QTextStream out(file);
-
-            for(int i=0;i<vsformulaList.size();i++)
-            {
-                out<<vsformulaList[i]<<endl;
-            }
-        }
-        file->close();
-        delete file;
-        file = NULL;
-}
 
 void MainWindow::saveTable2Excel(){
 
@@ -1438,41 +1319,6 @@ void MainWindow::saveAsTable2Excel(){
 
 }
 
-void MainWindow::saveExitStatus(){
-
-    QFile *file = new QFile("exitStatus");
-    bool ok = file->open(QIODevice::WriteOnly|QIODevice::Text);
-    if(ok){
-            DBG<<"write exitStatus.";
-            QTextStream out(file);
-
-            out<<ui->comboBoxWorker1->currentIndex()<<' '<<wvsformula_vsformulaList->currentIndex();
-        }
-        file->close();
-        delete file;
-        file = NULL;
-}
-
-void MainWindow::readExitStatus(){
-    QFile *file = new QFile("exitStatus");
-    bool ok = file->open(QIODevice::ReadOnly|QIODevice::Text);
-    if(ok){
-        DBG<<"read exitStatus.";
-        QTextStream in(file);
-
-        while(!in.atEnd())
-        {
-            int worker,formula;
-            in>>worker>>formula;
-            ui->comboBoxWorker1->setCurrentIndex(worker);
-            wvsformula_vsformulaList->setCurrentIndex(formula);
-        }
-        file->close();
-        delete file;
-        file = NULL;
-    }
-
-}
 
 void MainWindow::startJingdu(){
     if(!curGroupName.size())
@@ -1669,4 +1515,79 @@ void MainWindow::saveConfig(){
 
 void MainWindow::showSetting(){
     debugInitValue.show();
+}
+
+void MainWindow::changeComment1(QModelIndex modelIndex){
+
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        //judge if both are online.
+        if(3 == allGroup.at(index)->getOnlineStatus()) {
+            if(modelIndex.column()!=7) return;
+            if(modelIndex.row()>=allGroup.at(index)->allData.status_VS1.size()) return;
+
+            bool ok;
+            QString text = QInputDialog::getText(this, tr("修改备注"),
+                                                 tr("新的备注:"), QLineEdit::Normal,
+                                                 modelIndex.data(), &ok);
+            if (ok && !text.isEmpty()){
+                allGroup.at(index)->allData.status_VS1.replace(modelIndex.row(),text);
+                updateTable();
+            }
+        }
+    }
+}
+
+void MainWindow::changeComment2(QModelIndex modelIndex){
+
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        //judge if both are online.
+        if(3 == allGroup.at(index)->getOnlineStatus()) {
+            if(modelIndex.column()!=7) return;
+            if(modelIndex.row()>=allGroup.at(index)->allData.status_VS2.size()) return;
+
+            bool ok;
+            QString text = QInputDialog::getText(this, tr("修改备注"),
+                                                 tr("新的备注:"), QLineEdit::Normal,
+                                                 modelIndex.data(), &ok);
+            if (ok && !text.isEmpty()){
+                allGroup.at(index)->allData.status_VS2.replace(modelIndex.row(),text);
+                updateTable();
+            }
+        }
+    }
+}
+void MainWindow::changeComment3(QModelIndex modelIndex){
+
+    if(!curGroupName.size())
+        return ;
+
+    int index;
+    bool ok = findGroupInGroup(curGroupName, index);
+    if(ok){
+        //judge if both are online.
+        if(3 == allGroup.at(index)->getOnlineStatus()) {
+            if(modelIndex.column()!=18) return;
+            if(modelIndex.row()>=allGroup.at(index)->allData.status_Jingdu.size()) return;
+
+            bool ok;
+            QString text = QInputDialog::getText(this, tr("修改备注"),
+                                                 tr("新的备注:"), QLineEdit::Normal,
+                                                 modelIndex.data(), &ok);
+            if (ok && !text.isEmpty()){
+                allGroup.at(index)->allData.status_Jingdu.replace(modelIndex.row(),text);
+                updateTable();
+            }
+        }
+    }
+
 }

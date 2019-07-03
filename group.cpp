@@ -47,7 +47,6 @@ void Group::returnThreeResult(){
 
 }
 void Group::analyzeData_a(QByteArray data){
-    DBG<<"reveice data from a:"<<data;
 
     if(allData.curAction!=AllData::Action_request_a){// request a
         emit SendLog(groupInfo.name, "receive a and leave it.");
@@ -62,7 +61,6 @@ void Group::analyzeData_a(QByteArray data){
 }
 
 void Group::analyzeData_b(QByteArray data){
-    DBG<<"reveice data from b:"<<data;
     if(allData.curAction!=AllData::Action_request_b){// request b
         emit SendLog(groupInfo.name, "receive b and leave it.");
         //allData.lastRequest = AllData::Action_die;
@@ -83,7 +81,6 @@ void Group::analyzeData_b(QByteArray data){
 }
 
 void Group::analyzeData_r(QByteArray data){
-    DBG<<"reveice data from r:"<<data;
     if(allData.curAction!=AllData::Action_request_r){// request r
         emit SendLog(groupInfo.name, "receive r and leave it.");
         //allData.lastRequest = AllData::Action_die;
