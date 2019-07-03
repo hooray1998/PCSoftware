@@ -412,18 +412,18 @@ void AllData::cal_finalValues_JingduMode(){
 			double C11 = accuracy0_Jingdu.back();
 			double C16 = accuracy1_Jingdu.back();
 
-			DBG<<"step1第一次判断："<<"B11-C11="<<abs(B11-C11)<<"<>"<<Threshold1<<"\t  B16-C16="<<abs(B16-C16)<<"<>"<<Threshold2;
+			//DBG<<"step1第一次判断："<<"B11-C11="<<abs(B11-C11)<<"<>"<<Threshold1<<"\t  B16-C16="<<abs(B16-C16)<<"<>"<<Threshold2;
 			if(abs(B11-C11)<Threshold1 && abs(B16-C16)<Threshold2){
 				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功");
+                status_Jingdu.push_back(QString("step1成功,这一组和上一组符合(%1<%2并且%3<%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 			}
 			else{
-                status_Jingdu.push_back(QString("这两组不满足. (%1<%2和%3<%4没有同时满足)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
+                status_Jingdu.push_back(QString("这两组不满足 (%1>%2 或者 %3>%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 			}
 		}
 		else if(JingduCount==3){
@@ -442,7 +442,7 @@ void AllData::cal_finalValues_JingduMode(){
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功,上一组和上上一组符合");
+                status_Jingdu.push_back(QString("step1成功,上一组和上上一组符合(%1<%2并且%3<%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 
@@ -451,7 +451,7 @@ void AllData::cal_finalValues_JingduMode(){
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功,当前组和上上一组符合");
+                status_Jingdu.push_back(QString("step1成功,当前组和上上一组符合(%1<%2并且%3<%4)").arg(abs(D11-B11)).arg(Threshold1).arg(abs(D16-B16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 
@@ -460,12 +460,12 @@ void AllData::cal_finalValues_JingduMode(){
 				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
 				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
 
-				status_Jingdu.push_back("step1成功,当前组和上一组符合");
+                status_Jingdu.push_back(QString("step1成功,当前组和上一组符合(%1<%2并且%3<%4)").arg(abs(D11-C11)).arg(Threshold1).arg(abs(D16-C16)).arg(Threshold2));
 				jingdu_step ++;
 				JingduCount = -2;
 
 			}else{
-				status_Jingdu.push_back("step1精度不稳,请检查");
+                status_Jingdu.push_back(QString("step1精度不稳,请检查. (%1,%2,%3>%4和%5,%6,%7>%8至少三个成立)").arg(abs(B11-C11)).arg(abs(B11-D11)).arg(C11-D11).arg(Threshold1).arg(abs(B16-C16)).arg(B16-D16).arg(C16-D16).arg(Threshold2));
 				jingdu_step  = -1;
 				return;
 			}
@@ -490,7 +490,7 @@ void AllData::cal_finalValues_JingduMode(){
 			double B16 = accuracy1_Jingdu[length_Jingdu-2];
 			double C11 = accuracy0_Jingdu.back();
 			double C16 = accuracy1_Jingdu.back();
-			DBG<<"step2第一次判断："<<"(B11,C11)="<<B11<<','<<C11<<"<>("<<range1<<","<<range2<<")\t (B16,C16)="<<B16<<","<<C16<<"<>("<<range3<<","<<range4<<")";
+			//DBG<<"step2第一次判断："<<"(B11,C11)="<<B11<<','<<C11<<"<>("<<range1<<","<<range2<<")\t (B16,C16)="<<B16<<","<<C16<<"<>("<<range3<<","<<range4<<")";
 
 			if(min(B11,C11)>=range1 && max(B11,C11)<range2 && min(B16,C16)>=range3 && max(B16,C16)<=range4 ){
 				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
@@ -499,6 +499,7 @@ void AllData::cal_finalValues_JingduMode(){
 
 				jingdu_step ++;
 				status_Jingdu.push_back("成功");
+                //status_Jingdu.push_back(QString("step1成功,这一组和上一组符合(%1<%2并且%3<%4)").arg(abs(B11-C11)).arg(Threshold1).arg(abs(B16-C16)).arg(Threshold2));
 				return;
 			}
 			else{
