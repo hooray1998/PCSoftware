@@ -87,7 +87,7 @@ void MainWindow::initUI(){
     ui->tableWidget_2->setColumnCount(19);
     ui->tabWidget->setCurrentIndex(0);
 
-    headers<<"原值"<<"b"<<"r"<<"r-b"<<"a"<<"调整值"<<"最终值"<<"备注"<<"日期"<<"工作人员";
+    headers<<"原值"<<"初值b"<<"末值r"<<"实际值r-b"<<"显示值a"<<"调整值"<<"最终值"<<"备注"<<"日期"<<"工作人员";
 	//headers2<<"VS1"<<"VS2"<<"引流系数"<<"VS1（调）"<<"VS2（调）"<<"引流系数（调）"<<"0周期引流量初值"<<"0周期引流量末值"<<"0周期引流量实际值"<<"0周期引流量显示值"<<"0周期引流量精度"<<"1周期注入量初值"<<"1周期注入量末值"<<"1周期注入量实际值"<<"1周期注入量显示值"<<"1周期注入量精度"<<"设备状态及备注"<<"日期"<<"工作人员";
 	headers2<<"VS1"<<"VS2"<<"引流系数"<<"VS1-调"<<"VS2-调"<<"引流系数-调"<<"引-初值"<<"引-末值"<<"引-实际值"<<"引-显示值"<<"引-精度"<<"注-初值"<<"注-末值"<<"注-实际值"<<"注-显示值"<<"注-精度"<<"备注"<<"日期"<<"工作人员";
 
@@ -497,9 +497,16 @@ void MainWindow::showLog(QString group,QString msg)
 
     int index;
     if(findGroupInGroup(group, index)){
-        allGroupLog[index].clear();
-        allGroupLog[index] = msg;
-        model->setItem(index,1,new QStandardItem(allGroupLog.at(index)));
+		allGroupLog[index].clear();
+		allGroupLog[index] = msg;
+		model->setItem(index,1,new QStandardItem(allGroupLog.at(index)));
+		//model->item(index,1)->setText(msg);
+        if(msg.contains("没水了")||msg.contains("精度不稳")){
+			model->item(index, 1)->setBackground(QBrush(QColor(255, 0, 0))); 
+		}
+        if(msg.contains("OK")||msg.contains("ok")){
+			model->item(index, 1)->setBackground(QBrush(QColor(0, 255, 0))); 
+		}
     }
 
     if(msg=="VS1调试ok")
