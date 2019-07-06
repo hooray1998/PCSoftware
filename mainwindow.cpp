@@ -108,8 +108,8 @@ void MainWindow::initUI(){
     //ui->tableWidget_2->setAutoScroll(true);
     //ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(16,QHeaderView::Stretch);
     //ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(17,QHeaderView::Stretch);
-    ui->tableWidget_2->setColumnWidth(16,200);
-    ui->tableWidget_2->setColumnWidth(17,200);
+    ui->tableWidget_2->setColumnWidth(16,500);
+    //ui->tableWidget_2->setColumnWidth(17,200);
 
     ui->listView_2->setUpdatesEnabled(true);
 
@@ -1131,39 +1131,51 @@ void MainWindow::saveTable2Excel(){
 				return;
 
 			for(int i=0;i<10;i++)
-				xlsx.write(1, i+1,headers.at(i));
+				xlsx.write(1, i+2,headers.at(i));
 
 			for(int i=0;i<7;i++)
 				for(int j=0;j<f_vectorArr[i]->size();j++)
 				{
-					xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+					xlsx.write(j+2,i+2,f_vectorArr[i]->at(j), greenBackground);
 				}
 
 			for(int i=0;i<3;i++)
 				for(int j=0;j<s_vectorArr[i]->size();j++)
 				{
-
-					xlsx.write(j+2,i+8,s_vectorArr[i]->at(j), greenBackground);
+					xlsx.write(j+2,i+9,s_vectorArr[i]->at(j), greenBackground);
 				}
+			//序号
+			xlsx.write(1, 1, "序号", greenBackground);
+            for(int i=0;i<f_vectorArr[1]->size();i++){
+				xlsx.write(i+2, 1, i+1, greenBackground);
+			}
+
+			//VS2
 			int lastLen = s_vectorArr[0]->size()+3;
 
 			if(!allGroup.at(index)->allData.returnData_FromVS(m[1], f_vectorArr, s_vectorArr))
 				return;
 			for(int i=0;i<10;i++)
-				xlsx.write(1+lastLen, i+1,headers.at(i));
+				xlsx.write(1+lastLen, i+2,headers.at(i));
 
 			for(int i=0;i<7;i++)
 				for(int j=0;j<f_vectorArr[i]->size();j++)
 				{
-					xlsx.write(j+2+lastLen,i+1,f_vectorArr[i]->at(j), blueBackground);
+					xlsx.write(j+2+lastLen,i+2,f_vectorArr[i]->at(j), blueBackground);
 				}
 
 			for(int i=0;i<3;i++)
 				for(int j=0;j<s_vectorArr[i]->size();j++)
 				{
 
-					xlsx.write(j+2+lastLen,i+8,s_vectorArr[i]->at(j), blueBackground);
+					xlsx.write(j+2+lastLen,i+9,s_vectorArr[i]->at(j), blueBackground);
 				}
+
+			//序号
+			xlsx.write(1+lastLen, 1, "序号", blueBackground);
+            for(int i=0;i<f_vectorArr[1]->size();i++){
+				xlsx.write(i+2+lastLen, 1, i+1, blueBackground);
+			}
 
 			xlsx.save();
 		}
@@ -1180,21 +1192,26 @@ void MainWindow::saveTable2Excel(){
 				return;
 
 			for(int i=0;i<19;i++)
-				xlsx.write(1, i+1,headers2.at(i));
+				xlsx.write(1, i+2,headers2.at(i));
 
 			for(int i=0;i<16;i++)
 				for(int j=0;j<f_vectorArr[i]->size();j++)
 				{
-					xlsx.write(j+2,i+1,f_vectorArr[i]->at(j), greenBackground);
+					xlsx.write(j+2,i+2,f_vectorArr[i]->at(j), greenBackground);
 				}
 
 			for(int i=0;i<3;i++)
 				for(int j=0;j<s_vectorArr[i]->size();j++)
 				{
 
-					xlsx.write(j+2,i+17,s_vectorArr[i]->at(j), greenBackground);
+					xlsx.write(j+2,i+18,s_vectorArr[i]->at(j), greenBackground);
 				}
-			xlsx.save();
+            //序号
+            xlsx.write(1, 1, "序号", greenBackground);
+            for(int i=0;i<f_vectorArr[1]->size();i++){
+                xlsx.write(i+2, 1, i+1, greenBackground);
+            }
+            xlsx.save();
 		}
 
 	}
