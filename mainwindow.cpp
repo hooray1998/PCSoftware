@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setStyle(MainWindow::Style_Silvery);
     setWindowState(Qt::WindowMaximized);
 
+
     initUI();
 
     //初始化其他设置窗口
@@ -23,10 +24,10 @@ MainWindow::MainWindow(QWidget *parent) :
     initVSFormulaWidget();
     initTcpServer();
 
+    readConfig();
 	//数据处理
 
     listenButtonClickSlot();//auto to connect
-    readConfig();
     //readGroupShip();
     //readWorkerList();
     //readVSFormulaList();
@@ -359,6 +360,17 @@ void MainWindow::showUntieGroupWidget(){
 
 void MainWindow::listenButtonClickSlot()
 {
+	if(pTcpServer->isListening()){
+		if(QMessageBox::Ok != QMessageBox::warning(wip, "警告","当前设备正在监听，是否重启设备进行新的监听",QMessageBox::Ok|QMessageBox::Cancel)) return;
+		else{
+			saveConfig();
+			qApp->exit(2);
+			return;
+		}
+	}
+	//else{
+		//return;
+	//}
     QString myAddr = wip_ip->text();     //手动输入IP到edit框
     QString myPort = wip_port->text();       //手动设置端口
     QString msg;
@@ -370,7 +382,7 @@ void MainWindow::listenButtonClickSlot()
     else
     {
         msg = "绑定成功 IP:"+myAddr+"   Port:"+myPort;
-        wip_button->setEnabled(false);
+        wip_button->setText("重新绑定");
         wip->close();
     }
 
@@ -1349,6 +1361,9 @@ void MainWindow::readConfig(){
 
 	QJsonObject rootObj = jsonDoc.object();
 
+	QJsonObject tcpObj = rootObj.value("TCP").toObject();
+    wip_ip->setText(tcpObj.value("IP").toString());
+    wip_port->setValue(tcpObj.value("Port").toInt());
 
 	QJsonArray workers = rootObj.value("工作人员列表").toArray();
 	for(int i = 0; i< workers.size(); i++)
@@ -1416,13 +1431,13 @@ void MainWindow::saveConfig(){
 
 	QJsonObject rootObject;
 
+	QJsonObject tcpObj;
+	tcpObj.insert("IP",wip_ip->text());
+	tcpObj.insert("Port",wip_port->value());
+
 	QJsonObject exitStatus;
 	exitStatus.insert("当前工作人员",ui->comboBoxWorker1->currentIndex());
 	exitStatus.insert("当前VS公式",wvsformula_vsformulaList->currentIndex());
-
-	DBG<<"当前状态";
-	DBG<<ui->comboBoxWorker1->currentIndex();
-	DBG<<wvsformula_vsformulaList->currentIndex();
 
 	QJsonArray workers;
 	for(int i=0;i<workerList.size();i++)
@@ -1460,6 +1475,7 @@ void MainWindow::saveConfig(){
 	debugValues.insert("range3",debugInitValue.range3);
 	debugValues.insert("range4",debugInitValue.range4);
 
+	rootObject.insert("TCP", tcpObj);
 	rootObject.insert("退出时状态", exitStatus);
 	rootObject.insert("工作人员列表", workers);
 	rootObject.insert("VS公式列表", vsFormula);
