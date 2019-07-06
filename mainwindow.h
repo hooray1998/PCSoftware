@@ -257,6 +257,7 @@ private:
     QPushButton *wvsformula_buttonclose;
 
 	Setting debugInitValue;
+
 };
 
 #endif // MAINWINDOW_H

@@ -48,12 +48,12 @@ void Group::returnThreeResult(){
 void Group::analyzeData_a(QByteArray data){
 
     if(allData.curAction!=AllData::Action_request_a){// request a
-        emit SendLog(groupInfo.name, "receive a and leave it.");
+        emit SendLog(groupInfo.name, "收到无用的实际值a");
         //allData.lastRequest = AllData::Action_die;
     }
     else{
         allData.push_a(data.toDouble());
-        emit SendLog(groupInfo.name, "receive a.");
+        emit SendLog(groupInfo.name, "收到实际值a");
         allData.curAction = AllData::Action_receive_a;
         request_r();
     }
@@ -61,19 +61,19 @@ void Group::analyzeData_a(QByteArray data){
 
 void Group::analyzeData_b(QByteArray data){
     if(allData.curAction!=AllData::Action_request_b){// request b
-        emit SendLog(groupInfo.name, "receive b and leave it.");
+        emit SendLog(groupInfo.name, "收到无用的初值b");
         //allData.lastRequest = AllData::Action_die;
     }
     else{
         double number = data.left(8).toDouble();
         if(number<allData.minWater){
-            emit SendLog(groupInfo.name, QString("没水了。（当前水量%1 < %2）").arg(number).arg(allData.minWater));
+            emit SendLog(groupInfo.name, QString("没水了（当前水量%1小于阈值%2）").arg(number).arg(allData.minWater));
 			allData.complete();
 			allData.curAction = AllData::Action_die;
         }
         else{
             allData.push_b(data.right(8).toDouble());
-            emit SendLog(groupInfo.name, "receive b.");
+            emit SendLog(groupInfo.name, "收到初值b");
             allData.curAction = AllData::Action_receive_b;
             request_a();
         }
@@ -82,12 +82,12 @@ void Group::analyzeData_b(QByteArray data){
 
 void Group::analyzeData_r(QByteArray data){
     if(allData.curAction!=AllData::Action_request_r){// request r
-        emit SendLog(groupInfo.name, "receive r and leave it.");
+        emit SendLog(groupInfo.name, "收到无用的末值r");
         //allData.lastRequest = AllData::Action_die;
     }
     else{
         allData.push_r(data.toDouble());
-        emit SendLog(groupInfo.name, "receive r.");
+        emit SendLog(groupInfo.name, "收到末值r");
 		if(allData.curAction==AllData::Action_die) return;
         allData.curAction = AllData::Action_receive_r;
         //OK: 判断当前的模式和行为,不同的模式不同
@@ -95,7 +95,7 @@ void Group::analyzeData_r(QByteArray data){
 			if(allData.VSCount==2)
 			{
 				returnFinalResult(allData.averageValue);
-				emit SendLog(groupInfo.name, "将结果返回给了A设备。");
+				emit SendLog(groupInfo.name, "将结果返回给了A设备");
 			}
 
             if(allData.vs1_ok){
@@ -123,12 +123,12 @@ void Group::analyzeData_r(QByteArray data){
 			else if(allData.jingdu_step == 2){
                 allData.jingdu_step = 0;
                 allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "精度step2 is ok");
+                emit SendLog(groupInfo.name, "精度第二步ok");
 			}
 			else if(allData.jingdu_step == 1 && allData.JingduCount == -1){
 				allData.JingduCount++;
                 allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "精度step1 is ok");
+                emit SendLog(groupInfo.name, "精度第一步ok");
 				returnThreeResult();
 				request_b();
 			}
