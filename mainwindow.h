@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 
-#include "QTXLSX.h"
-#include "setting.h"
 
 #include <QInputDialog>
 #include <QStandardItemModel>
@@ -28,7 +26,7 @@
 #include <QNetworkInterface>
 #include <QTcpSocket>  //通信套接字
 #include <QKeyEvent>
-#include <QDebug>
+//#include <QDebug>
 #include <QSet>
 #include <QFile>
 #include <QFileInfoList>
@@ -43,6 +41,9 @@
 #include "group.h"
 #include "mythread.h"
 #include "expression.h"
+
+#include "QTXLSX.h"
+#include "setting.h"
 
 namespace Ui {
 class MainWindow;
@@ -153,6 +154,12 @@ public slots:
     void saveTable2Excel();
     void saveAsTable2Excel();
 
+
+	void slot_connect();
+	void slot_addWorkers();
+	void slot_delWorkers();
+	void slot_addFormula();
+	void slot_delFormula();
 
 private:
     Ui::MainWindow *ui;

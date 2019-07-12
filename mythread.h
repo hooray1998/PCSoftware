@@ -36,9 +36,12 @@ public:
     void WriteData(QByteArray);
     void analyzeHeader();
 
+
     bool die;
 public slots:
 
+    void slot_readyRead();
+    void slot_disconnect();
 signals:
     void ReadData(int, QByteArray);
     void RecvEnd();

@@ -1,4 +1,5 @@
 #include "group.h"
+#include "string.h"
 #define DBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
 
 Group::Group()
@@ -32,14 +33,20 @@ void Group::request_r(){
 }
 
 void Group::returnFinalResult(double final){
-    QByteArray header = "05" + QString::asprintf("%08.2f",final).toLocal8Bit();
+    char msg[12];
+    sprintf(msg,"%08.2f",final);
+    //QByteArray header = "05" + QString::asprintf("%08.2f",final).toLocal8Bit();
+    QByteArray header = "05" + QString(msg).toLocal8Bit();
     machineA->WriteData(header);
     allData.curAction = AllData::Action_return;
 }
 
 void Group::returnThreeResult(){
 	//TODO::返回三个值
-    QByteArray header = "08" + QString::asprintf("%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu).toLocal8Bit();
+    char msg[25];
+    sprintf(msg,"%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu);
+    //QByteArray header = "08" + QString::asprintf("%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu).toLocal8Bit();
+    QByteArray header = "08" + QString(msg).toLocal8Bit();
     machineA->WriteData(header);
     allData.curAction = AllData::Action_return;
 	emit SendLog(groupInfo.name, "回复给了A三个调整后的精度系数");

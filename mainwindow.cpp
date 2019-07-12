@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#define DBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
+#define DBG qDebug()
+//<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
 
 const qint64 LOADBYTES = 4096; //4K
 
@@ -8,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    DBG<<"start--------------------";
     ui->setupUi(this);
     this->setWindowTitle("上位机软件");
     setStyle(MainWindow::Style_Silvery);
@@ -161,24 +163,24 @@ void MainWindow::initUI(){
     connect(ui->tableWidgetvs2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment2(QModelIndex)));
     connect(ui->tableWidget_2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment3(QModelIndex)));
 
-    connect(ui->actionSetting,&QAction::triggered,this,&MainWindow::showSetting);
-    connect(ui->actionSetIP,&QAction::triggered,this,&MainWindow::showIpWidget);
-    connect(ui->actionGroupBound,&QAction::triggered,this,&MainWindow::showTieGroupWidget);
-    connect(ui->pushButtonTie,&QPushButton::clicked,this,&MainWindow::showTieGroupWidget);
-    connect(ui->actionGroupUnbound,&QAction::triggered,this,&MainWindow::showUntieGroupWidget);
-    connect(ui->pushButtonUntie,&QPushButton::clicked,this,&MainWindow::showUntieGroupWidget);
-    connect(ui->actionAdd_Worker,&QAction::triggered,this,&MainWindow::manageWorker);
-    connect(ui->actionVSFormula,&QAction::triggered,this,&MainWindow::showVSFormula);
-    connect(ui->actionSave,&QAction::triggered,this,&MainWindow::saveTable2Excel);
-    connect(ui->actionSave_as,&QAction::triggered,this,&MainWindow::saveAsTable2Excel);
-    connect(ui->tableView,&QTableView::clicked,this,&MainWindow::showTable);
+    connect(ui->actionSetting,SIGNAL(triggered()),this,SLOT(showSetting()));
+    connect(ui->actionSetIP,SIGNAL(triggered()),this,SLOT(showIpWidget()));
+    connect(ui->actionGroupBound,SIGNAL(triggered()),this,SLOT(showTieGroupWidget()));
+    connect(ui->pushButtonTie,SIGNAL(clicked()),this,SLOT(showTieGroupWidget()));
+    connect(ui->actionGroupUnbound,SIGNAL(triggered()),this,SLOT(showUntieGroupWidget()));
+    connect(ui->pushButtonUntie,SIGNAL(clicked()),this,SLOT(showUntieGroupWidget()));
+    connect(ui->actionAdd_Worker,SIGNAL(triggered()),this,SLOT(manageWorker()));
+    connect(ui->actionVSFormula,SIGNAL(triggered()),this,SLOT(showVSFormula()));
+    connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(saveTable2Excel()));
+    connect(ui->actionSave_as,SIGNAL(triggered()),this,SLOT(saveAsTable2Excel()));
+    connect(ui->tableView,SIGNAL(clicked(QModelIndex)),this,SLOT(showTable(QModelIndex)));
 
-    connect(ui->pushButtonStop,&QPushButton::clicked, this, &MainWindow::stopDebug);
+    connect(ui->pushButtonStop,SIGNAL(clicked()), this,SLOT(stopDebug()));
     connect(ui->pushButtonStartVS1,SIGNAL(clicked(bool)),this,SLOT(startVS1()));
     connect(ui->pushButtonStartVS2,SIGNAL(clicked(bool)),this,SLOT(startVS2()));
     connect(ui->pushButtonStartJingdu,SIGNAL(clicked(bool)),this,SLOT(startJingdu()));
 
-    connect(ui->comboBoxWorker1,&QComboBox::currentTextChanged,this,&MainWindow::setCurWorker);
+    connect(ui->comboBoxWorker1,SIGNAL(currentTextChanged(QString)),this,SLOT(setCurWorker(QString)));
 
 	//TODO: 修改掉
     ui->doubleSpinBoxVS1Value_vsmode->setMaximum(9999);
@@ -293,19 +295,7 @@ void MainWindow::initTcpServer(){
     pTcpServer = NULL;
     pTcpServer = new QTcpServer(this);
     //只要一建立连接成功，就会自动触发newConnection函数
-    connect(pTcpServer, &QTcpServer::newConnection,
-            [=]()
-            {
-                //取出建立好的连接套接字
-                pTcpSocket = pTcpServer->nextPendingConnection();
-                MyThread *temp = new MyThread(pTcpSocket);
-                allMachine.push_back(temp);
-                temp->start();
-
-                connect(temp, SIGNAL(SendLog(QString)), this, SLOT(showLog(QString)));
-                connect(temp, SIGNAL(SendLog(MyThread*,QByteArray)), this, SLOT(showLog(MyThread*,QByteArray)));
-            }
-            );
+    connect(pTcpServer,SIGNAL(newConnection()),this,SLOT(slot_connect()));
 }
 void MainWindow::showIpWidget()
 {
@@ -575,7 +565,7 @@ void MainWindow::initIpWidget(){
     wip_layout->addWidget(wip_port,1,1,1,2);
     wip_layout->addWidget(wip_button,1,4,1,2);
     wip->setLayout(wip_layout);
-    connect(wip_button,&QPushButton::clicked,this,&MainWindow::listenButtonClickSlot);
+    connect(wip_button,SIGNAL(clicked()),this,SLOT(listenButtonClickSlot()));
 
 }
 void MainWindow::initTieGroupWidget(){
@@ -605,8 +595,8 @@ void MainWindow::initTieGroupWidget(){
     wtie_layout->addWidget(wtie_button,4,0,1,2);
     wtie_layout->addWidget(wtie_buttonclose,4,3,1,2);
     wtie->setLayout(wtie_layout);
-    connect(wtie_button,&QPushButton::clicked,this,&MainWindow::tieTwoMachine);
-    connect(wtie_buttonclose,&QPushButton::clicked,wtie,&QWidget::close);
+    connect(wtie_button,SIGNAL(clicked()),this,SLOT(tieTwoMachine()));
+    connect(wtie_buttonclose,SIGNAL(clicked()),wtie,SLOT(close()));
 
 }
 void MainWindow::initUntieGroupWidget(){
@@ -627,8 +617,8 @@ void MainWindow::initUntieGroupWidget(){
     wuntie_layout->addWidget(wuntie_button,3,0,1,2);
     wuntie_layout->addWidget(wuntie_buttonclose,3,3,1,2);
     wuntie->setLayout(wuntie_layout);
-    connect(wuntie_button,&QPushButton::clicked,this,&MainWindow::untieTwoMachine);
-    connect(wuntie_buttonclose,&QPushButton::clicked,wuntie,&QWidget::close);
+    connect(wuntie_button,SIGNAL(clicked()),this,SLOT(untieTwoMachine()));
+    connect(wuntie_buttonclose,SIGNAL(clicked()),wuntie,SLOT(close()));
 }
 
 void MainWindow::tieTwoMachine(){
@@ -937,46 +927,9 @@ void MainWindow::initWorkerWidget(){
     wworker->setLayout(wworker_layout);
 
    // con7
-    connect(wworker_buttonAdd,&QPushButton::clicked,[=](){
-        QString worker = wworker_lineedit->text();
-        if(worker.size())
-        {
-            if(workerList.contains(worker))
-            {
-                wworker_msg->setText("已经存在。");
-            }
-            else{
-                workerList.push_back(worker);
-                wworker_workerList->addItem(worker);
-                ui->comboBoxWorker1->addItem(worker);
-                wworker_msg->setText("添加成功。");
-                wworker_lineedit->clear();
-            }
-        }
-    });
-    connect(wworker_buttonDel,&QPushButton::clicked,[=](){
-        QString worker = wworker_workerList->currentText();
-        if(worker.size())
-        {
-            if(workerList.contains(worker))
-            {
-                for(int i=0;i<workerList.size();i++)
-                {
-                    if(workerList[i] == worker){
-                        workerList.remove(i);
-                        break;
-                    }
-                }
-                wworker_workerList->removeItem(wworker_workerList->currentIndex());
-                ui->comboBoxWorker1->removeItem(ui->comboBoxWorker1->findText(worker));
-                wworker_msg->setText("移除成功。");
-            }
-            else{
-                wworker_msg->setText("列表中不存在该人员。");
-            }
-        }
-    });
-    connect(wworker_buttonclose, &QPushButton::clicked, wworker, &QWidget::close);
+    connect(wworker_buttonAdd,SIGNAL(clicked()),this,SLOT(slot_addWorkers()));
+    connect(wworker_buttonDel,SIGNAL(clicked()),this,SLOT(slot_delWorkers()));
+    connect(wworker_buttonclose,SIGNAL(clicked()), wworker,SLOT(close()));
 }
 
 void MainWindow::setCurWorker(QString w){
@@ -1024,69 +977,9 @@ void MainWindow::initVSFormulaWidget(){
     wvsformula->setLayout(wvsformula_layout);
 
    // con7
-    connect(wvsformula_buttonAdd,&QPushButton::clicked,[=](){
-        QString formula = wvsformula_lineedit->text();
-        if(formula.size())
-        {
-            if(vsformulaList.contains(formula))
-            {
-                wvsformula_msg->setText("已经存在。");
-            }
-            else{
-
-                QString charList = "abr+-*/().";
-                bool ok = true;
-                for(int i=0;i<formula.size();i++) {
-                    if(!formula[i].isDigit()&&!charList.contains(formula[i]))
-                    {
-                        wvsformula_msg->setText(QString("存在非法字符'%1'").arg(formula[i]));
-                        ok = false;
-                        break;
-                    }
-                }
-                int kuohao = 0;
-                for(int i=0;i<formula.size();i++) {
-                    if(formula[i] == '(')
-                        kuohao++;
-                    else if(formula[i] == ')')
-                        kuohao--;
-                }
-                if(kuohao){
-                    wvsformula_msg->setText(QString("括号不匹配"));
-                    ok = false;
-                }
-
-                if(ok){
-                    vsformulaList.push_back(formula);
-                    wvsformula_vsformulaList->addItem(formula);
-                    wvsformula_msg->setText("添加成功。");
-                    wvsformula_lineedit->clear();
-                }
-            }
-        }
-    });
-    connect(wvsformula_buttonDel,&QPushButton::clicked,[=](){
-        QString formula = wvsformula_vsformulaList->currentText();
-        if(formula.size())
-        {
-            if(vsformulaList.contains(formula))
-            {
-                for(int i=0;i<vsformulaList.size();i++)
-                {
-                    if(vsformulaList[i] == formula){
-                        vsformulaList.remove(i);
-                        break;
-                    }
-                }
-                wvsformula_vsformulaList->removeItem(wvsformula_vsformulaList->currentIndex());
-                wvsformula_msg->setText("移除成功。");
-            }
-            else{
-                wvsformula_msg->setText("Error:5001 不存在该公式。");
-            }
-        }
-    });
-    connect(wvsformula_buttonclose, &QPushButton::clicked, wvsformula, &QWidget::close);
+    connect(wvsformula_buttonAdd,SIGNAL(clicked()),this,SLOT(slot_addFormula()));
+    connect(wvsformula_buttonDel,SIGNAL(clicked()),this,SLOT(slot_delFormula()));
+    connect(wvsformula_buttonclose,SIGNAL(clicked()), wvsformula,SLOT(close()));
 
 }
 
@@ -1107,7 +1000,7 @@ void MainWindow::saveTable2Excel(){
     bool ok = findGroupInGroup(curGroupName, index);
 	if(ok){
 
-		if(allGroup.at(index)->allData.curAction!=AllData::Action::Action_die){
+        if(allGroup.at(index)->allData.curAction!=AllData::Action_die){
             QMessageBox::warning(this, "调试正在进行中","当前调试还未结束,不可中途保存");
 			return;
 		}
@@ -1593,4 +1486,120 @@ void MainWindow::changeComment3(QModelIndex modelIndex){
         }
     }
 
+}
+
+void MainWindow::slot_connect(){
+	//取出建立好的连接套接字
+	pTcpSocket = pTcpServer->nextPendingConnection();
+	MyThread *temp = new MyThread(pTcpSocket);
+	allMachine.push_back(temp);
+	temp->start();
+
+	connect(temp, SIGNAL(SendLog(QString)), this, SLOT(showLog(QString)));
+	connect(temp, SIGNAL(SendLog(MyThread*,QByteArray)), this, SLOT(showLog(MyThread*,QByteArray)));
+}
+
+void MainWindow::slot_addWorkers(){
+	QString worker = wworker_lineedit->text();
+	if(worker.size())
+	{
+		if(workerList.contains(worker))
+		{
+			wworker_msg->setText("已经存在。");
+		}
+		else{
+			workerList.push_back(worker);
+			wworker_workerList->addItem(worker);
+			ui->comboBoxWorker1->addItem(worker);
+			wworker_msg->setText("添加成功。");
+			wworker_lineedit->clear();
+		}
+	}
+}
+
+void MainWindow::slot_delWorkers(){
+	QString worker = wworker_workerList->currentText();
+	if(worker.size())
+	{
+		if(workerList.contains(worker))
+		{
+			for(int i=0;i<workerList.size();i++)
+			{
+				if(workerList[i] == worker){
+					workerList.remove(i);
+					break;
+				}
+			}
+			wworker_workerList->removeItem(wworker_workerList->currentIndex());
+			ui->comboBoxWorker1->removeItem(ui->comboBoxWorker1->findText(worker));
+			wworker_msg->setText("移除成功。");
+		}
+		else{
+			wworker_msg->setText("列表中不存在该人员。");
+		}
+	}
+}
+
+void MainWindow::slot_addFormula(){
+	QString formula = wvsformula_lineedit->text();
+	if(formula.size())
+	{
+		if(vsformulaList.contains(formula))
+		{
+			wvsformula_msg->setText("已经存在。");
+		}
+		else{
+
+			QString charList = "abr+-*/().";
+			bool ok = true;
+			for(int i=0;i<formula.size();i++) {
+				if(!formula[i].isDigit()&&!charList.contains(formula[i]))
+				{
+					wvsformula_msg->setText(QString("存在非法字符'%1'").arg(formula[i]));
+					ok = false;
+					break;
+				}
+			}
+			int kuohao = 0;
+			for(int i=0;i<formula.size();i++) {
+				if(formula[i] == '(')
+					kuohao++;
+				else if(formula[i] == ')')
+					kuohao--;
+			}
+			if(kuohao){
+				wvsformula_msg->setText(QString("括号不匹配"));
+				ok = false;
+			}
+
+			if(ok){
+				vsformulaList.push_back(formula);
+				wvsformula_vsformulaList->addItem(formula);
+				wvsformula_msg->setText("添加成功。");
+				wvsformula_lineedit->clear();
+			}
+		}
+	}
+}
+
+void MainWindow::slot_delFormula(){
+	QString formula = wvsformula_vsformulaList->currentText();
+	if(formula.size())
+	{
+		if(vsformulaList.contains(formula))
+		{
+			for(int i=0;i<vsformulaList.size();i++)
+			{
+				if(vsformulaList[i] == formula){
+					vsformulaList.remove(i);
+					break;
+				}
+			}
+			wvsformula_vsformulaList->removeItem(wvsformula_vsformulaList->currentIndex());
+			wvsformula_msg->setText("移除成功。");
+		}
+		else{
+			wvsformula_msg->setText("Error:5001 不存在该公式。");
+		}
+	}
 }

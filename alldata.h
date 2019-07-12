@@ -28,6 +28,8 @@ public:
         Action_return
     };
 
+	double myAbs(double b);
+
     //original
     bool returnData_FromVS(Mode mode, QVector<double> **a,
                     QVector<QString> **b);

@@ -34,7 +34,8 @@ SOURCES += \
     groupinfo.cpp \
     group.cpp \
     mythread.cpp \
-    setting.cpp
+    setting.cpp \
+    calexpression.cpp
 
 HEADERS += \
         mainwindow.h \

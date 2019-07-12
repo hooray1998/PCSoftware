@@ -12,21 +12,9 @@ MyThread::MyThread(QTcpSocket *t)
 
 void MyThread::run()
 {
-    connect(tcpSocket, &QTcpSocket::readyRead, [=](){
-       data = tcpSocket->readAll();
-            analyzeHeader();
-    }
-    );
+    connect(tcpSocket, SIGNAL(readyRead()),this, SLOT(slot_readyRead()));
 
-    connect(tcpSocket, &QTcpSocket::disconnected, [=](){
-        DBG<<"断开连接";
-        die = true;
-        if(group){
-            group->logout(this);
-        }
-        emit SendLog(this, QByteArray(machineId+"09"));
-        tcpSocket->disconnectFromHost();
-    });
+    connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(slot_disconnect()));
 
 }
 
@@ -122,4 +110,18 @@ void MyThread::setGroup(Group *g){
 
 Group* MyThread::getGroup(){
     return group;
+}
+
+void MyThread::slot_readyRead(){
+   data = tcpSocket->readAll();
+		analyzeHeader();
+}
+
+void MyThread::slot_disconnect(){
+	die = true;
+	if(group){
+		group->logout(this);
+	}
+	emit SendLog(this, QByteArray(machineId+"09"));
+	tcpSocket->disconnectFromHost();
 }
