@@ -59,7 +59,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     //saveGroupShip();
     //saveWorkerList();
     //saveVSFormulaList();
-	saveConfig();
+    saveConfig();
     wip->close();
     wtie->close();
     wuntie->close();
@@ -116,7 +116,7 @@ void MainWindow::initUI(){
     ui->listView_2->setUpdatesEnabled(true);
 
     ui->comboBoxWorker1->setFixedWidth(140);
-    ui->lineEditJiNumber_mode1->setFixedWidth(140);
+    ui->lineEditJiNumber_mode1->setFixedWidth(300);
 
 
     //m_model=new QStringListModel();
@@ -1256,7 +1256,7 @@ void MainWindow::startJingdu(int index){
 
 void MainWindow::readConfig(){
 	
-	QFile loadFile("./config.json");
+    QFile loadFile("config.json");
 
 	if(!loadFile.open(QIODevice::ReadOnly))
 	{
@@ -1282,7 +1282,7 @@ void MainWindow::readConfig(){
     wip_ip->setText(tcpObj.value("IP").toString());
     wip_port->setValue(tcpObj.value("Port").toInt());
 
-	QJsonArray workers = rootObj.value("工作人员列表").toArray();
+	QJsonArray workers = rootObj.value("workers").toArray();
 	for(int i = 0; i< workers.size(); i++)
 	{
 		QString worker = workers.at(i).toString();
@@ -1292,7 +1292,7 @@ void MainWindow::readConfig(){
 	}
 
 
-	QJsonArray formulas = rootObj.value("VS公式列表").toArray();
+	QJsonArray formulas = rootObj.value("vsFormula").toArray();
 	for(int i = 0; i< formulas.size(); i++)
 	{
 		QString formula = formulas.at(i).toString();
@@ -1301,38 +1301,38 @@ void MainWindow::readConfig(){
 	}
 
 
-	QJsonArray groupShip = rootObj.value("设备组列表").toArray();
-	for(int i=0;i<groupShip.size();i++){
+    QJsonArray groupShip = rootObj.value("groupShipList").toArray();
+    for(int i=0;i<groupShip.size();i++){
 		Group *g = new Group();
-		QString n = groupShip.at(i).toObject().value("设备组名称").toString();
-		QString a = groupShip.at(i).toObject().value("设备A").toString();
-		QString b = groupShip.at(i).toObject().value("设备B").toString();
+		QString n = groupShip.at(i).toObject().value("groupShipName").toString();
+		QString a = groupShip.at(i).toObject().value("MachineA").toString();
+		QString b = groupShip.at(i).toObject().value("MachineB").toString();
 		g->tie_byID(n,a,b);
 		allGroup.push_back(g);
 		allGroupLog.push_back(QString("均未上线"));
 		connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
 	}
 
-	QJsonObject exitStatus = rootObj.value("退出时状态").toObject();
-    ui->comboBoxWorker1->setCurrentIndex(exitStatus.value("当前工作人员").toInt());
-    wvsformula_vsformulaList->setCurrentIndex(exitStatus.value("当前VS公式").toInt());
+	QJsonObject exitStatus = rootObj.value("exitStatus").toObject();
+    ui->comboBoxWorker1->setCurrentIndex(exitStatus.value("curWorker").toInt());
+    wvsformula_vsformulaList->setCurrentIndex(exitStatus.value("curVSFormula").toInt());
 
-    debugInitValue.savePath = rootObj.value("表格默认保存路径").toString();
+    debugInitValue.savePath = rootObj.value("savePath").toString();
 
-	if(rootObj.contains("调试相关的参数")){
-	QJsonObject debugValues = rootObj.value("调试相关的参数").toObject();
+	if(rootObj.contains("debugValues")){
+		QJsonObject debugValues = rootObj.value("debugValues").toObject();
 
-	debugInitValue.minWater = debugValues.value("最低水量阈值").toDouble();
-	debugInitValue.VS1_vsmode = debugValues.value("VS1原值").toDouble();
-	debugInitValue.VS2_vsmode = debugValues.value("VS2原值").toDouble();
-	debugInitValue.range_vsmode = debugValues.value("最大稳定距离").toDouble();
-	debugInitValue.flow_jingdu = debugValues.value("默认引流系数").toDouble();
-	debugInitValue.threshold1 = debugValues.value("Threshold1").toDouble();
-	debugInitValue.threshold2 = debugValues.value("Threshold2").toDouble();
-	debugInitValue.range1 = debugValues.value("range1").toDouble();
-	debugInitValue.range2 = debugValues.value("range2").toDouble();
-	debugInitValue.range3 = debugValues.value("range3").toDouble();
-	debugInitValue.range4 = debugValues.value("range4").toDouble();
+		debugInitValue.minWater = debugValues.value("minWater").toDouble();
+		debugInitValue.VS1_vsmode = debugValues.value("VS1_vsmode").toDouble();
+		debugInitValue.VS2_vsmode = debugValues.value("VS2_vsmode").toDouble();
+		debugInitValue.range_vsmode = debugValues.value("range_vsmode").toDouble();
+		debugInitValue.flow_jingdu = debugValues.value("flow_jingdu").toDouble();
+		debugInitValue.threshold1 = debugValues.value("Threshold1").toDouble();
+		debugInitValue.threshold2 = debugValues.value("Threshold2").toDouble();
+		debugInitValue.range1 = debugValues.value("range1").toDouble();
+		debugInitValue.range2 = debugValues.value("range2").toDouble();
+		debugInitValue.range3 = debugValues.value("range3").toDouble();
+		debugInitValue.range4 = debugValues.value("range4").toDouble();
 
 	}
 
@@ -1341,7 +1341,7 @@ void MainWindow::readConfig(){
 
 void MainWindow::saveConfig(){
 
-	QFile file("./config.json");
+    QFile file("config.json");
 	if(!file.open(QIODevice::WriteOnly)){
 		qDebug()<<"File open error.";
 	}
@@ -1353,8 +1353,8 @@ void MainWindow::saveConfig(){
 	tcpObj.insert("Port",wip_port->value());
 
 	QJsonObject exitStatus;
-	exitStatus.insert("当前工作人员",ui->comboBoxWorker1->currentIndex());
-	exitStatus.insert("当前VS公式",wvsformula_vsformulaList->currentIndex());
+	exitStatus.insert("curWorker",ui->comboBoxWorker1->currentIndex());
+	exitStatus.insert("curVSFormula",wvsformula_vsformulaList->currentIndex());
 
 	QJsonArray workers;
 	for(int i=0;i<workerList.size();i++)
@@ -1372,19 +1372,19 @@ void MainWindow::saveConfig(){
 	for(int i=0;i<allGroup.size();i++)
 	{
 		QJsonObject curGroup;
-		curGroup.insert("设备组名称",allGroup[i]->groupInfo.name);
-		curGroup.insert("设备A",allGroup[i]->groupInfo.machineA_id);
-		curGroup.insert("设备B",allGroup[i]->groupInfo.machineB_id);
+		curGroup.insert("groupShipName",allGroup[i]->groupInfo.name);
+		curGroup.insert("MachineA",allGroup[i]->groupInfo.machineA_id);
+		curGroup.insert("MachineB",allGroup[i]->groupInfo.machineB_id);
 		groupShip.append(curGroup);
 	}
 
 	QJsonObject debugValues;
 
-	debugValues.insert("最低水量阈值",debugInitValue.minWater);
-	debugValues.insert("VS1原值",debugInitValue.VS1_vsmode);
-	debugValues.insert("VS2原值",debugInitValue.VS2_vsmode);
-	debugValues.insert("最大稳定距离",debugInitValue.range_vsmode);
-	debugValues.insert("默认引流系数",debugInitValue.flow_jingdu);
+	debugValues.insert("minWater",debugInitValue.minWater);
+	debugValues.insert("VS1_vsmode",debugInitValue.VS1_vsmode);
+	debugValues.insert("VS2_vsmode",debugInitValue.VS2_vsmode);
+	debugValues.insert("range_vsmode",debugInitValue.range_vsmode);
+	debugValues.insert("flow_jingdu",debugInitValue.flow_jingdu);
 	debugValues.insert("Threshold1",debugInitValue.threshold1);
 	debugValues.insert("Threshold2",debugInitValue.threshold2);
 	debugValues.insert("range1",debugInitValue.range1);
@@ -1393,12 +1393,12 @@ void MainWindow::saveConfig(){
 	debugValues.insert("range4",debugInitValue.range4);
 
 	rootObject.insert("TCP", tcpObj);
-	rootObject.insert("退出时状态", exitStatus);
-	rootObject.insert("工作人员列表", workers);
-	rootObject.insert("VS公式列表", vsFormula);
-	rootObject.insert("设备组列表", groupShip);
-    rootObject.insert("表格默认保存路径", debugInitValue.savePath);
-    rootObject.insert("调试相关的参数", debugValues);
+	rootObject.insert("exitStatus", exitStatus);
+	rootObject.insert("workers", workers);
+	rootObject.insert("vsFormula", vsFormula);
+	rootObject.insert("groupShipList", groupShip);
+    rootObject.insert("savePath", debugInitValue.savePath);
+    rootObject.insert("debugValues", debugValues);
 
 
 	QJsonDocument jsonDoc;
@@ -1472,7 +1472,7 @@ void MainWindow::changeComment3(QModelIndex modelIndex){
     if(ok){
         //judge if both are online.
         if(3 == allGroup.at(index)->getOnlineStatus()) {
-            if(modelIndex.column()!=18) return;
+            if(modelIndex.column()!=16) return;
             if(modelIndex.row()>=allGroup.at(index)->allData.status_Jingdu.size()) return;
 
             bool ok;
