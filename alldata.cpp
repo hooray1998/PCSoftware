@@ -105,11 +105,13 @@ double AllData::cal_adjustValue(){
         double a = a_VS1.back();
         double b = b_VS1.back();
         double r = r_VS1.back();
+        double c = original_VS1.back();
 
 
         expression = expression.split("a").join(QString::number(a));
         expression = expression.split("b").join(QString::number(b));
         expression = expression.split("r").join(QString::number(r));
+        expression = expression.split("c").join(QString::number(c));
 
         return cal_expression(expression);
 
@@ -121,11 +123,13 @@ double AllData::cal_adjustValue(){
         double a = a_VS2.back();
         double b = b_VS2.back();
         double r = r_VS2.back();
+        double c = original_VS2.back();
 
 
         expression = expression.split("a").join(QString::number(a));
         expression = expression.split("b").join(QString::number(b));
         expression = expression.split("r").join(QString::number(r));
+        expression = expression.split("c").join(QString::number(c));
 
         return cal_expression(expression);
 

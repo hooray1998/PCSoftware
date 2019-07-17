@@ -416,7 +416,6 @@
      <string>公式</string>
     </property>
     <addaction name="actionVSFormula"/>
-    <addaction name="actionJDFormula"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">

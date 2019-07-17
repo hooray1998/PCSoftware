@@ -954,7 +954,7 @@ void MainWindow::initVSFormulaWidget(){
     wvsformula->setWindowTitle("VS公式编辑");
 
     wvsformula_layout = new QGridLayout;
-    wvsformula_rule = new QLabel("规则: a-显示值 b-初值 r-末值");
+    wvsformula_rule = new QLabel("规则: c-原值 a-显示值 b-初值 r-末值");
     wvsformula_label = new QLabel("VS公式列表：");
     wvsformula_vsformulaList = new QComboBox;
     wvsformula_buttonDel = new QPushButton("删除");
@@ -1550,7 +1550,7 @@ void MainWindow::slot_addFormula(){
 		}
 		else{
 
-			QString charList = "abr+-*/().";
+            QString charList = "abcr+-*/().";
 			bool ok = true;
 			for(int i=0;i<formula.size();i++) {
 				if(!formula[i].isDigit()&&!charList.contains(formula[i]))
