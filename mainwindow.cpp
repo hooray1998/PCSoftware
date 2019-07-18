@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initTcpServer();
 
     readConfig();
-	//数据处理
+    //数据处理
 
     listenButtonClickSlot();//auto to connect
     //readGroupShip();
@@ -36,11 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //readExitStatus();
     updateListView();
     setCurWorker(ui->comboBoxWorker1->currentText());
-
-
-    ui->doubleSpinBoxVS1Value_vsmode->setValue(debugInitValue.VS1_vsmode);
-    ui->doubleSpinBoxVS2Value_vsmode->setValue(debugInitValue.VS2_vsmode);
-	//ui->doubleSpinBoxYinliuValue_jdmode->setValue(debugInitValue.flow_jingdu);
 
 }
 
@@ -680,6 +675,7 @@ void MainWindow::tieTwoMachine(){
         Group *g = new Group();
         g->tie(wtie_groupname->text(),a,b);
         allGroup.push_back(g);
+        setInitValue(allGroup.size()-1);
         allGroupLog.push_back(QString("new group"));
         connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
         wtie_msg->setText("绑定成功。");
@@ -733,8 +729,7 @@ void MainWindow::startVS1(int index){
             allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
 
             allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
-			allGroup.at(index)->allData.minWater = debugInitValue.minWater;
-			allGroup.at(index)->allData.range_vsmode = debugInitValue.range_vsmode;
+            allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
 
 
             allGroup.at(index)->request_b();
@@ -768,8 +763,6 @@ void MainWindow::startVS2(int index){
             allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
 
             allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
-			allGroup.at(index)->allData.minWater = debugInitValue.minWater;
-			allGroup.at(index)->allData.range_vsmode = debugInitValue.range_vsmode;
 
             allGroup.at(index)->request_b();
         }
@@ -795,14 +788,16 @@ void MainWindow::updateTable(){
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
-		ui->doubleSpinBoxVS1Value_vsmode->setValue(debugInitValue.VS1_vsmode);
-		ui->doubleSpinBoxVS2Value_vsmode->setValue(debugInitValue.VS2_vsmode);
+		ui->doubleSpinBoxVS1Value_vsmode->setValue(allGroup.at(index)->allData.initValue_VS1_modeVS);
+		ui->doubleSpinBoxVS2Value_vsmode->setValue(allGroup.at(index)->allData.initValue_VS2_modeVS);
 
 		//TODO:更新精度调试的三个输入框，分别为上一次的VS调试的最终值,引流值为最新的值
-		if(allGroup.at(index)->allData.final_VS1.size())
-			ui->doubleSpinBoxVS1Value_jdmode->setValue(allGroup.at(index)->allData.final_VS1.back());
-		if(allGroup.at(index)->allData.final_VS2.size())
-			ui->doubleSpinBoxVS2Value_jdmode->setValue(allGroup.at(index)->allData.final_VS2.back());
+		//if(allGroup.at(index)->allData.final_VS1.size())
+			//ui->doubleSpinBoxVS1Value_jdmode->setValue(allGroup.at(index)->allData.final_VS1.back());
+		//if(allGroup.at(index)->allData.final_VS2.size())
+			//ui->doubleSpinBoxVS2Value_jdmode->setValue(allGroup.at(index)->allData.final_VS2.back());
+		ui->doubleSpinBoxVS1Value_jdmode->setValue(allGroup.at(index)->allData.initValue_VS1_modeJingdu);
+		ui->doubleSpinBoxVS2Value_jdmode->setValue(allGroup.at(index)->allData.initValue_VS2_modeJingdu);
 		ui->doubleSpinBoxYinliuValue_jdmode->setValue(allGroup.at(index)->allData.initValue_Yinliu_modeJingdu);
 
         //TODO: show all data
@@ -1228,16 +1223,8 @@ void MainWindow::startJingdu(int index){
 			allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
 			allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();
 			allGroup.at(index)->allData.initValue_VS2_modeJingdu = ui->doubleSpinBoxVS2Value_jdmode->value();
-			allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = debugInitValue.flow_jingdu;
+			allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = ui->doubleSpinBoxYinliuValue_jdmode->value();
 
-			allGroup.at(index)->allData.minWater = debugInitValue.minWater;
-            allGroup.at(index)->allData.Threshold1 = debugInitValue.threshold1;
-            allGroup.at(index)->allData.Threshold2 = debugInitValue.threshold2;
-
-			allGroup.at(index)->allData.range1 = debugInitValue.range1;
-			allGroup.at(index)->allData.range2 = debugInitValue.range2;
-			allGroup.at(index)->allData.range3 = debugInitValue.range3;
-			allGroup.at(index)->allData.range4 = debugInitValue.range4;
 
 			//TODO: 暂时没有用公式
 			//allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
@@ -1278,7 +1265,27 @@ void MainWindow::readConfig(){
 
 	QJsonObject rootObj = jsonDoc.object();
 
-	QJsonObject tcpObj = rootObj.value("TCP").toObject();
+    debugInitValue.savePath = rootObj.value("savePath").toString();
+
+    if(rootObj.contains("debugValues")){
+        QJsonObject debugValues = rootObj.value("debugValues").toObject();
+
+        debugInitValue.minWater = debugValues.value("minWater").toDouble();
+        debugInitValue.VS1_vsmode = debugValues.value("VS1_vsmode").toDouble();
+        debugInitValue.VS2_vsmode = debugValues.value("VS2_vsmode").toDouble();
+        debugInitValue.range_vsmode = debugValues.value("range_vsmode").toDouble();
+        debugInitValue.flow_jingdu = debugValues.value("flow_jingdu").toDouble();
+        debugInitValue.threshold1 = debugValues.value("Threshold1").toDouble();
+        debugInitValue.threshold2 = debugValues.value("Threshold2").toDouble();
+        debugInitValue.range1 = debugValues.value("range1").toDouble();
+        debugInitValue.range2 = debugValues.value("range2").toDouble();
+        debugInitValue.range3 = debugValues.value("range3").toDouble();
+        debugInitValue.range4 = debugValues.value("range4").toDouble();
+
+    }
+
+    debugInitValue.readValueToWidget();
+    QJsonObject tcpObj = rootObj.value("TCP").toObject();
     wip_ip->setText(tcpObj.value("IP").toString());
     wip_port->setValue(tcpObj.value("Port").toInt());
 
@@ -1309,7 +1316,8 @@ void MainWindow::readConfig(){
 		QString b = groupShip.at(i).toObject().value("MachineB").toString();
 		g->tie_byID(n,a,b);
 		allGroup.push_back(g);
-		allGroupLog.push_back(QString("均未上线"));
+        setInitValue(allGroup.size()-1);
+        allGroupLog.push_back(QString("均未上线"));
 		connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
 	}
 
@@ -1317,26 +1325,6 @@ void MainWindow::readConfig(){
     ui->comboBoxWorker1->setCurrentIndex(exitStatus.value("curWorker").toInt());
     wvsformula_vsformulaList->setCurrentIndex(exitStatus.value("curVSFormula").toInt());
 
-    debugInitValue.savePath = rootObj.value("savePath").toString();
-
-	if(rootObj.contains("debugValues")){
-		QJsonObject debugValues = rootObj.value("debugValues").toObject();
-
-		debugInitValue.minWater = debugValues.value("minWater").toDouble();
-		debugInitValue.VS1_vsmode = debugValues.value("VS1_vsmode").toDouble();
-		debugInitValue.VS2_vsmode = debugValues.value("VS2_vsmode").toDouble();
-		debugInitValue.range_vsmode = debugValues.value("range_vsmode").toDouble();
-		debugInitValue.flow_jingdu = debugValues.value("flow_jingdu").toDouble();
-		debugInitValue.threshold1 = debugValues.value("Threshold1").toDouble();
-		debugInitValue.threshold2 = debugValues.value("Threshold2").toDouble();
-		debugInitValue.range1 = debugValues.value("range1").toDouble();
-		debugInitValue.range2 = debugValues.value("range2").toDouble();
-		debugInitValue.range3 = debugValues.value("range3").toDouble();
-		debugInitValue.range4 = debugValues.value("range4").toDouble();
-
-	}
-
-	debugInitValue.readValueToWidget();
 }
 
 void MainWindow::saveConfig(){
@@ -1602,4 +1590,21 @@ void MainWindow::slot_delFormula(){
 			wvsformula_msg->setText("Error:5001 不存在该公式。");
 		}
 	}
+}
+
+void MainWindow::setInitValue(int index){
+	allGroup.at(index)->allData.minWater = debugInitValue.minWater;
+
+	allGroup.at(index)->allData.initValue_VS1_modeVS = debugInitValue.VS1_vsmode;
+	allGroup.at(index)->allData.initValue_VS2_modeVS = debugInitValue.VS2_vsmode;
+	allGroup.at(index)->allData.range_vsmode = debugInitValue.range_vsmode;
+
+	allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = debugInitValue.flow_jingdu;
+	allGroup.at(index)->allData.Threshold1 = debugInitValue.threshold1;
+	allGroup.at(index)->allData.Threshold2 = debugInitValue.threshold2;
+	allGroup.at(index)->allData.range1 = debugInitValue.range1;
+	allGroup.at(index)->allData.range2 = debugInitValue.range2;
+	allGroup.at(index)->allData.range3 = debugInitValue.range3;
+	allGroup.at(index)->allData.range4 = debugInitValue.range4;
+
 }

@@ -292,7 +292,7 @@
         <string notr="true">color:red;</string>
        </property>
        <property name="text">
-        <string>所有修改从下一次调试开始生效</string>
+        <string>所有修改从新的设备组开始生效</string>
        </property>
       </widget>
      </item>

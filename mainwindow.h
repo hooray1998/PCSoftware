@@ -139,6 +139,8 @@ public slots:
     void readConfig();
     void saveConfig();
 
+	void setInitValue(int index);
+
     //Worker
     void manageWorker();
 

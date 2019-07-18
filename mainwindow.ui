@@ -174,13 +174,13 @@
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_vsmode">
               <property name="readOnly">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="decimals">
                <number>3</number>
               </property>
               <property name="maximum">
-               <double>99999.990000000005239</double>
+               <double>9999.998999999999796</double>
               </property>
              </widget>
             </item>
@@ -243,13 +243,13 @@
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_vsmode">
               <property name="readOnly">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="decimals">
                <number>3</number>
               </property>
               <property name="maximum">
-               <double>99999.990000000005239</double>
+               <double>9999.998999999999796</double>
               </property>
              </widget>
             </item>
@@ -320,13 +320,13 @@
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS1Value_jdmode">
               <property name="readOnly">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="decimals">
                <number>3</number>
               </property>
               <property name="maximum">
-               <double>99999.990000000005239</double>
+               <double>9999.998999999999796</double>
               </property>
              </widget>
             </item>
@@ -340,13 +340,13 @@
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxVS2Value_jdmode">
               <property name="readOnly">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="decimals">
                <number>3</number>
               </property>
               <property name="maximum">
-               <double>99999.990000000005239</double>
+               <double>9999.998999999999796</double>
               </property>
              </widget>
             </item>
@@ -360,13 +360,13 @@
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxYinliuValue_jdmode">
               <property name="readOnly">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="decimals">
                <number>3</number>
               </property>
               <property name="maximum">
-               <double>99999.990000000005239</double>
+               <double>9999.998999999999796</double>
               </property>
              </widget>
             </item>

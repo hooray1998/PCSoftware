@@ -254,6 +254,7 @@ void AllData::push_r(double r){
         else if(VSCount==2)
         {
             final_VS1.push_back(result);
+			initValue_VS1_modeJingdu = result;
             int a = final_VS1.back();
             int b = original_VS1.back() - a;
             if(b<0)
@@ -295,6 +296,7 @@ void AllData::push_r(double r){
         else if(VSCount==2)
         {
             final_VS2.push_back(result);
+			initValue_VS2_modeJingdu = result;
             int a = final_VS2.back();
             int b = original_VS2.back() - a;
             if(b<0)
