@@ -120,24 +120,19 @@ void Group::analyzeData_r(QByteArray data){
             }
         }
 		else if(allData.curMode==AllData::Mode_Jingdu){
-			//OK: step1完成后返回，step2完成后结束
+
+			if(allData.updateFlag){
+				allData.updateFlag = false;
+				returnThreeResult();
+			}
 			
 			if(allData.jingdu_step == -1){
-                allData.jingdu_step = 0;
                 allData.curAction=AllData::Action_die;
                 emit SendLog(groupInfo.name, "精度不稳，请检查");
 			}
-			else if(allData.jingdu_step == 2){
-                allData.jingdu_step = 0;
+			else if(allData.jingdu_step == -2){
                 allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "精度第二步ok");
-			}
-			else if(allData.jingdu_step == 1 && allData.JingduCount == -1){
-				allData.JingduCount++;
-                allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "精度第一步ok");
-				returnThreeResult();
-				request_b();
+                emit SendLog(groupInfo.name, "精度调试成功");
 			}
             else{
                 request_b();

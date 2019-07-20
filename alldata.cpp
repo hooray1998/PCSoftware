@@ -236,7 +236,7 @@ void AllData::push_r(double r){
         r_VS1.push_back(r);
         if(length_VS1 < r_VS1.size())
             length_VS1 = r_VS1.size();
-        differential_VS1.push_back(r-b_VS1[length_VS1-1]);
+        differential_VS1.push_back(myAbs(r-b_VS1[length_VS1-1]));
         double result = cal_adjustValue();
 		if(curAction==Action_die) return;
         adjust_VS1.push_back(result);
@@ -278,7 +278,7 @@ void AllData::push_r(double r){
         r_VS2.push_back(r);
         if(length_VS2 < r_VS2.size())
             length_VS2 = r_VS2.size();
-        differential_VS2.push_back(r-b_VS2[length_VS2-1]);
+        differential_VS2.push_back(myAbs(r-b_VS2[length_VS2-1]));
         double result = cal_adjustValue();
 		if(curAction==Action_die) return;
         adjust_VS2.push_back(result);
@@ -316,16 +316,16 @@ void AllData::push_r(double r){
     }
     else if(curMode==Mode_Jingdu)
     {
-		if(r1_Jingdu.size()<r0_Jingdu.size()){
+		if(r1_Jingdu.size()<r0_Jingdu.size()){ //注入值  后半部分
 			r1_Jingdu.push_back(r);
-			differential1_Jingdu.push_back(r-b1_Jingdu.back());
+			differential1_Jingdu.push_back(myAbs(r-b1_Jingdu.back()));
 			accuracy1_Jingdu.push_back(100*(a1_Jingdu.back()-differential1_Jingdu.back())/differential1_Jingdu.back());
-			cal_finalValues_JingduMode();
+			cal_finalValues_JingduMode(); //增加备注
 
 		}
-		else{
+		else{ //引流值 前半部分
 			r0_Jingdu.push_back(r);
-			differential0_Jingdu.push_back(r-b0_Jingdu.back());
+			differential0_Jingdu.push_back(myAbs(r-b0_Jingdu.back()));
 			accuracy0_Jingdu.push_back(100*(a0_Jingdu.back()-differential0_Jingdu.back())/differential0_Jingdu.back());
 
 		}
@@ -402,156 +402,167 @@ void AllData::cal_finalValues_JingduMode(){
 	adjustVS2_Jingdu.push_back(A5);
 	adjustFlow_Jingdu.push_back(A6);
 
-	//第一次判断
-	if(jingdu_step == 0){
 
-		/*
-			1.判断|B11-C11|<Threshold1？且|B16-C16|<Threshold2？(Threshold的值可编辑)，则D1=(B4+C4)/2,D2=(B5+C5)/2,D3=(B6+C6)/2。
-			2.不满足条件1，则重复步骤二 D1~3与A1~3相同，再测一组(D组)。
-			3.按照条件1，B、C、D两两判断，选择满足条件1的两组数据(比如B、D两组)，则E1=(B4+D4)/2,E2=(B5+D5)/2,E3=(B6+D6)/2。
-			4.若不满足条件3，则暂停该设备组并在界面上提示“精度不稳，请检查”。"
-		*/
-
-		if(JingduCount==2){
-			double B11 = accuracy0_Jingdu[length_Jingdu-2];
-			double B16 = accuracy1_Jingdu[length_Jingdu-2];
-			double C11 = accuracy0_Jingdu.back();
-			double C16 = accuracy1_Jingdu.back();
-
-			//DBG<<"step1第一次判断："<<"B11-C11="<<myAbs(B11-C11)<<"<>"<<Threshold1<<"\t  B16-C16="<<myAbs(B16-C16)<<"<>"<<Threshold2;
-			if(myAbs(B11-C11)<Threshold1 && myAbs(B16-C16)<Threshold2){
-				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
-				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
-				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
-
-                status_Jingdu.push_back(QString("step1成功,这一组和上一组符合(%1<%2并且%3<%4)").arg(myAbs(B11-C11)).arg(Threshold1).arg(myAbs(B16-C16)).arg(Threshold2));
-				jingdu_step ++;
-				JingduCount = -2;
-			}
-			else{
-                status_Jingdu.push_back(QString("这两组不满足 (%1>%2 或者 %3>%4)").arg(myAbs(B11-C11)).arg(Threshold1).arg(myAbs(B16-C16)).arg(Threshold2));
-			}
-		}
-		else if(JingduCount==3){
-			double B11 = accuracy0_Jingdu[length_Jingdu-3];
-			double B16 = accuracy1_Jingdu[length_Jingdu-3];
-			double C11 = accuracy0_Jingdu[length_Jingdu-2];
-			double C16 = accuracy1_Jingdu[length_Jingdu-2];
-			double D11 = accuracy0_Jingdu.back();
-			double D16 = accuracy1_Jingdu.back();
-			DBG<<"step1第二次判断："<<"B11-C11="<<myAbs(B11-C11)<<"<>"<<Threshold1<<"\t  B16-C16="<<myAbs(B16-C16)<<"<>"<<Threshold2;
-			DBG<<"step1第二次判断："<<"B11-D11="<<myAbs(B11-D11)<<"<>"<<Threshold1<<"\t  B16-C16="<<myAbs(B16-D16)<<"<>"<<Threshold2;
-			DBG<<"step1第二次判断："<<"C11-D11="<<myAbs(C11-D11)<<"<>"<<Threshold1<<"\t  B16-C16="<<myAbs(C16-D16)<<"<>"<<Threshold2;
-
-			if(myAbs(B11-C11)<Threshold1 && myAbs(B16-C16)<Threshold2){
-				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
-				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
-				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
-
-                status_Jingdu.push_back(QString("step1成功,上一组和上上一组符合(%1<%2并且%3<%4)").arg(myAbs(B11-C11)).arg(Threshold1).arg(myAbs(B16-C16)).arg(Threshold2));
-				jingdu_step ++;
-				JingduCount = -2;
-
-			}else if(myAbs(B11-D11)<Threshold1 && myAbs(B16-D16)<Threshold2){
-				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
-				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
-				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
-
-                status_Jingdu.push_back(QString("step1成功,当前组和上上一组符合(%1<%2并且%3<%4)").arg(myAbs(D11-B11)).arg(Threshold1).arg(myAbs(D16-B16)).arg(Threshold2));
-				jingdu_step ++;
-				JingduCount = -2;
-
-			}else if(myAbs(C11-D11)<Threshold1 && myAbs(C16-D16)<Threshold2){
-				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
-				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
-				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
-
-                status_Jingdu.push_back(QString("step1成功,当前组和上一组符合(%1<%2并且%3<%4)").arg(myAbs(D11-C11)).arg(Threshold1).arg(myAbs(D16-C16)).arg(Threshold2));
-				jingdu_step ++;
-				JingduCount = -2;
-
-			}else{
-                status_Jingdu.push_back(QString("step1精度不稳,请检查. (%1,%2,%3>%4和%5,%6,%7>%8至少三个成立)").arg(myAbs(B11-C11)).arg(myAbs(B11-D11)).arg(C11-D11).arg(Threshold1).arg(myAbs(B16-C16)).arg(B16-D16).arg(C16-D16).arg(Threshold2));
-				jingdu_step  = -1;
-				return;
-			}
-
-
-		}
-		else{
-			status_Jingdu.push_back(QString("step%1-%2").arg(jingdu_step+1).arg(JingduCount+1));
-		}
-
+	//第0轮不做判断
+	if(!jingdu_step){
+		status_Jingdu.push_back(QString("热机"));
+		jingdu_step++;
+		return;
 	}
-	//第二次判断
+	if(JingduCount<1){
+		status_Jingdu.push_back(QString("step%1-%2").arg(jingdu_step).arg(JingduCount+1));
+		JingduCount++;
+		return;
+	}
+
 	/*
-	 *  1.按步骤四的方式得出满足条件的两组数据（比如E、F组）。
-		2.判断E11和F11∈(Range1, Range2)？ E16和F16∈(Range3, Range4)？(Range的值可编辑)则流程结束。
-		3.若不满足条件2，则重复步骤五、六、七。"
+	 * 参数：	1：最新的两组
+	 *			2：距离较远的两组
 	 */
-	else{
-
-		if(JingduCount==1){
-			double B11 = accuracy0_Jingdu[length_Jingdu-2];
-			double B16 = accuracy1_Jingdu[length_Jingdu-2];
-			double C11 = accuracy0_Jingdu.back();
-			double C16 = accuracy1_Jingdu.back();
-			//DBG<<"step2第一次判断："<<"(B11,C11)="<<B11<<','<<C11<<"<>("<<range1<<","<<range2<<")\t (B16,C16)="<<B16<<","<<C16<<"<>("<<range3<<","<<range4<<")";
-
-			if(min(B11,C11)>=range1 && max(B11,C11)<range2 && min(B16,C16)>=range3 && max(B16,C16)<=range4 ){
-				initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
-				initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
-				initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
-
-				jingdu_step ++;
-				status_Jingdu.push_back("成功");
-                //status_Jingdu.push_back(QString("step1成功,这一组和上一组符合(%1<%2并且%3<%4)").arg(myAbs(B11-C11)).arg(Threshold1).arg(myAbs(B16-C16)).arg(Threshold2));
-				return;
+	if(JingduCount==1){//第二次
+		if(StableJudge(1)){
+			if(jingdu_step==1){//第一轮稳定
+				updateValue(1);
+				status_Jingdu.push_back(QString("step%1-%2: 这两组稳定").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step++;
+				JingduCount=0;
 			}
-			else{
-				status_Jingdu.push_back("这两组不满足");
+			else{//第 >1 轮稳定
+				if(RangeJudge(1)){//满足range
+					updateValue(1);
+					status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上次满足）").arg(jingdu_step).arg(JingduCount+1));
+					jingdu_step = -2;
+				}
+				else{//不满足range，再测一组
+					updateValue(1);
+					status_Jingdu.push_back(QString("step%1-%2: 这两组稳定，但不满足range条件，开始新的一轮").arg(jingdu_step).arg(JingduCount+1));
+					jingdu_step++;
+					JingduCount=0;
+				}
 			}
 		}
-		else if(JingduCount==2){
-			double B11 = accuracy0_Jingdu[length_Jingdu-3];
-			double B16 = accuracy1_Jingdu[length_Jingdu-3];
-			double C11 = accuracy0_Jingdu[length_Jingdu-2];
-			double C16 = accuracy1_Jingdu[length_Jingdu-2];
-			double D11 = accuracy0_Jingdu.back();
-			double D16 = accuracy1_Jingdu.back();
-			DBG<<"step2第二次判断："<<"(B11,C11)="<<B11<<','<<C11<<"<>("<<range1<<","<<range2<<")\t (B16,C16)="<<B16<<","<<C16<<"<>("<<range3<<","<<range4<<")";
-			DBG<<"step2第二次判断："<<"(B11,D11)="<<B11<<','<<D11<<"<>("<<range1<<","<<range2<<")\t (B16,D16)="<<B16<<","<<D16<<"<>("<<range3<<","<<range4<<")";
-			DBG<<"step2第二次判断："<<"(C11,D11)="<<C11<<','<<D11<<"<>("<<range1<<","<<range2<<")\t (C16,D16)="<<C16<<","<<D16<<"<>("<<range3<<","<<range4<<")";
-
-			if(min(B11,C11)>=range1 && max(B11,C11)<range2 && min(B16,C16)>=range3 && max(B16,C16)<=range4 ){
-				jingdu_step ++;
-				status_Jingdu.push_back("step2成功,上一组和上上一组符合");
-				return;
-			}else if(min(B11,D11)>=range1 && max(B11,D11)<range2 && min(B16,D16)>=range3 && max(B16,D16)<=range4 ){
-				jingdu_step ++;
-				status_Jingdu.push_back("step2成功,这一组和上上一组符合");
-				return;
-			}else if(min(D11,C11)>=range1 && max(D11,C11)<range2 && min(D16,C16)>=range3 && max(D16,C16)<=range4 ){
-				jingdu_step ++;
-				status_Jingdu.push_back("step2成功,这一组和上一组符合");
-				return;
-			}else{
-
-				status_Jingdu.push_back("step2精度不稳,请检查");
-				jingdu_step  = -1;
-				return;
-			}
-
-		}
-		else{
-			status_Jingdu.push_back(QString("step%1-%2").arg(jingdu_step+1).arg(JingduCount+1));
+		else{//再测一轮
+			status_Jingdu.push_back(QString("step%1-%2: 这两组不稳定,再测一次").arg(jingdu_step).arg(JingduCount+1));
+			JingduCount++;
 		}
 	}
-	JingduCount ++ ;
+	else if(JingduCount==2){//第三次
+		if(jingdu_step==1){//第一轮
+			if(StableJudge(1)){//距离为1的两组ok
+				updateValue(1);
+				status_Jingdu.push_back(QString("step%1-%2: 上组和本组稳定").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step++;
+				JingduCount=0;
+			}
+			else if(StableJudge(2)){//距离为2的两组ok
+				updateValue(2);
+				status_Jingdu.push_back(QString("step%1-%2: 上上组和本组稳定").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step++;
+				JingduCount=0;
+			}
+			else{//这三组都不行
+				status_Jingdu.push_back(QString("step%1-%2: 精度不稳，请检查").arg(jingdu_step).arg(JingduCount+1));
+				JingduCount=0;
+				jingdu_step = -1;
+			}
+		}
+		else{//不是第一轮，>1
+			if(!StableJudge(1) && !StableJudge(2)){
+				status_Jingdu.push_back(QString("step%1-%2: 精度不稳，请检查").arg(jingdu_step).arg(JingduCount+1));
+				JingduCount=0;
+				jingdu_step = -1;
+				return;
+			}
+
+			if(StableJudge(1) && RangeJudge(1)){//距离为1的两组ok
+				updateValue(1);
+				status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上次满足）").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step = -2;
+				return;
+			}
+
+			if(StableJudge(2) && RangeJudge(2)){//距离为2的两组ok
+				updateValue(2);
+				status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上上次满足）").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step = -2;
+				return;
+			}
+
+			if(StableJudge(1)) updateValue(1);
+			else if(StableJudge(2)) updateValue(2);
+
+			status_Jingdu.push_back(QString("step%1-%2: 这三组稳定，但不满足range条件，开始新的一轮").arg(jingdu_step).arg(JingduCount+1));
+			JingduCount=0;
+			jingdu_step++;
+		}
+	}
+	else{
+		status_Jingdu.push_back(QString("不会出现这一句"));
+		jingdu_step = -1;
+	}
 
 }
 
 double AllData::myAbs(double b){
 	if(b<0) return -b;
 	return b;
+}
+
+
+void AllData::updateValue(int distance){
+			//3.按照条件1，B、C、D两两判断，选择满足条件1的两组数据(比如B、D两组)，则E1=(B4+D4)/2,E2=(B5+D5)/2,E3=(B6+D6)/2。
+	updateFlag = true;
+	if(distance==1){
+		initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
+		initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
+		initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-2] + adjustFlow_Jingdu[length_Jingdu-1])/2;
+	}
+	else{
+		initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-3] + adjustVS1_Jingdu[length_Jingdu-1])/2;
+		initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-3] + adjustVS2_Jingdu[length_Jingdu-1])/2;
+		initValue_Yinliu_modeJingdu = (adjustFlow_Jingdu[length_Jingdu-3] + adjustFlow_Jingdu[length_Jingdu-1])/2;
+	}
+}
+
+bool AllData::StableJudge(int distance){
+		/*
+			1.判断|B11-C11|<Threshold1？且|B16-C16|<Threshold2？(Threshold的值可编辑)，则D1=(B4+C4)/2,D2=(B5+C5)/2,D3=(B6+C6)/2。
+			2.不满足条件1，则重复步骤二 D1~3与A1~3相同，再测一组(D组)。
+			3.按照条件1，B、C、D两两判断，选择满足条件1的两组数据(比如B、D两组)，则E1=(B4+D4)/2,E2=(B5+D5)/2,E3=(B6+D6)/2。
+			4.若不满足条件3，则暂停该设备组并在界面上提示“精度不稳，请检查”。"
+		*/
+	double B11 = accuracy0_Jingdu[length_Jingdu-3];
+	double B16 = accuracy1_Jingdu[length_Jingdu-3];
+	double C11 = accuracy0_Jingdu[length_Jingdu-2];
+	double C16 = accuracy1_Jingdu[length_Jingdu-2];
+	double D11 = accuracy0_Jingdu.back();
+	double D16 = accuracy1_Jingdu.back();
+
+	if(distance==1){
+		if(myAbs(D11-C11)<Threshold1 && myAbs(D16-C16)<Threshold2) return true;
+	}
+	else{
+		if(myAbs(D11-B11)<Threshold1 && myAbs(D16-B16)<Threshold2) return true;
+	}
+	return false;
+
+}
+
+bool AllData::RangeJudge(int distance){
+	/*  1.按步骤四的方式得出满足条件的两组数据（比如E、F组）。
+		2.判断E11和F11∈(Range1, Range2)？ E16和F16∈(Range3, Range4)？(Range的值可编辑)则流程结束。
+		3.若不满足条件2，则重复步骤五、六、七。"  */
+	double B11 = accuracy0_Jingdu[length_Jingdu-3];
+	double B16 = accuracy1_Jingdu[length_Jingdu-3];
+	double C11 = accuracy0_Jingdu[length_Jingdu-2];
+	double C16 = accuracy1_Jingdu[length_Jingdu-2];
+	double D11 = accuracy0_Jingdu.back();
+	double D16 = accuracy1_Jingdu.back();
+
+	if(distance==1){
+		if(min(D11,C11)>=range1 && max(D11,C11)<range2 && min(D16,C16)>=range3 && max(D16,C16)<=range4) return true;
+	}
+	else{
+		if(min(B11,D11)>=range1 && max(B11,D11)<range2 && min(B16,D16)>=range3 && max(B16,D16)<=range4) return true;
+	}
 }

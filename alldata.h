@@ -47,6 +47,10 @@ public:
 	void cal_finalValues_JingduMode();
     void complete();//let all vector length same.
 
+	void updateValue(int distance);
+	bool StableJudge(int distance);
+	bool RangeJudge(int distance);
+
 
     QString curWorker;
 
@@ -136,10 +140,10 @@ public:
     int length_Jingdu;
 
 	int jingdu_step;
-
     int VSCount;//记录第几次，三次一检查。
-
 	int JingduCount;
+
+	bool updateFlag;
 
     Mode curMode;
     Action curAction;

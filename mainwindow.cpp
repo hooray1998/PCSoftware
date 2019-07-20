@@ -596,8 +596,8 @@ void MainWindow::initTieGroupWidget(){
 }
 void MainWindow::initUntieGroupWidget(){
     wuntie = new QWidget;
-    wtie->setWindowTitle("解绑设备组");
-    wtie->resize(300,200);
+    wuntie->setWindowTitle("解绑设备组");
+    wuntie->resize(300,200);
 
     wuntie_layout = new QGridLayout;
     wuntie_label = new QLabel("设备组名称:");
@@ -787,18 +787,48 @@ void MainWindow::updateTable(){
 
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
+	Group *curGroup = allGroup.at(index);
     if(ok){
-		ui->doubleSpinBoxVS1Value_vsmode->setValue(allGroup.at(index)->allData.initValue_VS1_modeVS);
-		ui->doubleSpinBoxVS2Value_vsmode->setValue(allGroup.at(index)->allData.initValue_VS2_modeVS);
+
+        QString debugs;
+
+        debugs.append("最低水量阈值：");
+        debugs.append(QString::number(curGroup->allData.minWater));
+        debugs.append("\t\tVS最大稳定距离：");
+        debugs.append(QString::number(curGroup->allData.range_vsmode));
+        debugs.append("\n");
+
+        debugs.append("Threshold1：");
+        debugs.append(QString::number(curGroup->allData.Threshold1));
+        debugs.append("\t\tThreshold2：");
+        debugs.append(QString::number(curGroup->allData.Threshold2));
+        debugs.append("\n");
+
+        debugs.append("range1：");
+        debugs.append(QString::number(curGroup->allData.range1));
+        debugs.append("\t\trange2：");
+        debugs.append(QString::number(curGroup->allData.range2));
+        debugs.append("\n");
+        debugs.append("range3：");
+        debugs.append(QString::number(curGroup->allData.range3));
+        debugs.append("\t\trange4：");
+        debugs.append(QString::number(curGroup->allData.range4));
+
+
+        ui->debugLabel->setText(debugs);
+
+
+		ui->doubleSpinBoxVS1Value_vsmode->setValue(curGroup->allData.initValue_VS1_modeVS);
+		ui->doubleSpinBoxVS2Value_vsmode->setValue(curGroup->allData.initValue_VS2_modeVS);
 
 		//TODO:更新精度调试的三个输入框，分别为上一次的VS调试的最终值,引流值为最新的值
-		//if(allGroup.at(index)->allData.final_VS1.size())
-			//ui->doubleSpinBoxVS1Value_jdmode->setValue(allGroup.at(index)->allData.final_VS1.back());
-		//if(allGroup.at(index)->allData.final_VS2.size())
-			//ui->doubleSpinBoxVS2Value_jdmode->setValue(allGroup.at(index)->allData.final_VS2.back());
-		ui->doubleSpinBoxVS1Value_jdmode->setValue(allGroup.at(index)->allData.initValue_VS1_modeJingdu);
-		ui->doubleSpinBoxVS2Value_jdmode->setValue(allGroup.at(index)->allData.initValue_VS2_modeJingdu);
-		ui->doubleSpinBoxYinliuValue_jdmode->setValue(allGroup.at(index)->allData.initValue_Yinliu_modeJingdu);
+		//if(curGroup->allData.final_VS1.size())
+			//ui->doubleSpinBoxVS1Value_jdmode->setValue(curGroup->allData.final_VS1.back());
+		//if(curGroup->allData.final_VS2.size())
+			//ui->doubleSpinBoxVS2Value_jdmode->setValue(curGroup->allData.final_VS2.back());
+		ui->doubleSpinBoxVS1Value_jdmode->setValue(curGroup->allData.initValue_VS1_modeJingdu);
+		ui->doubleSpinBoxVS2Value_jdmode->setValue(curGroup->allData.initValue_VS2_modeJingdu);
+		ui->doubleSpinBoxYinliuValue_jdmode->setValue(curGroup->allData.initValue_Yinliu_modeJingdu);
 
         //TODO: show all data
         QTableWidget *curTable;
@@ -806,7 +836,7 @@ void MainWindow::updateTable(){
         AllData::Mode m[3] = {AllData::Mode_VS1, AllData::Mode_VS2, AllData::Mode_Jingdu};
         for(int i=0;i<3;i++){
             AllData::Mode mode = m[i];
-            if(!allGroup.at(index)->allData.returnData_FromVS(mode, f_vectorArr, s_vectorArr))
+            if(!curGroup->allData.returnData_FromVS(mode, f_vectorArr, s_vectorArr))
                     return;
 
             int column = 7;
