@@ -488,8 +488,12 @@ void AllData::cal_finalValues_JingduMode(){
 				return;
 			}
 
-			if(StableJudge(1)) updateValue(1);
-			else if(StableJudge(2)) updateValue(2);
+			if(StableJudge(1)){
+				updateValue(1);
+			}
+			else if(StableJudge(2)){
+				updateValue(2);
+			}
 
 			status_Jingdu.push_back(QString("step%1-%2: 这三组稳定，但不满足range条件，开始新的一轮").arg(jingdu_step).arg(JingduCount+1));
 			JingduCount=0;
@@ -539,13 +543,14 @@ bool AllData::StableJudge(int distance){
 	double D16 = accuracy1_Jingdu.back();
 
 	if(distance==1){
+        qDebug()<<"=============>  StableJudge"<<C11<<" "<<D11<<" "<<C16<<" "<<D16;
 		if(myAbs(D11-C11)<Threshold1 && myAbs(D16-C16)<Threshold2) return true;
 	}
 	else{
+        qDebug()<<"=============>  StableJudge"<<B11<<" "<<D11<<" "<<B16<<" "<<D16;
 		if(myAbs(D11-B11)<Threshold1 && myAbs(D16-B16)<Threshold2) return true;
 	}
 	return false;
-
 }
 
 bool AllData::RangeJudge(int distance){
@@ -560,9 +565,12 @@ bool AllData::RangeJudge(int distance){
 	double D16 = accuracy1_Jingdu.back();
 
 	if(distance==1){
-		if(min(D11,C11)>=range1 && max(D11,C11)<range2 && min(D16,C16)>=range3 && max(D16,C16)<=range4) return true;
+        DBG<<"=============>  RangeJudge"<<C11<<" "<<D11<<" "<<C16<<" "<<D16;
+		if(min(D11,C11)>=range1 && max(D11,C11)<=range2 && min(D16,C16)>=range3 && max(D16,C16)<=range4) return true;
 	}
 	else{
-		if(min(B11,D11)>=range1 && max(B11,D11)<range2 && min(B16,D16)>=range3 && max(B16,D16)<=range4) return true;
+        DBG<<"=============>  RangeJudge"<<B11<<" "<<D11<<" "<<B16<<" "<<D16;
+		if(min(B11,D11)>=range1 && max(B11,D11)<=range2 && min(B16,D16)>=range3 && max(B16,D16)<=range4) return true;
 	}
+	return false;
 }
