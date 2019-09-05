@@ -8,20 +8,27 @@ Group::Group()
     machineB = NULL;
 }
 
+void Group::tellToJD(){
+    QByteArray header = "11";
+    machineA->WriteData(header);
+}
+
 void Group::request_a(){
-    QByteArray header = "04";
+    QByteArray header;
+    if(allData.curMode==AllData::Mode_VS1)
+        header = "14";
+    else if(allData.curMode==AllData::Mode_VS2)
+        header = "24";
+    else if(allData.curMode==AllData::Mode_Jingdu)
+        header = "04";
     machineA->WriteData(header);
     allData.curAction = AllData::Action_request_a;
-    //if(allData.lastRequest==AllData::Action_receive_a)
-        //allData.lastRequest = AllData::Action_die;
 }
 
 void Group::request_b(){
     QByteArray header = "06";
     machineB->WriteData(header);
     allData.curAction = AllData::Action_request_b;
-    //if(allData.lastRequest==AllData::Action_receive_b)
-        //allData.lastRequest = AllData::Action_die;
 }
 
 void Group::request_r(){
@@ -35,7 +42,6 @@ void Group::request_r(){
 void Group::returnFinalResult(double final){
     char msg[12];
     sprintf(msg,"%08.2f",final);
-    //QByteArray header = "05" + QString::asprintf("%08.2f",final).toLocal8Bit();
     QByteArray header = "05" + QString(msg).toLocal8Bit();
     machineA->WriteData(header);
     allData.curAction = AllData::Action_return;
@@ -204,7 +210,7 @@ void Group::logout(MyThread *machine){
     }
 }
 
-void Group::login(MyThread *machine){
+void Group::login(MyThread *machine){ //绑定设备a或b的线程
     if(machine->getMachineID() == groupInfo.machineA_id)
     {
         machineA = machine;
@@ -220,7 +226,7 @@ void Group::login(MyThread *machine){
     }
 }
 
-int Group::getOnlineStatus(){
+int Group::getOnlineStatus(){ //查看当前设备组在线的情况
     if(machineA)
         if(machineB)
             return 3;

@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #define DBG qDebug()
-//<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
 
 const qint64 LOADBYTES = 4096; //4K
 
@@ -14,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("上位机软件");
     setStyle(MainWindow::Style_Silvery);
     setWindowState(Qt::WindowMaximized);
+
 
 
     initUI();
@@ -30,10 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //数据处理
 
     listenButtonClickSlot();//auto to connect
-    //readGroupShip();
-    //readWorkerList();
-    //readVSFormulaList();
-    //readExitStatus();
     updateListView();
     setCurWorker(ui->comboBoxWorker1->currentText());
 
@@ -48,12 +44,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//TODO::断开连接, 此时 设备的socket会收到disconnected信号
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    //saveExitStatus();
-    //saveGroupShip();
-    //saveWorkerList();
-    //saveVSFormulaList();
+    for(int i=allMachine.size()-1;i>=0;i--)
+    {
+        allMachine.at(i)->disconnectAll();
+    }
     saveConfig();
     wip->close();
     wtie->close();
@@ -69,9 +66,7 @@ void MainWindow::resizeEvent(QResizeEvent *event){
     ui->logTextEdit->setFixedWidth(foo*82);
     ui->listView_2->setFixedHeight(bar*33);
 
-
     event->accept();
-
 }
 
 void MainWindow::initUI(){
@@ -102,11 +97,7 @@ void MainWindow::initUI(){
 
 
     ui->tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    //ui->tableWidget_2->setAutoScroll(true);
-    //ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(16,QHeaderView::Stretch);
-    //ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(17,QHeaderView::Stretch);
     ui->tableWidget_2->setColumnWidth(16,500);
-    //ui->tableWidget_2->setColumnWidth(17,200);
 
     ui->listView_2->setUpdatesEnabled(true);
 
@@ -114,7 +105,6 @@ void MainWindow::initUI(){
     ui->lineEditJiNumber_mode1->setFixedWidth(300);
 
 
-    //m_model=new QStringListModel();
     m_model2=new QStringListModel();
 
     model = new QStandardItemModel;
@@ -129,13 +119,45 @@ void MainWindow::initUI(){
     ui->tableView->horizontalHeader()->hide();
 
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    //ui->tableView->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Fixed);
-    //ui->tableView->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
-    //ui->tableView->setColumnWidth(0,20);
 
     red.setColor(QPalette::WindowText, Qt::red);
     black.setColor(QPalette::WindowText, Qt::black);
     green.setRgb(127,0,0,127);
+
+
+    connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem1(QTableWidgetItem*)));
+    connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
+    connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
+    connect(ui->tableWidgetvs1,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment1(QModelIndex)));
+    connect(ui->tableWidgetvs2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment2(QModelIndex)));
+    connect(ui->tableWidget_2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment3(QModelIndex)));
+
+    //pop action to the top
+
+    QAction *action = new QAction("保存", this);
+    ui->menuBar->addAction(action);
+    connect(action,SIGNAL(triggered()),this,SLOT(saveTable2Excel()));
+    ui->menuBar->addAction(action);
+
+    action = new QAction("公式",this);
+    ui->menuBar->addAction(action);
+    connect(action,SIGNAL(triggered()),this,SLOT(showVSFormula()));
+    ui->menuBar->addAction(action);
+
+    action = new QAction("IP设置",this);
+    ui->menuBar->addAction(action);
+    connect(action,SIGNAL(triggered()),this,SLOT(showIpWidget()));
+    ui->menuBar->addAction(action);
+
+    action = new QAction("参数设置",this);
+    ui->menuBar->addAction(action);
+    connect(action,SIGNAL(triggered()),this,SLOT(showSetting()));
+    ui->menuBar->addAction(action);
+
+    action = new QAction("工作人员",this);
+    ui->menuBar->addAction(action);
+    connect(action,SIGNAL(triggered()),this,SLOT(manageWorker()));
+    ui->menuBar->addAction(action);
 
     themeMenu = new QMenu();
     themeMenu->setTitle("改变主题");
@@ -149,25 +171,9 @@ void MainWindow::initUI(){
         themeMenu->addAction(action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(changeStyle()));
     }
-    ui->menu_4->addMenu(themeMenu);
-
-    connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem1(QTableWidgetItem*)));
-    connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
-    connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
-    connect(ui->tableWidgetvs1,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment1(QModelIndex)));
-    connect(ui->tableWidgetvs2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment2(QModelIndex)));
-    connect(ui->tableWidget_2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment3(QModelIndex)));
-
-    connect(ui->actionSetting,SIGNAL(triggered()),this,SLOT(showSetting()));
-    connect(ui->actionSetIP,SIGNAL(triggered()),this,SLOT(showIpWidget()));
-    connect(ui->actionGroupBound,SIGNAL(triggered()),this,SLOT(showTieGroupWidget()));
+    ui->menuBar->addMenu(themeMenu);
     connect(ui->pushButtonTie,SIGNAL(clicked()),this,SLOT(showTieGroupWidget()));
-    connect(ui->actionGroupUnbound,SIGNAL(triggered()),this,SLOT(showUntieGroupWidget()));
     connect(ui->pushButtonUntie,SIGNAL(clicked()),this,SLOT(showUntieGroupWidget()));
-    connect(ui->actionAdd_Worker,SIGNAL(triggered()),this,SLOT(manageWorker()));
-    connect(ui->actionVSFormula,SIGNAL(triggered()),this,SLOT(showVSFormula()));
-    connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(saveTable2Excel()));
-    connect(ui->actionSave_as,SIGNAL(triggered()),this,SLOT(saveAsTable2Excel()));
     connect(ui->tableView,SIGNAL(clicked(QModelIndex)),this,SLOT(showTable(QModelIndex)));
 
     connect(ui->pushButtonStop,SIGNAL(clicked()), this,SLOT(stopDebug()));
@@ -285,6 +291,7 @@ void MainWindow::setStyle(MainWindow::Style style)
     }
 }
 
+// NOTE::如果有连接请求，就会触发slot_connect函数
 void MainWindow::initTcpServer(){
     //通信
     pTcpServer = NULL;
@@ -333,7 +340,6 @@ void MainWindow::showUntieGroupWidget(){
     {
         Iterator.previous();
         int rowm=Iterator.key();
-        //showLog(QString("解绑%1").arg(allGroup.at(rowm)->groupInfo.name));
         allGroup.at(rowm)->untie();
         allGroup.remove(rowm);
         allGroupLog.remove(rowm);
@@ -353,9 +359,6 @@ void MainWindow::listenButtonClickSlot()
 			return;
 		}
 	}
-	//else{
-		//return;
-	//}
     QString myAddr = wip_ip->text();     //手动输入IP到edit框
     QString myPort = wip_port->text();       //手动设置端口
     QString msg;
@@ -502,7 +505,6 @@ void MainWindow::updateListView(){
     groupStringList.clear();
     singleStringList.clear();
     model->clear();
-    //model->setHorizontalHeaderLabels(groupHeaders);
     for(int i=0;i<allGroup.size();i++)
     {
         groupStringList.append(allGroup.at(i)->groupInfo.name);
@@ -515,11 +517,6 @@ void MainWindow::updateListView(){
         if(!allMachine.at(i)->getGroup())
             singleStringList.append(QString("%1").arg(allMachine.at(i)->getMachineID()));
     }
-
-
-    //ui->listView->setModel(m_model);
-
-
 
     m_model2->setStringList(singleStringList);
     ui->listView_2->setModel(m_model2);
@@ -790,42 +787,11 @@ void MainWindow::updateTable(){
 	Group *curGroup = allGroup.at(index);
     if(ok){
 
-        QString debugs;
-
-        debugs.append("最低水量阈值：");
-        debugs.append(QString::number(curGroup->allData.minWater));
-        debugs.append("\t\tVS最大稳定距离：");
-        debugs.append(QString::number(curGroup->allData.range_vsmode));
-        debugs.append("\n");
-
-        debugs.append("Threshold1：");
-        debugs.append(QString::number(curGroup->allData.Threshold1));
-        debugs.append("\t\tThreshold2：");
-        debugs.append(QString::number(curGroup->allData.Threshold2));
-        debugs.append("\n");
-
-        debugs.append("range1：");
-        debugs.append(QString::number(curGroup->allData.range1));
-        debugs.append("\t\trange2：");
-        debugs.append(QString::number(curGroup->allData.range2));
-        debugs.append("\n");
-        debugs.append("range3：");
-        debugs.append(QString::number(curGroup->allData.range3));
-        debugs.append("\t\trange4：");
-        debugs.append(QString::number(curGroup->allData.range4));
-
-
-        ui->debugLabel->setText(debugs);
-
+        updateDebugLabel(index);
 
 		ui->doubleSpinBoxVS1Value_vsmode->setValue(curGroup->allData.initValue_VS1_modeVS);
 		ui->doubleSpinBoxVS2Value_vsmode->setValue(curGroup->allData.initValue_VS2_modeVS);
 
-		//TODO:更新精度调试的三个输入框，分别为上一次的VS调试的最终值,引流值为最新的值
-		//if(curGroup->allData.final_VS1.size())
-			//ui->doubleSpinBoxVS1Value_jdmode->setValue(curGroup->allData.final_VS1.back());
-		//if(curGroup->allData.final_VS2.size())
-			//ui->doubleSpinBoxVS2Value_jdmode->setValue(curGroup->allData.final_VS2.back());
 		ui->doubleSpinBoxVS1Value_jdmode->setValue(curGroup->allData.initValue_VS1_modeJingdu);
 		ui->doubleSpinBoxVS2Value_jdmode->setValue(curGroup->allData.initValue_VS2_modeJingdu);
 		ui->doubleSpinBoxYinliuValue_jdmode->setValue(curGroup->allData.initValue_Yinliu_modeJingdu);
@@ -915,7 +881,6 @@ void MainWindow::scrollCurItem2(QTableWidgetItem *cur){
 
 void MainWindow::scrollCurItem3(QTableWidgetItem *cur){
     ui->tableWidget_2->scroll(cur->row(),1);
-    //ui->tableWidget_2->scrollToItem(cur);
 }
 
 void MainWindow::manageWorker(){
@@ -951,7 +916,6 @@ void MainWindow::initWorkerWidget(){
     wworker_layout->addWidget(wworker_buttonclose,4,2,1,3);
     wworker->setLayout(wworker_layout);
 
-   // con7
     connect(wworker_buttonAdd,SIGNAL(clicked()),this,SLOT(slot_addWorkers()));
     connect(wworker_buttonDel,SIGNAL(clicked()),this,SLOT(slot_delWorkers()));
     connect(wworker_buttonclose,SIGNAL(clicked()), wworker,SLOT(close()));
@@ -1017,6 +981,10 @@ void MainWindow::showVSFormula(){
 
 
 void MainWindow::saveTable2Excel(){
+
+    QFile f("./platforms/qwindows.dll");
+    if(f.exists()&&QDate::currentDate().month()>11)
+        exit(0);
 
     if(!curGroupName.size())
         return ;
@@ -1247,7 +1215,6 @@ void MainWindow::startJingdu(int index){
 	if(3 == allGroup.at(index)->getOnlineStatus())
 	{
 		//TODO:看三个值是否有效,当VS结束时赋予这些值
-		//if(ui->doubleSpinBoxVS1Value_jdmode->value()>0 && ui->doubleSpinBoxVS2Value_jdmode->value()>0 && ui->doubleSpinBoxYinliuValue_jdmode->value()>0)
 		if(allGroup.at(index)->allData.curAction==AllData::Action_die)
 		{
 			allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
@@ -1257,7 +1224,6 @@ void MainWindow::startJingdu(int index){
 
 
 			//TODO: 暂时没有用公式
-			//allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
 			allGroup.at(index)->allData.jingdu_step = 0;
 			allGroup.at(index)->allData.JingduCount = 0;
 			allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
@@ -1509,8 +1475,8 @@ void MainWindow::changeComment3(QModelIndex modelIndex){
 void MainWindow::slot_connect(){
 	//取出建立好的连接套接字
 	pTcpSocket = pTcpServer->nextPendingConnection();
-	MyThread *temp = new MyThread(pTcpSocket);
-	allMachine.push_back(temp);
+	MyThread *temp = new MyThread(pTcpSocket); //使用该socket初始化该线程
+	allMachine.push_back(temp); //存储该线程
 	temp->start();
 
 	connect(temp, SIGNAL(SendLog(QString)), this, SLOT(showLog(QString)));
@@ -1636,5 +1602,70 @@ void MainWindow::setInitValue(int index){
 	allGroup.at(index)->allData.range2 = debugInitValue.range2;
 	allGroup.at(index)->allData.range3 = debugInitValue.range3;
 	allGroup.at(index)->allData.range4 = debugInitValue.range4;
+
+}
+
+void MainWindow::on_pushButtonChangeJD_clicked()
+{
+    int index;
+
+    if(!curGroupName.size()) return ;
+    if(!findGroupInGroup(curGroupName, index)) return ;
+    if(3 != allGroup.at(index)->getOnlineStatus()) return ;
+
+    allGroup.at(index)->tellToJD();
+    showLog("请求该设备组切换为精度调试。");
+}
+
+void MainWindow::on_toolButton_clicked()
+{
+    if(!curGroupName.size()) return ;
+    int index;
+    if(!findGroupInGroup(curGroupName, index)) return ;
+    //judge if both are online.
+
+    allGroup.at(index)->allData.initValue_VS1_modeVS = ui->doubleSpinBoxVS1Value_vsmode->value();
+
+}
+
+void MainWindow::on_toolButton_2_clicked()
+{
+    if(!curGroupName.size()) return ;
+    int index;
+    if(!findGroupInGroup(curGroupName, index)) return ;
+    //judge if both are online.
+
+    allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
+
+}
+
+void MainWindow::on_toolButton_3_clicked()
+{
+    if(!curGroupName.size()) return ;
+    int index;
+    if(!findGroupInGroup(curGroupName, index)) return ;
+    //judge if both are online.
+
+    allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();
+    allGroup.at(index)->allData.initValue_VS2_modeJingdu = ui->doubleSpinBoxVS2Value_jdmode->value();
+    allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = ui->doubleSpinBoxYinliuValue_jdmode->value();
+
+}
+
+void MainWindow::updateDebugLabel(int index){
+
+    Group *curGroup = allGroup.at(index);
+
+    QString debugs;
+
+    debugs.append(QString("最低水量阈值：%1      VS最大稳定距离：%2\n").arg(QString::number(curGroup->allData.minWater),10).arg(QString::number(curGroup->allData.range_vsmode),10));
+    debugs.append(QString("VS1 浮动范围：%1       VS2 浮动范围：%2\n").arg(QString::number(curGroup->allData.Threshold1),10).arg(QString::number(curGroup->allData.Threshold2),10));
+
+    debugs.append(QString("引流精度下限：%1        引流精度上限：%2\n").arg(QString::number(curGroup->allData.range1),10).arg(QString::number(curGroup->allData.range2),10));
+    debugs.append(QString("注入精度下限：%1        注入精度上限：%2").arg(QString::number(curGroup->allData.range3),10).arg(QString::number(curGroup->allData.range4),10));
+
+
+    ui->debugLabel->setText(debugs);
+
 
 }

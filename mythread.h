@@ -16,25 +16,26 @@
 #include "group.h"
 
 
-
-
 class Group;
+
 class MyThread : public QThread
 {
     Q_OBJECT
 public:
     MyThread(QTcpSocket *t);
 
-    void setName(QString n);
-    void setGroup(Group *g);
+    void setName(QString n); //设备的id
+    void setGroup(Group *g); //绑定的group
 
-    Group* getGroup();
-    QString getIp();
-    qint16 getPort();
-    QString getMachineID();
+    Group* getGroup(); //返回group
+    QString getIp(); //获得ip
+    qint16 getPort(); //获得端口号
+    QString getMachineID(); //获得id
 
-    void WriteData(QByteArray);
-    void analyzeHeader();
+    void WriteData(QByteArray); //发送消息
+    void analyzeHeader(); //根据协议分析数据，获得id，判断在哪个设备组，然后处理
+
+    void disconnectAll(); //断开连接
 
 
     bool die;

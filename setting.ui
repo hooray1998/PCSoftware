@@ -161,14 +161,14 @@
           <item row="6" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>range1:</string>
+             <string>引流精度下限：</string>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Threshold2:</string>
+             <string>VS2浮动范围：</string>
             </property>
            </widget>
           </item>
@@ -222,21 +222,21 @@
           <item row="7" column="0">
            <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>range2:</string>
+             <string>引流精度上限：</string>
             </property>
            </widget>
           </item>
           <item row="8" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>range3:</string>
+             <string>注入精度下限：</string>
             </property>
            </widget>
           </item>
           <item row="10" column="0">
            <widget class="QLabel" name="label_12">
             <property name="text">
-             <string>range4:</string>
+             <string>注入精度上限：</string>
             </property>
            </widget>
           </item>
@@ -253,7 +253,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>Threshold1：</string>
+             <string>VS1浮动范围：</string>
             </property>
            </widget>
           </item>

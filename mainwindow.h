@@ -54,10 +54,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 protected:
-    void closeEvent(QCloseEvent *event);
-    void resizeEvent(QResizeEvent *event);
+    void closeEvent(QCloseEvent *event); //程序退出时触发
+    void resizeEvent(QResizeEvent *event); //窗口大小变化时触发
 signals:
-    void changeStyle(const QString &qssFile);
+    void changeStyle(const QString &qssFile);//改变主题
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -86,100 +86,107 @@ public:
 
 
 public slots:
-    void startVS1(); //开启当前设备
-    void startVS2();
-    void startJingdu();
-    void startVS1(int index); //指定设备启动
+    void startVS1(); //开始vs1调试
+    void startVS2(); //开始vs2调试
+    void startJingdu(); //开始精度调试
+    void startVS1(int index);
     void startVS2(int index);
     void startJingdu(int index);
-    void stopDebug();
+    void stopDebug(); //停止调试
 
 
-    void showLog(QString msg);
-    void showLog(MyThread* machine, QByteArray header);
-    void showLog(QString group,QString msg);
+    void showLog(QString msg); //显示log
+    void showLog(MyThread* machine, QByteArray header); //显示log
+    void showLog(QString group,QString msg); //显示log
 
     void changeStyle();             //更换样式
-    void initTcpServer();
-    void initUI();
+    void initTcpServer();   //初始化tcp服务器
+    void initUI();  //初始化UI
 
-    void showSetting();
+    void showSetting(); //参数设置界面
 
-    void initIpWidget();
-    void showIpWidget();
-    void listenButtonClickSlot();
+    void initIpWidget(); //初始化ip修改界面
+    void showIpWidget(); //显示ip修改界面
+    void listenButtonClickSlot(); //ip监听按钮点击后触发
 
-    void initTieGroupWidget();
-    void showTieGroupWidget();
-    void tieTwoMachine();
+    void initTieGroupWidget(); //init绑定界面
+    void showTieGroupWidget(); //show绑定界面
+    void tieTwoMachine(); //绑定界面绑定按钮点击后触发
 
-    void initUntieGroupWidget();
-    void showUntieGroupWidget();
-    void untieTwoMachine();
+    void initUntieGroupWidget(); //初始化解绑界面
+    void showUntieGroupWidget(); //show解绑界面
+    void untieTwoMachine(); //解绑界面解绑按钮点击
 
-    void initWorkerWidget();
-    void setCurWorker(QString w);
+    void initWorkerWidget(); //工作人员界面
+    void setCurWorker(QString w); //设置当前工作人员
 
-    void initVSFormulaWidget();
+    void initVSFormulaWidget(); //公式修改界面初始化
 
-    bool findMachineInGroup(QString machine, int &index, bool &AorB);
-    bool findGroupInGroup(QString group, int &index);
+    bool findMachineInGroup(QString machine, int &index, bool &AorB); //从所有设备中查找某设备，返回是否找到。结果存到index中。
+    bool findGroupInGroup(QString group, int &index); //从所有设备组查找group设备组的索引
 
 
-    void showTable(QModelIndex index);
-    void updateTable();
-    void scrollCurItem1(QTableWidgetItem *cur);
-    void scrollCurItem2(QTableWidgetItem *cur);
-    void scrollCurItem3(QTableWidgetItem *cur);
+    void showTable(QModelIndex index); //显示表格
+    void updateTable(); //更新表格
+    void scrollCurItem1(QTableWidgetItem *cur); //聚焦某个表格项
+    void scrollCurItem2(QTableWidgetItem *cur); //聚焦某个表格项
+    void scrollCurItem3(QTableWidgetItem *cur); //聚焦某个表格项
 
-    void changeComment1(QModelIndex index);
-    void changeComment2(QModelIndex index);
-    void changeComment3(QModelIndex index);
+    void changeComment1(QModelIndex index); //修改备注信息
+    void changeComment2(QModelIndex index); //修改备注信息
+    void changeComment3(QModelIndex index); //修改备注信息
 
-    void readConfig();
-    void saveConfig();
+    void readConfig(); //读取配置信息
+    void saveConfig(); //保存配置信息
 
-	void setInitValue(int index);
+	void setInitValue(int index); //使用当前的参数初始化index设备组
 
     //Worker
-    void manageWorker();
+    void manageWorker(); //工作人员界面
 
     //VSFormula
-    void showVSFormula();
+    void showVSFormula(); //公式界面
 
 
-    void updateListView();
-    void setStyle(Style style);
+    void updateListView(); //更新左侧设备组和未绑定设备列表
+    void updateDebugLabel(int index);
+    void setStyle(Style style); //修改皮肤
 
 
     //save to excel
-    void saveTable2Excel();
-    void saveAsTable2Excel();
+    void saveTable2Excel(); //保存表格到 excel文件
+    void saveAsTable2Excel(); //另存为
 
 
-	void slot_connect();
-	void slot_addWorkers();
-	void slot_delWorkers();
-	void slot_addFormula();
-	void slot_delFormula();
+	void slot_connect(); // 收到tcp连接请求，处理连接
+	void slot_addWorkers(); // add工作人员
+	void slot_delWorkers(); //delete工作人员
+	void slot_addFormula(); //add 公式
+	void slot_delFormula(); //delete 公式
+
+private slots:
+    void on_pushButtonChangeJD_clicked();  //切换为精度调试按钮点击后触发
+
+    void on_toolButton_clicked();
+
+    void on_toolButton_2_clicked();
+
+    void on_toolButton_3_clicked();
 
 private:
     Ui::MainWindow *ui;
 
 	//通信
-    QTcpServer *pTcpServer;
-    QTcpSocket *pTcpSocket;
-    QVector<MyThread*> allMachine;
+    QTcpServer *pTcpServer; //tcp服务器
+    QTcpSocket *pTcpSocket; //临时的tcp接口
+    QVector<MyThread*> allMachine; //存储所有的设备对应的线程
 
 	//设备组
-    Group *curGroup;
-    QVector<Group*> allGroup;
-    QVector<QString> allGroupLog;
+    Group *curGroup;  //当前显示的设备组
+    QVector<Group*> allGroup; //存储所有的设备组
+    QVector<QString> allGroupLog; //所有设备组最新的消息，左上角表格显示的
 
-	//数据处理
-    Expression allExpression;
-
-    //Set Ip
+    //Set Ip ,  ip设置界面相关
     QWidget *wip;
     QGridLayout *wip_layout;
     QLabel *wip_labelip;
@@ -188,8 +195,7 @@ private:
     QSpinBox *wip_port;
     QPushButton *wip_button;
 
-
-    //Tie group
+    //Tie group ,  设备绑定界面相关
     QWidget *wtie;
     QGridLayout *wtie_layout;
     QLabel *wtie_labelA;
@@ -202,7 +208,7 @@ private:
     QPushButton *wtie_button;
     QPushButton *wtie_buttonclose;
 
-    //Untie group
+    //Untie group  设备解绑界面相关
     QWidget *wuntie;
     QGridLayout *wuntie_layout;
     QLabel *wuntie_label;
@@ -212,32 +218,32 @@ private:
     QPushButton *wuntie_buttonclose;
 
 
-    QStandardItemModel *model;
+    QStandardItemModel *model; //显示设备组的model
 
-    QStringListModel *m_model;
-    QStringListModel *m_model2;
-    QStringList groupStringList;
-    QStringList singleStringList;
-    QString curGroupName;
-
-
-    int foo;
-    int bar;
-    QStringList groupHeaders;
-    QStringList headers;
-    QStringList headers2;
-    QVector<double> *f_vectorArr[16];//f_vector[0] point to originalVector.
-    QVector<QString> *s_vectorArr[3];
+    QStringListModel *m_model2; //未绑定列表的model
+    QStringList groupStringList; //所有设备组的名称，显示在左上角
+    QStringList singleStringList; //未绑定列表的名称列表
+    QString curGroupName; //当前设备组的名称
 
 
-    QPalette red;
-    QPalette black;
-    QColor green;
+    int foo; //当前窗口的width的100分之1
+    int bar; //当前窗口的height的100分之1
+
+    QStringList groupHeaders; //设备组表格的表头
+    QStringList headers; //vs调试的表头
+    QStringList headers2; //精度调试的表头
+    QVector<double> *f_vectorArr[16];//f_vector[0] point to originalVector. 存储表格中所有的数值
+    QVector<QString> *s_vectorArr[3]; //存储表格中所有的文字
+
+
+    QPalette red; //红色背景
+    QPalette black; //黑色背景
+    QColor green; //绿色
 
     //change Theme
-    QMenu *themeMenu;
+    QMenu *themeMenu; //皮肤菜单
 
-    //worker
+    //worker ,  工作人员界面相关
     QVector<QString> workerList;
     QWidget *wworker;
     QGridLayout *wworker_layout;
@@ -251,7 +257,7 @@ private:
     QPushButton *wworker_buttonclose;
 
 
-    //vsFormula
+    //vsFormula , 公式修改界面相关
     QVector<QString> vsformulaList;
     QWidget *wvsformula;
     QGridLayout *wvsformula_layout;
@@ -265,8 +271,7 @@ private:
     QLabel *wvsformula_msg;
     QPushButton *wvsformula_buttonclose;
 
-	Setting debugInitValue;
-
+	Setting debugInitValue; //参数修改界面
 };
 
 #endif // MAINWINDOW_H

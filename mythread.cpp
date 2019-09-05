@@ -44,38 +44,37 @@ void MyThread::analyzeHeader(){
 
         if(mode=="02")
         {
-                if(!group)
-                {
-                    emit SendLog(QString("设备%1还未绑定设备组，数据会丢失。").arg(QString(machineId)));
-                }
-                else{
+            if(!group){
+                emit SendLog(QString("设备%1还未绑定设备组，数据会丢失。").arg(QString(machineId)));
+            }
+            else{
 
-                    if(this->group->getMachineA_id()==machineId)
-                    {
-                        group->analyzeData_a(data.right(data.size()-8));
-                    }
-                    else if(this->group->getMachineB_id()==machineId)
-                    {
-                        group->analyzeData_r(data.right(data.size()-8));
-                    }
-                    else
-                        emit SendLog(QString("所属的设备组没有这个设备【%1】。").arg(QString(machineId)));
+                if(this->group->getMachineA_id()==machineId)
+                {
+                    group->analyzeData_a(data.right(data.size()-8));
                 }
+                else if(this->group->getMachineB_id()==machineId)
+                {
+                    group->analyzeData_r(data.right(data.size()-8));
+                }
+                else
+                    emit SendLog(QString("所属的设备组没有这个设备【%1】。").arg(QString(machineId)));
+            }
         }
         else if(mode=="03")
         {
-                if(!group)
+            if(!group)
+            {
+                emit SendLog(QString("%1 还未绑定设备，数据会丢失。").arg(QString(machineId)));
+            }
+            else{
+                if(this->group->getMachineB_id()==machineId)
                 {
-                    emit SendLog(QString("%1 还未绑定设备，数据会丢失。").arg(QString(machineId)));
+                    group->analyzeData_b(data.right(data.size()-8));
                 }
-                else{
-                    if(this->group->getMachineB_id()==machineId)
-                    {
-                        group->analyzeData_b(data.right(data.size()-8));
-                    }
-                    else
-                        emit SendLog(QString("所属的设备组没有这个设备B【%1】。").arg(QString(machineId)));
-                }
+                else
+                    emit SendLog(QString("所属的设备组没有这个设备B【%1】。").arg(QString(machineId)));
+            }
         }
         else{
             emit SendLog(QString("%1 receive other mode%2").arg(QString(machineId)).arg(QString(mode)));
@@ -113,15 +112,19 @@ Group* MyThread::getGroup(){
 }
 
 void MyThread::slot_readyRead(){
-   data = tcpSocket->readAll();
-		analyzeHeader();
+    data = tcpSocket->readAll();
+    analyzeHeader();
 }
 
 void MyThread::slot_disconnect(){
-	die = true;
-	if(group){
-		group->logout(this);
-	}
-	emit SendLog(this, QByteArray(machineId+"09"));
-	tcpSocket->disconnectFromHost();
+    die = true;
+    if(group){
+        group->logout(this);
+    }
+    emit SendLog(this, QByteArray(machineId+"09"));
+    tcpSocket->disconnectFromHost();
+}
+
+void MyThread::disconnectAll(){
+    tcpSocket->disconnectFromHost();
 }
