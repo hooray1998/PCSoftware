@@ -33,7 +33,7 @@ public:
     void untie(); //解绑该设备组
 
     void setWorker(QString w); //设置工作人员
-    void stop(); //中止当前调试进程
+    bool stop(); //中止当前调试进程
 
     //data processing
     void request_b(); //寻求初值
@@ -43,12 +43,15 @@ public:
     void analyzeData_b(QByteArray data); //存储处理初值
     void analyzeData_r(QByteArray data); //存储处理末值
 
-    void returnFinalResult(double final); //vs调试返回最终值给设备
-	void returnThreeResult(); //精度调试返回调整后的三个值
+    void returnFinalResult(int mode); //vs调试返回最终值给设备
+	void returnThreeResult(int mode); //精度调试返回调整后的三个值
+    void analyzeData_BuChong();
 
     void tellToJD(); //通知设备A转化为精度调试
 
 
+    void saveData(FILE *fp);
+    void readData(FILE *fp);
 
     bool meishuile;
 private:

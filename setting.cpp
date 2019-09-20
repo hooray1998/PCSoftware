@@ -29,6 +29,8 @@ void Setting::on_pushButton_clicked(){
     range3 = ui->doubleSpinBox_7->value();
     range4 = ui->doubleSpinBox_8->value();
 
+    emit updateDebugValue();
+
 	this->hide();
 }
 
@@ -45,4 +47,13 @@ void Setting::readValueToWidget(){
 	ui->doubleSpinBox_6->setValue(range2);
 	ui->doubleSpinBox_7->setValue(range3);
 	ui->doubleSpinBox_8->setValue(range4);
+}
+
+void Setting::on_toolButton_clicked()
+{
+
+    QString folderName = QFileDialog::getExistingDirectory(this,tr("选择文件保存位置"),".");
+    if(!folderName.isNull()){
+        ui->lineEdit->setText(folderName);
+    }
 }

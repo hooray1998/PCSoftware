@@ -39,24 +39,57 @@ void Group::request_r(){
         //allData.lastRequest = AllData::Action_die;
 }
 
-void Group::returnFinalResult(double final){
+void Group::returnFinalResult(int mode){//mode 0:调整后返回，1：vs1初始返回，2：vs2初始返回
     char msg[12];
-    sprintf(msg,"%08.2f",final);
-    QByteArray header = "05" + QString(msg).toLocal8Bit();
-    machineA->WriteData(header);
-    allData.curAction = AllData::Action_return;
+	if(mode == 0){
+		sprintf(msg,"%08.2f",allData.averageValue);
+		QByteArray header = "05" + QString(msg).toLocal8Bit();
+		machineA->WriteData(header);
+		allData.curAction = AllData::Action_return;
+	}
+	else if(mode == 1){
+        sprintf(msg,"%08.2f",allData.initValue_VS1_modeVS);
+		QByteArray header = "15" + QString(msg).toLocal8Bit();
+		machineA->WriteData(header);
+        allData.curAction = AllData::Action_request_bc;
+    }
+	else if(mode == 2){
+        sprintf(msg,"%08.2f",allData.initValue_VS2_modeVS);
+        QByteArray header = "25" + QString(msg).toLocal8Bit();
+		machineA->WriteData(header);
+        allData.curAction = AllData::Action_request_bc;
+    }
 }
 
-void Group::returnThreeResult(){
+void Group::returnThreeResult(int mode){
 	//TODO::返回三个值
     char msg[25];
     sprintf(msg,"%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu);
     //QByteArray header = "08" + QString::asprintf("%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu).toLocal8Bit();
-    QByteArray header = "08" + QString(msg).toLocal8Bit();
-    machineA->WriteData(header);
-    allData.curAction = AllData::Action_return;
-	emit SendLog(groupInfo.name, "回复给了A三个调整后的精度系数");
+	if(mode == 0){
+		QByteArray header = "08" + QString(msg).toLocal8Bit();
+		machineA->WriteData(header);
+		allData.curAction = AllData::Action_return;
+		emit SendLog(groupInfo.name, "回复给了A三个调整后的精度系数");
+	}
+	else{
+        QByteArray header = "35" + QString(msg).toLocal8Bit();
+		machineA->WriteData(header);
+        allData.curAction = AllData::Action_request_bc;
+        emit SendLog(groupInfo.name, "回复给了A三个精度系数");
+	}
 
+}
+
+void Group::analyzeData_BuChong(){
+    if(allData.curAction!=AllData::Action_request_bc){
+        emit SendLog(groupInfo.name, "收到无用的补充回应");
+    }
+    else{
+        emit SendLog(groupInfo.name, "收到补充回应");
+        allData.curAction = AllData::Action_receive_b;
+        request_b();
+    }
 }
 void Group::analyzeData_a(QByteArray data){
 
@@ -79,7 +112,7 @@ void Group::analyzeData_b(QByteArray data){
     }
     else{
         double number = data.left(8).toDouble();
-        if(number<allData.minWater){
+        if(allData.curMode!=AllData::Mode_Jingdu && number<allData.minWater){
             emit SendLog(groupInfo.name, QString("没水了（当前水量%1小于阈值%2）").arg(number).arg(allData.minWater));
 			allData.complete();
 			allData.curAction = AllData::Action_die;
@@ -107,7 +140,7 @@ void Group::analyzeData_r(QByteArray data){
         if(allData.curMode==AllData::Mode_VS1||allData.curMode==AllData::Mode_VS2){
 			if(allData.VSCount==2)
 			{
-				returnFinalResult(allData.averageValue);
+				returnFinalResult(0);
 				emit SendLog(groupInfo.name, "将结果返回给了A设备");
 			}
 
@@ -129,7 +162,7 @@ void Group::analyzeData_r(QByteArray data){
 
 			if(allData.updateFlag){
 				allData.updateFlag = false;
-				returnThreeResult();
+				returnThreeResult(0);
 			}
 			
 			if(allData.jingdu_step == -1){
@@ -190,10 +223,17 @@ QString Group::getMachineB_id(){
     return groupInfo.machineB_id;
 }
 
-void Group::stop(){
+bool Group::stop(){
     allData.complete();
-    //allData.lastRequest = allData.curAction;
-    allData.curAction = AllData::Action_die;
+    if(getOnlineStatus()>1){
+        machineA->WriteData("91");
+        allData.curAction = AllData::Action_die;
+        return true;
+    }
+    else{
+        allData.curAction = AllData::Action_die;
+        return false;
+    }
 }
 
 void Group::setWorker(QString w){
@@ -237,4 +277,15 @@ int Group::getOnlineStatus(){ //查看当前设备组在线的情况
             return 1;
         else
             return 0;
+}
+
+
+
+void Group::readData(FILE *fp){
+    qDebug()<<"cur Name:"<<groupInfo.name;
+    allData.readData(fp);
+}
+void Group::saveData(FILE *fp){
+    qDebug()<<"cur Name:"<<groupInfo.name;
+    allData.saveData(fp);
 }

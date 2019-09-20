@@ -26,6 +26,13 @@
      <item>
       <widget class="QLineEdit" name="lineEdit"/>
      </item>
+     <item>
+      <widget class="QToolButton" name="toolButton">
+       <property name="text">
+        <string>选择路径</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

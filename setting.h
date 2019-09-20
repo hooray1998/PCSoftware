@@ -2,6 +2,7 @@
 #define SETTING_H
 
 #include <QDialog>
+#include <QFileDialog>
 
 namespace Ui {
 class Setting;
@@ -33,8 +34,12 @@ public:
 
     void readValueToWidget();
 
+signals:
+    void updateDebugValue();
 private slots:
     void on_pushButton_clicked();
+
+    void on_toolButton_clicked();
 
 private:
     Ui::Setting *ui;

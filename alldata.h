@@ -19,6 +19,8 @@ public:
     };
     enum Action{
         Action_die=0,
+        Action_request_bc, //补充指令
+        Action_receive_bc,
         Action_request_b,
         Action_receive_b,
         Action_request_a,
@@ -51,6 +53,13 @@ public:
 	bool StableJudge(int distance);
 	bool RangeJudge(int distance);
 
+    void saveData(FILE *fp);
+    void saveDoubleVector(QVector<double> *vec, FILE *fp);
+    void saveStringVector(QVector<QString> *vec, FILE *fp);
+
+    void readData(FILE *fp);
+    void readDoubleVector(QVector<double> *vec, FILE *fp);
+    void readStringVector(QVector<QString> *vec, FILE *fp);
 
     QString curWorker;
 
@@ -143,12 +152,12 @@ public:
     int VSCount;//记录第几次，三次一检查。
 	int JingduCount;
 
-	bool updateFlag;
 
     Mode curMode;
     Action curAction;
     //Action lastRequest;
     bool saved;
+    bool updateFlag;
 
 };
 

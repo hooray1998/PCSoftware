@@ -33,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent) :
     updateListView();
     setCurWorker(ui->comboBoxWorker1->currentText());
 
+    ui->pushButtonStop->setEnabled(false);
+    ui->pushButtonStop->setPalette(QColor(0, 0, 0));
+    ui->pushButtonChangeJD->setEnabled(false);
+    ui->pushButtonChangeJD->setPalette(QColor(0, 0, 0));
 }
 
 MainWindow::~MainWindow()
@@ -47,6 +51,20 @@ MainWindow::~MainWindow()
 //TODO::断开连接, 此时 设备的socket会收到disconnected信号
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    int lived = -1;
+    for(int i=0;i<allGroup.size();i++){
+        if(allGroup[i]->allData.curAction != AllData::Action_die){
+            lived = i;
+            break;
+        }
+    }
+    if(lived != -1){
+        QMessageBox::warning(this, "警告", QString("设备组%1正在进行调试，不可退出").arg(allGroup.at(lived)->groupInfo.name));
+        event->ignore();
+        return;
+    }
+
+
     for(int i=allMachine.size()-1;i>=0;i--)
     {
         allMachine.at(i)->disconnectAll();
@@ -195,6 +213,8 @@ void MainWindow::initUI(){
 
     ui->actionSave_as->setEnabled(false);
 
+    connect(&debugInitValue, SIGNAL(updateDebugValue()), this, SLOT(updateAllDebugValue()));
+
 }
 
 void MainWindow::changeStyle()
@@ -324,7 +344,7 @@ void MainWindow::showUntieGroupWidget(){
     msgBox.setInformativeText("是否确认解绑?");
     msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Cancel);
-     if(QMessageBox::Ok != msgBox.exec())
+    if(QMessageBox::Ok != msgBox.exec())
          return;
 
     QMap<int,int>rowMap;
@@ -340,6 +360,11 @@ void MainWindow::showUntieGroupWidget(){
     {
         Iterator.previous();
         int rowm=Iterator.key();
+        if(allGroup.at(rowm)->groupInfo.name==curGroupName){
+            curGroupName = ' ';
+            ui->lineEditJiNumber_mode1->setText(curGroupName);
+
+        }
         allGroup.at(rowm)->untie();
         allGroup.remove(rowm);
         allGroupLog.remove(rowm);
@@ -489,7 +514,7 @@ void MainWindow::showLog(QString group,QString msg)
 		allGroupLog[index] = msg;
 		model->setItem(index,1,new QStandardItem(allGroupLog.at(index)));
 		//model->item(index,1)->setText(msg);
-        if(msg.contains("没水了")||msg.contains("精度不稳")){
+        if(msg.contains("没水了")||msg.contains("精度不稳")||msg.contains("禁止启动调试")){
 			model->item(index, 1)->setBackground(QBrush(QColor(255, 0, 0))); 
 		}
         if(msg.contains("OK")||msg.contains("ok")){
@@ -648,6 +673,7 @@ void MainWindow::tieTwoMachine(){
                 else{
                     wtie_msg->setPalette(red);
                     wtie_msg->setText("错误：设备A已经被其他设备绑定。");
+                    showLog("错误：设备A已经被其他设备绑定。groupName:"+allMachine.at(i)->getGroup()->groupInfo.name);
                     return ;
                 }
             }
@@ -659,6 +685,7 @@ void MainWindow::tieTwoMachine(){
                 else{
                     wtie_msg->setPalette(red);
                     wtie_msg->setText("错误：设备B已经被其他设备绑定。");
+                    showLog("错误：设备B已经被其他设备绑定。groupName:"+allMachine.at(i)->getGroup()->groupInfo.name);
                     return ;
                 }
             }
@@ -672,7 +699,7 @@ void MainWindow::tieTwoMachine(){
         Group *g = new Group();
         g->tie(wtie_groupname->text(),a,b);
         allGroup.push_back(g);
-        setInitValue(allGroup.size()-1);
+        setInitValue(allGroup.size()-1, true);
         allGroupLog.push_back(QString("new group"));
         connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
         wtie_msg->setText("绑定成功。");
@@ -729,20 +756,33 @@ void MainWindow::startVS1(int index){
             allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
 
 
-            allGroup.at(index)->request_b();
+			allGroup.at(index)->returnFinalResult(1);
+            //allGroup.at(index)->request_b();
         }
         else{
             showLog("该设备组正在进行其他动作，禁止启动调试。");
+            QMessageBox::warning(this, "警告", "该设备组正在进行其他动作，禁止启动调试。");
         }
+    }
+    else{
+        QMessageBox::warning(this, "警告", "该设备组未上线");
     }
 }
 
 void MainWindow::startVS1()
 {
-    if(!curGroupName.size()) return ;
+	if(!curGroupName.size()){
+        QMessageBox::warning(this, "提示", "未选中设备组");
+		return ;
+	}
     int index;
     if(findGroupInGroup(curGroupName, index)){
 		startVS1(index);
+        updateTable();
+    }
+    else{
+        QMessageBox::warning(this, "警告", "该设备组不存在");
+        return ;
     }
 }
 
@@ -761,26 +801,44 @@ void MainWindow::startVS2(int index){
 
             allGroup.at(index)->allData.initValue_VS2_modeVS = ui->doubleSpinBoxVS2Value_vsmode->value();
 
-            allGroup.at(index)->request_b();
+			allGroup.at(index)->returnFinalResult(2);
+            //allGroup.at(index)->request_b();
         }
         else{
             showLog("该设备组正在进行其他动作，禁止启动调试。");
+            QMessageBox::warning(this, "警告", "该设备组正在进行其他动作，禁止启动调试。");
         }
+    }
+    else{
+        QMessageBox::warning(this, "警告", "该设备组未上线");
     }
 }
 
 void MainWindow::startVS2(){
 
-    if(!curGroupName.size()) return ;
+	if(!curGroupName.size()){
+        QMessageBox::warning(this, "提示", "未选中设备组");
+		return ;
+	}
     int index;
 	if(findGroupInGroup(curGroupName, index)){
 		startVS2(index);
-	}
+        updateTable();
+    }
+    else{
+        QMessageBox::warning(this, "警告", "该设备组不存在");
+        return ;
+    }
 }
 
 void MainWindow::updateTable(){
     if(!curGroupName.size())
         return ;
+
+    ui->pushButtonStop->setEnabled(false);
+    ui->pushButtonStop->setPalette(QColor(0, 0, 0));
+    ui->pushButtonChangeJD->setEnabled(false);
+    ui->pushButtonChangeJD->setPalette(QColor(0, 0, 0));
 
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
@@ -830,6 +888,16 @@ void MainWindow::updateTable(){
                 }
 
         }
+
+        if(curGroup->allData.curAction != AllData::Action_die){
+            ui->pushButtonStop->setEnabled(true);
+            ui->pushButtonStop->setPalette(QColor(220, 0, 0));
+        }
+        else{
+            ui->pushButtonChangeJD->setEnabled(true);
+            ui->pushButtonChangeJD->setPalette(QColor(220, 0, 0));
+        }
+
     }
 
     ui->tableWidgetvs1->setHorizontalHeaderLabels(headers);
@@ -930,8 +998,12 @@ void MainWindow::stopDebug(){
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
-        allGroup[index]->stop();
-        showLog("终止了当前调试");
+        if(allGroup[index]->stop()){
+            showLog("终止了当前调试");
+        }
+        else{
+            showLog("终止了当前调试, 但设备A不在线");
+        }
     }
     updateTable();
 
@@ -1202,10 +1274,18 @@ void MainWindow::saveAsTable2Excel(){
 
 
 void MainWindow::startJingdu(){
-    if(!curGroupName.size()) return ;
+	if(!curGroupName.size()){
+        QMessageBox::warning(this, "提示", "未选中设备组");
+		return ;
+	}
     int index;
     if(findGroupInGroup(curGroupName, index)){
 		startJingdu(index);
+        updateTable();
+    }
+    else{
+        QMessageBox::warning(this, "警告", "该设备组不存在");
+        return ;
     }
 }
 
@@ -1227,12 +1307,17 @@ void MainWindow::startJingdu(int index){
 			allGroup.at(index)->allData.jingdu_step = 0;
 			allGroup.at(index)->allData.JingduCount = 0;
 			allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
-			allGroup.at(index)->request_b();
+			allGroup.at(index)->returnThreeResult(1);
+            //allGroup.at(index)->request_b();
 		}
 		else{
 			showLog("该设备组正在进行其他动作，禁止启动调试。");
+            QMessageBox::warning(this, "警告", "该设备组正在进行其他动作，禁止启动调试。");
 		}
 	}
+    else{
+        QMessageBox::warning(this, "警告", "该设备组未上线");
+    }
 
 }
 
@@ -1304,6 +1389,12 @@ void MainWindow::readConfig(){
 	}
 
 
+    bool init = false;
+    if(QFile("allData.dat").exists())
+        init = true;
+    FILE *fp;
+    fp = fopen("allData.dat","rb");
+
     QJsonArray groupShip = rootObj.value("groupShipList").toArray();
     for(int i=0;i<groupShip.size();i++){
 		Group *g = new Group();
@@ -1311,11 +1402,14 @@ void MainWindow::readConfig(){
 		QString a = groupShip.at(i).toObject().value("MachineA").toString();
 		QString b = groupShip.at(i).toObject().value("MachineB").toString();
 		g->tie_byID(n,a,b);
-		allGroup.push_back(g);
-        setInitValue(allGroup.size()-1);
+
+        allGroup.push_back(g);
+        setInitValue(allGroup.size()-1, true);
         allGroupLog.push_back(QString("均未上线"));
-		connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
-	}
+        if(init) g->readData(fp);
+        connect(g,SIGNAL(SendLog(QString,QString)),this,SLOT(showLog(QString,QString)));
+    }
+    fclose(fp);
 
 	QJsonObject exitStatus = rootObj.value("exitStatus").toObject();
     ui->comboBoxWorker1->setCurrentIndex(exitStatus.value("curWorker").toInt());
@@ -1352,7 +1446,9 @@ void MainWindow::saveConfig(){
 		vsFormula.append(vsformulaList[i]);
 	}
 
-	QJsonArray groupShip;
+    FILE *fp;
+    fp = fopen("allData.dat","wb");
+    QJsonArray groupShip;
 	for(int i=0;i<allGroup.size();i++)
 	{
 		QJsonObject curGroup;
@@ -1360,7 +1456,10 @@ void MainWindow::saveConfig(){
 		curGroup.insert("MachineA",allGroup[i]->groupInfo.machineA_id);
 		curGroup.insert("MachineB",allGroup[i]->groupInfo.machineB_id);
 		groupShip.append(curGroup);
+
+        allGroup[i]->saveData(fp);
 	}
+    fclose(fp);
 
 	QJsonObject debugValues;
 
@@ -1588,14 +1687,16 @@ void MainWindow::slot_delFormula(){
 	}
 }
 
-void MainWindow::setInitValue(int index){
+void MainWindow::setInitValue(int index, bool all){
 	allGroup.at(index)->allData.minWater = debugInitValue.minWater;
 
 	allGroup.at(index)->allData.initValue_VS1_modeVS = debugInitValue.VS1_vsmode;
 	allGroup.at(index)->allData.initValue_VS2_modeVS = debugInitValue.VS2_vsmode;
-	allGroup.at(index)->allData.range_vsmode = debugInitValue.range_vsmode;
+    if(all){
+        allGroup.at(index)->allData.range_vsmode = debugInitValue.range_vsmode;
 
-	allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = debugInitValue.flow_jingdu;
+        allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = debugInitValue.flow_jingdu;
+    }
 	allGroup.at(index)->allData.Threshold1 = debugInitValue.threshold1;
 	allGroup.at(index)->allData.Threshold2 = debugInitValue.threshold2;
 	allGroup.at(index)->allData.range1 = debugInitValue.range1;
@@ -1666,6 +1767,15 @@ void MainWindow::updateDebugLabel(int index){
 
 
     ui->debugLabel->setText(debugs);
+}
 
+
+
+void MainWindow::updateAllDebugValue(){
+    for(int i=0;i<allGroup.size();i++){
+        setInitValue(i, false);
+    }
+    showLog("参数发生了更新");
+    updateTable();
 
 }

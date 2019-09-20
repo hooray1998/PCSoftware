@@ -161,7 +161,7 @@
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background:rgb(204, 0, 0)</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>中止</string>
@@ -458,7 +458,7 @@
      <x>0</x>
      <y>0</y>
      <width>1288</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

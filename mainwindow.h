@@ -139,7 +139,8 @@ public slots:
     void readConfig(); //读取配置信息
     void saveConfig(); //保存配置信息
 
-	void setInitValue(int index); //使用当前的参数初始化index设备组
+    void updateAllDebugValue();
+    void setInitValue(int index, bool all); //使用当前的参数初始化index设备组
 
     //Worker
     void manageWorker(); //工作人员界面

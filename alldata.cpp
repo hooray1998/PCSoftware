@@ -390,6 +390,123 @@ void AllData::complete(){//let the length equal
 void AllData::cal_finalValues_JingduMode(){
 
 
+	//A4=A1*(1.008-A16/100)
+	//A5=A2*(1.008-A16/100)
+	//A6=A3-(A11+(0.8-A16)-1.2)/100
+	double A11 = accuracy0_Jingdu.back();
+	double A16 = accuracy1_Jingdu.back();
+	double A4 = originalVS1_Jingdu.back() * (1.008 - A16/100);
+	double A5 = originalVS2_Jingdu.back() * (1.008 - A16/100);
+	double A6 = originalFlow_Jingdu.back() - (A11 + (0.8 - A16) - 1.2)/100;
+
+	adjustVS1_Jingdu.push_back(A4);
+	adjustVS2_Jingdu.push_back(A5);
+	adjustFlow_Jingdu.push_back(A6);
+
+
+	//第0轮不做判断
+	if(!jingdu_step){
+		status_Jingdu.push_back(QString("热机"));
+		jingdu_step++;
+		return;
+	}
+	if(JingduCount<1){
+		status_Jingdu.push_back(QString("step%1-%2").arg(jingdu_step).arg(JingduCount+1));
+		JingduCount++;
+		return;
+	}
+
+	/*
+	 * 参数：	1：最新的两组
+	 *			2：距离较远的两组
+	 */
+	if(JingduCount==1){//第二次
+		if(StableJudge(1)){
+			if(jingdu_step==1){//第一轮稳定
+				updateValue(1);
+				status_Jingdu.push_back(QString("step%1-%2: 这两组稳定").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step++;
+				JingduCount=0;
+			}
+			else{//第 >1 轮稳定
+				if(RangeJudge(1)){//满足range
+					updateValue(1);
+					status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上次满足）").arg(jingdu_step).arg(JingduCount+1));
+					jingdu_step = -2;
+				}
+				else{//不满足range，再测一组
+					updateValue(1);
+					status_Jingdu.push_back(QString("step%1-%2: 这两组稳定，但不满足range条件，开始新的一轮").arg(jingdu_step).arg(JingduCount+1));
+					jingdu_step++;
+					JingduCount=0;
+				}
+			}
+		}
+		else{//再测一轮
+			status_Jingdu.push_back(QString("step%1-%2: 这两组不稳定,再测一次").arg(jingdu_step).arg(JingduCount+1));
+			JingduCount++;
+		}
+	}
+	else if(JingduCount==2){//第三次
+		if(jingdu_step==1){//第一轮
+			if(StableJudge(1)){//距离为1的两组ok
+				updateValue(1);
+				status_Jingdu.push_back(QString("step%1-%2: 上组和本组稳定").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step++;
+				JingduCount=0;
+			}
+			else if(StableJudge(2)){//距离为2的两组ok
+				updateValue(2);
+				status_Jingdu.push_back(QString("step%1-%2: 上上组和本组稳定").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step++;
+				JingduCount=0;
+			}
+			else{//这三组都不行
+				status_Jingdu.push_back(QString("step%1-%2: 精度不稳，请检查").arg(jingdu_step).arg(JingduCount+1));
+				JingduCount=0;
+				jingdu_step = -1;
+			}
+		}
+		else{//不是第一轮，>1
+			if(!StableJudge(1) && !StableJudge(2)){
+				status_Jingdu.push_back(QString("step%1-%2: 精度不稳，请检查").arg(jingdu_step).arg(JingduCount+1));
+				JingduCount=0;
+				jingdu_step = -1;
+				return;
+			}
+
+			if(StableJudge(1) && RangeJudge(1)){//距离为1的两组ok
+				updateValue(1);
+				status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上次满足）").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step = -2;
+				return;
+			}
+
+			if(StableJudge(2) && RangeJudge(2)){//距离为2的两组ok
+				updateValue(2);
+				status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上上次满足）").arg(jingdu_step).arg(JingduCount+1));
+				jingdu_step = -2;
+				return;
+			}
+
+			if(StableJudge(1)){
+				updateValue(1);
+			}
+			else if(StableJudge(2)){
+				updateValue(2);
+			}
+
+			status_Jingdu.push_back(QString("step%1-%2: 这三组稳定，但不满足range条件，开始新的一轮").arg(jingdu_step).arg(JingduCount+1));
+			JingduCount=0;
+			jingdu_step++;
+		}
+	}
+	else{
+		status_Jingdu.push_back(QString("不会出现这一句"));
+		jingdu_step = -1;
+	}
+
+
 }
 
 double AllData::myAbs(double b){
@@ -400,7 +517,7 @@ double AllData::myAbs(double b){
 
 void AllData::updateValue(int distance){
 			//3.按照条件1，B、C、D两两判断，选择满足条件1的两组数据(比如B、D两组)，则E1=(B4+D4)/2,E2=(B5+D5)/2,E3=(B6+D6)/2。
-	updateFlag = true;
+    updateFlag = true;
 	if(distance==1){
 		initValue_VS1_modeJingdu = (adjustVS1_Jingdu[length_Jingdu-2] + adjustVS1_Jingdu[length_Jingdu-1])/2;
 		initValue_VS2_modeJingdu = (adjustVS2_Jingdu[length_Jingdu-2] + adjustVS2_Jingdu[length_Jingdu-1])/2;
@@ -458,4 +575,191 @@ bool AllData::RangeJudge(int distance){
 		if(min(B11,D11)>=range1 && max(B11,D11)<=range2 && min(B16,D16)>=range3 && max(B16,D16)<=range4) return true;
 	}
 	return false;
+}
+
+
+void AllData::saveData(FILE *fp){
+    ///////////////////////////////////////////////////////////VS1
+    saveDoubleVector(&original_VS1, fp);
+    saveDoubleVector(&b_VS1, fp);
+    saveDoubleVector(&r_VS1, fp);
+    saveDoubleVector(&differential_VS1, fp);
+    saveDoubleVector(&a_VS1, fp);
+    saveDoubleVector(&adjust_VS1, fp);
+    saveDoubleVector(&final_VS1, fp);
+
+    saveStringVector(&status_VS1, fp);
+    saveStringVector(&date_VS1, fp);
+    saveStringVector(&worker_VS1, fp);
+
+    fwrite(&length_VS1, sizeof(int),1,fp);
+
+
+    ////////////////////////////////////////////////////////////VS2
+    saveDoubleVector(&original_VS2, fp);
+    saveDoubleVector(&b_VS2, fp);
+    saveDoubleVector(&r_VS2, fp);
+    saveDoubleVector(&differential_VS2, fp);
+    saveDoubleVector(&a_VS2, fp);
+    saveDoubleVector(&adjust_VS2, fp);
+    saveDoubleVector(&final_VS2, fp);
+
+    saveStringVector(&status_VS2, fp);
+    saveStringVector(&date_VS2, fp);
+    saveStringVector(&worker_VS2, fp);
+
+    fwrite(&length_VS2, sizeof(int),1,fp);
+
+
+    ////////////////////////////////////////////////////////////JD
+
+    saveDoubleVector(&originalVS1_Jingdu, fp);
+    saveDoubleVector(&originalVS2_Jingdu, fp);
+    saveDoubleVector(&originalFlow_Jingdu, fp);
+    saveDoubleVector(&adjustVS1_Jingdu, fp);
+    saveDoubleVector(&adjustVS2_Jingdu, fp);
+    saveDoubleVector(&adjustFlow_Jingdu, fp);
+    saveDoubleVector(&b0_Jingdu, fp);
+    saveDoubleVector(&r0_Jingdu, fp);
+    saveDoubleVector(&differential0_Jingdu, fp);
+    saveDoubleVector(&a0_Jingdu, fp);
+    saveDoubleVector(&accuracy0_Jingdu, fp);
+    saveDoubleVector(&b1_Jingdu, fp);
+    saveDoubleVector(&r1_Jingdu, fp);
+    saveDoubleVector(&differential1_Jingdu, fp);
+    saveDoubleVector(&a1_Jingdu, fp);
+    saveDoubleVector(&accuracy1_Jingdu, fp);
+
+    //备注
+    saveStringVector(&status_Jingdu, fp);
+    saveStringVector(&date_Jingdu, fp);
+    saveStringVector(&worker_Jingdu, fp);
+
+    fwrite(&length_Jingdu, sizeof(int),1,fp);
+
+    //===========================================================
+    //  精度调试
+    //===========================================================
+    fwrite(&Threshold1, sizeof(double), 1, fp);
+    fwrite(&Threshold2, sizeof(double), 1, fp);
+    fwrite(&range1, sizeof(double), 1, fp);
+    fwrite(&range2, sizeof(double), 1, fp);
+    fwrite(&range3, sizeof(double), 1, fp);
+    fwrite(&range4, sizeof(double), 1, fp);
+    fwrite(&initValue_VS1_modeJingdu, sizeof(double), 1, fp);
+    fwrite(&initValue_VS2_modeJingdu, sizeof(double), 1, fp);
+    fwrite(&initValue_Yinliu_modeJingdu, sizeof(double), 1, fp);
+}
+
+void AllData::saveDoubleVector(QVector<double> *vec, FILE *fp){
+    int len = vec->size();
+    fwrite(&len, sizeof(int), 1, fp);
+    fwrite(vec->data(), sizeof(double),len,fp);
+}
+
+void AllData::saveStringVector(QVector<QString> *vec, FILE *fp){
+    int len = vec->size(), l;
+    fwrite(&len, sizeof(int), 1, fp);
+    for(int i=0;i<len;i++){
+        l = vec->at(i).length();
+        fwrite(&l, sizeof(int),1,fp);
+        fwrite(vec->at(i).data(), sizeof(QChar),l,fp);
+    }
+}
+
+void AllData::readData(FILE *fp){
+
+    readDoubleVector(&original_VS1, fp);
+    readDoubleVector(&b_VS1, fp);
+    readDoubleVector(&r_VS1, fp);
+    readDoubleVector(&differential_VS1, fp);
+    readDoubleVector(&a_VS1, fp);
+    readDoubleVector(&adjust_VS1, fp);
+    readDoubleVector(&final_VS1, fp);
+
+    readStringVector(&status_VS1, fp);
+    readStringVector(&date_VS1, fp);
+    readStringVector(&worker_VS1, fp);
+
+    fread(&length_VS1, sizeof(int),1,fp);
+
+    ////////////////////////////////////////////////////////////VS2
+    readDoubleVector(&original_VS2, fp);
+    readDoubleVector(&b_VS2, fp);
+    readDoubleVector(&r_VS2, fp);
+    readDoubleVector(&differential_VS2, fp);
+    readDoubleVector(&a_VS2, fp);
+    readDoubleVector(&adjust_VS2, fp);
+    readDoubleVector(&final_VS2, fp);
+
+    readStringVector(&status_VS2, fp);
+    readStringVector(&date_VS2, fp);
+    readStringVector(&worker_VS2, fp);
+
+    fread(&length_VS2, sizeof(int),1,fp);
+
+
+    ////////////////////////////////////////////////////////////JD
+
+    readDoubleVector(&originalVS1_Jingdu, fp);
+    readDoubleVector(&originalVS2_Jingdu, fp);
+    readDoubleVector(&originalFlow_Jingdu, fp);
+    readDoubleVector(&adjustVS1_Jingdu, fp);
+    readDoubleVector(&adjustVS2_Jingdu, fp);
+    readDoubleVector(&adjustFlow_Jingdu, fp);
+    readDoubleVector(&b0_Jingdu, fp);
+    readDoubleVector(&r0_Jingdu, fp);
+    readDoubleVector(&differential0_Jingdu, fp);
+    readDoubleVector(&a0_Jingdu, fp);
+    readDoubleVector(&accuracy0_Jingdu, fp);
+    readDoubleVector(&b1_Jingdu, fp);
+    readDoubleVector(&r1_Jingdu, fp);
+    readDoubleVector(&differential1_Jingdu, fp);
+    readDoubleVector(&a1_Jingdu, fp);
+    readDoubleVector(&accuracy1_Jingdu, fp);
+
+    //备注
+    readStringVector(&status_Jingdu, fp);
+    readStringVector(&date_Jingdu, fp);
+    readStringVector(&worker_Jingdu, fp);
+
+    fread(&length_Jingdu, sizeof(int),1,fp);
+
+    //===========================================================
+    //  精度调试
+    //===========================================================
+    fread(&Threshold1, sizeof(double), 1, fp);
+    fread(&Threshold2, sizeof(double), 1, fp);
+    fread(&range1, sizeof(double), 1, fp);
+    fread(&range2, sizeof(double), 1, fp);
+    fread(&range3, sizeof(double), 1, fp);
+    fread(&range4, sizeof(double), 1, fp);
+    fread(&initValue_VS1_modeJingdu, sizeof(double), 1, fp);
+    fread(&initValue_VS2_modeJingdu, sizeof(double), 1, fp);
+    fread(&initValue_Yinliu_modeJingdu, sizeof(double), 1, fp);
+}
+
+void AllData::readDoubleVector(QVector<double> *vec, FILE *fp){
+    double temp;
+    int sum = 0;
+    int len;
+    sum += fread(&len, sizeof(int),1,fp);
+    while(len--){
+        sum += fread(&temp, sizeof(double),1,fp);
+        vec->push_back(temp);
+    }
+}
+
+void AllData::readStringVector(QVector<QString> *vec, FILE *fp){
+    QString temp;
+    int sum = 0;
+    int len, l;
+    sum += fread(&len, sizeof(int),1,fp);
+    for(int i=0;i<len;i++){
+        fread(&l, sizeof(int),1,fp);
+        QChar *da = new QChar[l+1];
+        fread(da, sizeof(QChar),l,fp);
+        temp.setRawData(da, l);
+        vec->push_back(temp);
+    }
 }
