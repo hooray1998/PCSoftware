@@ -45,7 +45,10 @@ public:
 
     void returnFinalResult(int mode); //vs调试返回最终值给设备
 	void returnThreeResult(int mode); //精度调试返回调整后的三个值
-    void analyzeData_BuChong();
+    void analyzeData_answer();
+
+    void request_buchong();
+    void receive_buchong();
 
     void tellToJD(); //通知设备A转化为精度调试
 

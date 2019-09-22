@@ -9,6 +9,8 @@ Group::Group()
 }
 
 void Group::tellToJD(){
+    allData.initValue_VS1_modeJingdu = allData.final_VS1.back();
+    allData.initValue_VS2_modeJingdu = allData.final_VS2.back();
     QByteArray header = "11";
     machineA->WriteData(header);
 }
@@ -23,6 +25,27 @@ void Group::request_a(){
         header = "04";
     machineA->WriteData(header);
     allData.curAction = AllData::Action_request_a;
+}
+
+void Group::request_buchong(){
+    QByteArray header;
+    if(allData.curMode==AllData::Mode_VS1)
+        header = "35";
+    else if(allData.curMode==AllData::Mode_VS2)
+        header = "45";
+    machineA->WriteData(header);
+    allData.curAction = AllData::Action_request_buchong;
+}
+
+void Group::receive_buchong(){
+    if(allData.curAction!=AllData::Action_request_buchong){
+        emit SendLog(groupInfo.name, "收到无用的buchong回应");
+    }
+    else{
+        emit SendLog(groupInfo.name, "收到buchong回应");
+        allData.curAction = AllData::Action_receive_buchong;
+        request_b();
+    }
 }
 
 void Group::request_b(){
@@ -51,13 +74,13 @@ void Group::returnFinalResult(int mode){//mode 0:调整后返回，1：vs1初始
         sprintf(msg,"%08.2f",allData.initValue_VS1_modeVS);
 		QByteArray header = "15" + QString(msg).toLocal8Bit();
 		machineA->WriteData(header);
-        allData.curAction = AllData::Action_request_bc;
+        allData.curAction = AllData::Action_request_answer;
     }
 	else if(mode == 2){
         sprintf(msg,"%08.2f",allData.initValue_VS2_modeVS);
         QByteArray header = "25" + QString(msg).toLocal8Bit();
 		machineA->WriteData(header);
-        allData.curAction = AllData::Action_request_bc;
+        allData.curAction = AllData::Action_request_answer;
     }
 }
 
@@ -65,7 +88,6 @@ void Group::returnThreeResult(int mode){
 	//TODO::返回三个值
     char msg[25];
     sprintf(msg,"%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu);
-    //QByteArray header = "08" + QString::asprintf("%08.3f%08.3f%08.3f",allData.initValue_VS1_modeJingdu,allData.initValue_VS2_modeJingdu,allData.initValue_Yinliu_modeJingdu).toLocal8Bit();
 	if(mode == 0){
 		QByteArray header = "08" + QString(msg).toLocal8Bit();
 		machineA->WriteData(header);
@@ -73,22 +95,28 @@ void Group::returnThreeResult(int mode){
 		emit SendLog(groupInfo.name, "回复给了A三个调整后的精度系数");
 	}
 	else{
-        QByteArray header = "35" + QString(msg).toLocal8Bit();
+        QByteArray header = "65" + QString(msg).toLocal8Bit();
 		machineA->WriteData(header);
-        allData.curAction = AllData::Action_request_bc;
+        allData.curAction = AllData::Action_request_answer;
         emit SendLog(groupInfo.name, "回复给了A三个精度系数");
 	}
 
 }
 
-void Group::analyzeData_BuChong(){
-    if(allData.curAction!=AllData::Action_request_bc){
-        emit SendLog(groupInfo.name, "收到无用的补充回应");
+void Group::analyzeData_answer(){
+    if(allData.curAction!=AllData::Action_request_answer){
+        emit SendLog(groupInfo.name, "收到无用的queren回应");
     }
     else{
-        emit SendLog(groupInfo.name, "收到补充回应");
-        allData.curAction = AllData::Action_receive_b;
-        request_b();
+        emit SendLog(groupInfo.name, "收到queren回应");
+        allData.curAction = AllData::Action_receive_answer;
+
+        if(allData.curMode==AllData::Mode_Jingdu){
+            request_b();
+        }
+        else{
+            request_buchong();
+        }
     }
 }
 void Group::analyzeData_a(QByteArray data){
@@ -137,33 +165,43 @@ void Group::analyzeData_r(QByteArray data){
 		if(allData.curAction==AllData::Action_die) return;
         allData.curAction = AllData::Action_receive_r;
         //OK: 判断当前的模式和行为,不同的模式不同
-        if(allData.curMode==AllData::Mode_VS1||allData.curMode==AllData::Mode_VS2){
-			if(allData.VSCount==2)
-			{
-				returnFinalResult(0);
-				emit SendLog(groupInfo.name, "将结果返回给了A设备");
-			}
-
+        if(allData.curMode==AllData::Mode_VS1){
             if(allData.vs1_ok){
                 allData.vs1_ok = false;
                 allData.curAction=AllData::Action_die;
                 emit SendLog(groupInfo.name, "VS1调试ok");
             }
-            else if(allData.vs2_ok){
+            else if(allData.VSCount==3){
+                allData.vs1_ok = false;
+                allData.curAction=AllData::Action_die;
+                emit SendLog(groupInfo.name, "buwen");
+			}
+            else{
+                request_buchong();
+            }
+        }
+        else if(allData.curMode==AllData::Mode_VS2){
+            if(allData.vs2_ok){
                 allData.vs2_ok = false;
                 allData.curAction=AllData::Action_die;
                 emit SendLog(groupInfo.name, "VS2调试ok");
             }
+            else if(allData.VSCount==3){
+                allData.vs2_ok = false;
+                allData.curAction=AllData::Action_die;
+                emit SendLog(groupInfo.name, "buwen");
+            }
             else{
-                request_b();
+                request_buchong();
             }
         }
-		else if(allData.curMode==AllData::Mode_Jingdu){
+        else if(allData.curMode==AllData::Mode_Jingdu){
 
 			if(allData.updateFlag){
 				allData.updateFlag = false;
 				returnThreeResult(0);
-			}
+                emit SendLog(groupInfo.name, "精度参数更新");
+            }
 			
 			if(allData.jingdu_step == -1){
                 allData.curAction=AllData::Action_die;

@@ -522,8 +522,10 @@ void MainWindow::showLog(QString group,QString msg)
 		}
     }
 
-    if(msg=="VS1调试ok")
-        startVS2(index);
+//if(msg.contains("VS1调试ok")//startVS2(index);
+        if(msg.contains("精度参数更新")){
+            updateTable();
+        }
 }
 
 void MainWindow::updateListView(){
@@ -746,6 +748,9 @@ void MainWindow::startVS1(int index){
     {
         if(allGroup.at(index)->allData.curAction==AllData::Action_die)
         {
+            if(QMessageBox::Ok != QMessageBox::information(this,"提示",QString("设备组名称%1\nVS1值：%2\n是否开始调试").arg(allGroup[index]->groupInfo.name).arg(ui->doubleSpinBoxVS1Value_vsmode->value()),QMessageBox::Ok | QMessageBox::Cancel)){
+                return ;
+            }
             allGroup.at(index)->allData.curMode = AllData::Mode_VS1;
             allGroup.at(index)->allData.Expression_VS1 = wvsformula_vsformulaList->currentText();
             allGroup.at(index)->allData.VSCount = 0;
@@ -793,6 +798,9 @@ void MainWindow::startVS2(int index){
     {
 		if(allGroup.at(index)->allData.curAction==AllData::Action_die)
         {
+            if(QMessageBox::Ok != QMessageBox::information(this,"提示",QString("设备组名称%1\nVS2值：%2\n是否开始调试").arg(allGroup[index]->groupInfo.name).arg(ui->doubleSpinBoxVS2Value_vsmode->value()),QMessageBox::Ok | QMessageBox::Cancel)){
+                return ;
+            }
             allGroup.at(index)->allData.curMode = AllData::Mode_VS2;
             allGroup.at(index)->allData.Expression_VS2 = wvsformula_vsformulaList->currentText();
             allGroup.at(index)->allData.VSCount = 0;
@@ -806,6 +814,7 @@ void MainWindow::startVS2(int index){
         }
         else{
             showLog("该设备组正在进行其他动作，禁止启动调试。");
+            qDebug()<<"cod:"<<allGroup.at(index)->allData.curAction;
             QMessageBox::warning(this, "警告", "该设备组正在进行其他动作，禁止启动调试。");
         }
     }
@@ -998,6 +1007,10 @@ void MainWindow::stopDebug(){
     int index;
     bool ok = findGroupInGroup(curGroupName, index);
     if(ok){
+		QString modeName = (allGroup[index]->allData.curMode == AllData::Mode_Jingdu)?"精度调试":(allGroup[index]->allData.curMode == AllData::Mode_VS1)?"VS1调试":"VS2调试";
+
+        if(QMessageBox::Ok != QMessageBox::information(this,"提示",QString("当前设备组%1,正在进行%2，是否需要中止？中止后需要重新开始当前测试").arg(curGroupName).arg(modeName),QMessageBox::Ok | QMessageBox::Cancel)) return ;
+		
         if(allGroup[index]->stop()){
             showLog("终止了当前调试");
         }
@@ -1297,7 +1310,11 @@ void MainWindow::startJingdu(int index){
 		//TODO:看三个值是否有效,当VS结束时赋予这些值
 		if(allGroup.at(index)->allData.curAction==AllData::Action_die)
 		{
-			allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
+            if(QMessageBox::Ok != QMessageBox::information(this,"提示",QString("设备组名称%1\nVS1值：%2\nVS2值：%3\n引流系数：%4\n是否开始调试").arg(allGroup[index]->groupInfo.name).arg(ui->doubleSpinBoxVS1Value_jdmode->value()).arg(ui->doubleSpinBoxVS2Value_jdmode->value()).arg(ui->doubleSpinBoxYinliuValue_jdmode->value()),QMessageBox::Ok | QMessageBox::Cancel)){
+                return ;
+            }
+
+            allGroup.at(index)->allData.curMode = AllData::Mode_Jingdu;
 			allGroup.at(index)->allData.initValue_VS1_modeJingdu = ui->doubleSpinBoxVS1Value_jdmode->value();
 			allGroup.at(index)->allData.initValue_VS2_modeJingdu = ui->doubleSpinBoxVS2Value_jdmode->value();
 			allGroup.at(index)->allData.initValue_Yinliu_modeJingdu = ui->doubleSpinBoxYinliuValue_jdmode->value();
@@ -1716,6 +1733,7 @@ void MainWindow::on_pushButtonChangeJD_clicked()
 
     allGroup.at(index)->tellToJD();
     showLog("请求该设备组切换为精度调试。");
+    updateTable();
 }
 
 void MainWindow::on_toolButton_clicked()

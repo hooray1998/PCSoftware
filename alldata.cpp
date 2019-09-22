@@ -236,39 +236,47 @@ void AllData::push_r(double r){
         r_VS1.push_back(r);
         if(length_VS1 < r_VS1.size())
             length_VS1 = r_VS1.size();
-        differential_VS1.push_back(myAbs(r-b_VS1[length_VS1-1]));
+        differential_VS1.push_back(myAbs(r-b_VS1.back()));
         double result = cal_adjustValue();
-		if(curAction==Action_die) return;
+        double pre = adjust_VS1.back();
         adjust_VS1.push_back(result);
+        if(curAction==Action_die) return;
         if(VSCount==0)
         {
-            final_VS1.push_back(result);
+            final_VS1.push_back(0);
             status_VS1.push_back("1");
         }
         else if(VSCount==1){
-            double pre = final_VS1.at(final_VS1.size()-1);
-            final_VS1.push_back((result+pre)/2);
-			averageValue = final_VS1.back();//return to A
-            status_VS1.push_back("2");
+
+            if(myAbs(pre-result)<=range_vsmode){
+                final_VS1.push_back((result+pre)/2);
+                averageValue = final_VS1.back();//return to A
+                status_VS1.push_back("OK");
+                vs1_ok = true;
+                VSCount = 0;
+                return ;
+            }
+            else{
+                final_VS1.push_back(0);
+                status_VS1.push_back("2");
+            }
         }
         else if(VSCount==2)
         {
-            final_VS1.push_back(result);
-			initValue_VS1_modeJingdu = result;
-            int a = final_VS1.back();
-            int b = original_VS1.back() - a;
-            if(b<0)
-                b = -b;
-            if(b<range_vsmode)
-            {
-                status_VS1.push_back(QString("OK"));
-                vs1_ok = true;
-            }
-            else
-                status_VS1.push_back(QString("%1 <> %2").arg(final_VS1.back()).arg(original_VS1.back()));
 
-            VSCount = 0;
-            return ;
+            if(myAbs(pre-result)<=range_vsmode){
+                final_VS1.push_back((result+pre)/2);
+                averageValue = final_VS1.back();//return to A
+                status_VS1.push_back("OK");
+                vs1_ok = true;
+                VSCount = 0;
+                return ;
+            }
+            else{
+                final_VS1.push_back(0);
+                status_VS1.push_back(QString("|%1-%2|=%3>%4").arg(pre).arg(result).arg(myAbs(pre-result)).arg(range_vsmode));
+                vs1_ok = false;
+            }
         }
         VSCount ++;
 
@@ -278,41 +286,50 @@ void AllData::push_r(double r){
         r_VS2.push_back(r);
         if(length_VS2 < r_VS2.size())
             length_VS2 = r_VS2.size();
-        differential_VS2.push_back(myAbs(r-b_VS2[length_VS2-1]));
+        differential_VS2.push_back(myAbs(r-b_VS2.back()));
         double result = cal_adjustValue();
-		if(curAction==Action_die) return;
+        double pre = adjust_VS2.back();
         adjust_VS2.push_back(result);
+        if(curAction==Action_die) return;
         if(VSCount==0)
         {
-            final_VS2.push_back(result);
+            final_VS2.push_back(0);
             status_VS2.push_back("1");
         }
         else if(VSCount==1){
-            double pre = final_VS2.at(final_VS2.size()-1);
-            final_VS2.push_back((result+pre)/2);
-			averageValue = final_VS2.back();//return to A
-            status_VS2.push_back("2");
+
+            if(myAbs(pre-result)<=range_vsmode){
+                final_VS2.push_back((result+pre)/2);
+                averageValue = final_VS2.back();//return to A
+                status_VS2.push_back("OK");
+                vs2_ok = true;
+                VSCount = 0;
+                return ;
+            }
+            else{
+                final_VS2.push_back(0);
+                status_VS2.push_back("2");
+            }
         }
         else if(VSCount==2)
         {
-            final_VS2.push_back(result);
-			initValue_VS2_modeJingdu = result;
-            int a = final_VS2.back();
-            int b = original_VS2.back() - a;
-            if(b<0)
-                b = -b;
-            if(b<5000)
-            {
-                status_VS2.push_back(QString("OK"));
-                vs2_ok = true;
-            }
-            else
-                status_VS2.push_back(QString("%1 <> %2").arg(final_VS2.back()).arg(original_VS2.back()));
 
-            VSCount = 0;
-            return ;
+            if(myAbs(pre-result)<=range_vsmode){
+                final_VS2.push_back((result+pre)/2);
+                averageValue = final_VS2.back();//return to A
+                status_VS2.push_back("OK");
+                vs2_ok = true;
+                VSCount = 0;
+                return ;
+            }
+            else{
+                final_VS2.push_back(0);
+                status_VS2.push_back(QString("|%1-%2|=%3>%4").arg(pre).arg(result).arg(myAbs(pre-result)).arg(range_vsmode));
+                vs2_ok = false;
+            }
         }
         VSCount ++;
+
     }
     else if(curMode==Mode_Jingdu)
     {

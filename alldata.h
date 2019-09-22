@@ -19,8 +19,10 @@ public:
     };
     enum Action{
         Action_die=0,
-        Action_request_bc, //补充指令
-        Action_receive_bc,
+        Action_request_answer, //补充指令
+        Action_receive_answer,
+        Action_request_buchong,
+        Action_receive_buchong,
         Action_request_b,
         Action_receive_b,
         Action_request_a,
