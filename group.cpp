@@ -33,16 +33,25 @@ void Group::request_buchong(){
         header = "35";
     else if(allData.curMode==AllData::Mode_VS2)
         header = "45";
+    else if(allData.curMode==AllData::Mode_Jingdu)
+        header = "16";
     machineA->WriteData(header);
     allData.curAction = AllData::Action_request_buchong;
 }
 
 void Group::receive_buchong(){
     if(allData.curAction!=AllData::Action_request_buchong){
-        emit SendLog(groupInfo.name, "收到无用的buchong回应");
+        if(allData.jingdu_step != -2){
+            emit SendLog(groupInfo.name, "收到无用的补充回应");
+        }
     }
     else{
-        emit SendLog(groupInfo.name, "收到buchong回应");
+        if(allData.curMode!=AllData::Mode_Jingdu){
+            emit SendLog(groupInfo.name, "收到补充回应");
+        }
+        else{
+            emit SendLog(groupInfo.name, "收到新一轮通知确认");
+        }
         allData.curAction = AllData::Action_receive_buchong;
         request_b();
     }
@@ -91,24 +100,30 @@ void Group::returnThreeResult(int mode){
 	if(mode == 0){
 		QByteArray header = "08" + QString(msg).toLocal8Bit();
 		machineA->WriteData(header);
-		allData.curAction = AllData::Action_return;
+        allData.curAction = AllData::Action_request_buchong;
 		emit SendLog(groupInfo.name, "回复给了A三个调整后的精度系数");
 	}
-	else{
+    else if(mode == 1){
         QByteArray header = "65" + QString(msg).toLocal8Bit();
-		machineA->WriteData(header);
+        machineA->WriteData(header);
         allData.curAction = AllData::Action_request_answer;
         emit SendLog(groupInfo.name, "回复给了A三个精度系数");
+    }
+    else if(mode == 2){
+        QByteArray header = "18";
+		machineA->WriteData(header);
+        allData.curAction = AllData::Action_request_answer;
+        emit SendLog(groupInfo.name, "精度调试OK，返回通知");
 	}
 
 }
 
 void Group::analyzeData_answer(){
     if(allData.curAction!=AllData::Action_request_answer){
-        emit SendLog(groupInfo.name, "收到无用的queren回应");
+        emit SendLog(groupInfo.name, "收到无用的确认回应");
     }
     else{
-        emit SendLog(groupInfo.name, "收到queren回应");
+        emit SendLog(groupInfo.name, "收到确认回应");
         allData.curAction = AllData::Action_receive_answer;
 
         if(allData.curMode==AllData::Mode_Jingdu){
@@ -197,10 +212,16 @@ void Group::analyzeData_r(QByteArray data){
         }
         else if(allData.curMode==AllData::Mode_Jingdu){
 
+            bool return1= false;
 			if(allData.updateFlag){
 				allData.updateFlag = false;
-				returnThreeResult(0);
-                emit SendLog(groupInfo.name, "精度参数更新");
+                return1 = true;
+                if(allData.jingdu_step != -2){
+                    returnThreeResult(0);
+                    emit SendLog(groupInfo.name, "精度参数更新");
+                }
+                else
+                    returnThreeResult(2);
             }
 			
 			if(allData.jingdu_step == -1){
@@ -212,7 +233,8 @@ void Group::analyzeData_r(QByteArray data){
                 emit SendLog(groupInfo.name, "精度调试成功");
 			}
             else{
-                request_b();
+                if(!return1)
+                    request_buchong();
             }
 		}
     }

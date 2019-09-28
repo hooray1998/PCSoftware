@@ -440,11 +440,18 @@ void AllData::cal_finalValues_JingduMode(){
 	if(JingduCount==1){//第二次
 		if(StableJudge(1)){
 			if(jingdu_step==1){//第一轮稳定
-				updateValue(1);
-				status_Jingdu.push_back(QString("step%1-%2: 这两组稳定").arg(jingdu_step).arg(JingduCount+1));
-				jingdu_step++;
-				JingduCount=0;
-			}
+                if(RangeJudge(1)){//满足range
+                    updateValue(1);
+                    status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上次满足）").arg(jingdu_step).arg(JingduCount+1));
+                    jingdu_step = -2;
+                }
+                else{
+                    updateValue(1);
+                    status_Jingdu.push_back(QString("step%1-%2: 这两组稳定,但不满足range条件，").arg(jingdu_step).arg(JingduCount+1));
+                    jingdu_step++;
+                    JingduCount=0;
+                }
+            }
 			else{//第 >1 轮稳定
 				if(RangeJudge(1)){//满足range
 					updateValue(1);
@@ -467,16 +474,32 @@ void AllData::cal_finalValues_JingduMode(){
 	else if(JingduCount==2){//第三次
 		if(jingdu_step==1){//第一轮
 			if(StableJudge(1)){//距离为1的两组ok
-				updateValue(1);
-				status_Jingdu.push_back(QString("step%1-%2: 上组和本组稳定").arg(jingdu_step).arg(JingduCount+1));
-				jingdu_step++;
-				JingduCount=0;
+                if(RangeJudge(1)){//满足range
+                    updateValue(1);
+                    status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上次满足）").arg(jingdu_step).arg(JingduCount+1));
+                    jingdu_step = -2;
+                    return;
+                }
+                else{
+                    updateValue(1);
+                    status_Jingdu.push_back(QString("step%1-%2: 上组和本组稳定,但不满足range条件，").arg(jingdu_step).arg(JingduCount+1));
+                    jingdu_step++;
+                    JingduCount=0;
+                }
 			}
 			else if(StableJudge(2)){//距离为2的两组ok
-				updateValue(2);
-				status_Jingdu.push_back(QString("step%1-%2: 上上组和本组稳定").arg(jingdu_step).arg(JingduCount+1));
-				jingdu_step++;
-				JingduCount=0;
+                if(RangeJudge(2)){//满足range
+                    updateValue(2);
+                    status_Jingdu.push_back(QString("step%1-%2: 精度调试OK（本次和上上次满足）").arg(jingdu_step).arg(JingduCount+1));
+                    jingdu_step = -2;
+                return;
+                }
+                else{
+                    updateValue(2);
+                    status_Jingdu.push_back(QString("step%1-%2: 上上组和本组稳定,但不满足range条件，").arg(jingdu_step).arg(JingduCount+1));
+                    jingdu_step++;
+                    JingduCount=0;
+                }
 			}
 			else{//这三组都不行
 				status_Jingdu.push_back(QString("step%1-%2: 精度不稳，请检查").arg(jingdu_step).arg(JingduCount+1));

@@ -365,9 +365,13 @@ void MainWindow::showUntieGroupWidget(){
             ui->lineEditJiNumber_mode1->setText(curGroupName);
 
         }
-        allGroup.at(rowm)->untie();
-        allGroup.remove(rowm);
-        allGroupLog.remove(rowm);
+        if(allGroup[rowm]->allData.curAction == AllData::Action_die){
+            allGroup.at(rowm)->untie();
+            allGroup.remove(rowm);
+            allGroupLog.remove(rowm);
+        }
+        else
+            QMessageBox::warning(this, "警告", QString("设备组%1正在进行调试，不可退出").arg(allGroup.at(rowm)->groupInfo.name));
     }
     updateListView();
 
@@ -1778,7 +1782,7 @@ void MainWindow::updateDebugLabel(int index){
     QString debugs;
 
     debugs.append(QString("最低水量阈值：%1      VS最大稳定距离：%2\n").arg(QString::number(curGroup->allData.minWater),10).arg(QString::number(curGroup->allData.range_vsmode),10));
-    debugs.append(QString("VS1 浮动范围：%1       VS2 浮动范围：%2\n").arg(QString::number(curGroup->allData.Threshold1),10).arg(QString::number(curGroup->allData.Threshold2),10));
+    debugs.append(QString("引流精度浮动范围：%1     注入精度浮动范围:%2\n").arg(QString::number(curGroup->allData.Threshold1),6).arg(QString::number(curGroup->allData.Threshold2),10));
 
     debugs.append(QString("引流精度下限：%1        引流精度上限：%2\n").arg(QString::number(curGroup->allData.range1),10).arg(QString::number(curGroup->allData.range2),10));
     debugs.append(QString("注入精度下限：%1        注入精度上限：%2").arg(QString::number(curGroup->allData.range3),10).arg(QString::number(curGroup->allData.range4),10));

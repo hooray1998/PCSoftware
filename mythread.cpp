@@ -106,6 +106,21 @@ void MyThread::analyzeHeader(){
                     emit SendLog(QString("所属的设备组没有这个设备A【%1】。").arg(QString(machineId)));
             }
         }
+        else if(mode=="80")
+        {
+            if(!group)
+            {
+                emit SendLog(QString("%1 还未绑定设备，数据会丢失。").arg(QString(machineId)));
+            }
+            else{
+                if(this->group->getMachineA_id()==machineId)
+                {
+                    group->receive_buchong();
+                }
+                else
+                    emit SendLog(QString("所属的设备组没有这个设备A【%1】。").arg(QString(machineId)));
+            }
+        }
         else{
             emit SendLog(QString("%1 receive other mode%2").arg(QString(machineId)).arg(QString(mode)));
         }
