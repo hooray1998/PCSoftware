@@ -190,10 +190,7 @@ void AllData::push_b(double b){
         b_VS1.push_back(b);
         if(length_VS1 < b_VS1.size())
             length_VS1 = b_VS1.size();
-        if(VSCount!=2)
-            original_VS1.push_back(initValue_VS1_modeVS);
-        else
-            original_VS1.push_back(final_VS1.back());
+        original_VS1.push_back(initValue_VS1_modeVS);
         worker_VS1.push_back(curWorker);
         date_VS1.push_back(QDate::currentDate().toString("yy-MM-dd"));
     }
@@ -202,10 +199,7 @@ void AllData::push_b(double b){
         b_VS2.push_back(b);
         if(length_VS2 < b_VS2.size())
             length_VS2 = b_VS2.size();
-        if(VSCount!=2)
-            original_VS2.push_back(initValue_VS2_modeVS);
-        else
-            original_VS2.push_back(final_VS2.back());
+        original_VS2.push_back(initValue_VS2_modeVS);
         worker_VS2.push_back(curWorker);
         date_VS2.push_back(QDate::currentDate().toString("yy-MM-dd"));
     }
@@ -409,12 +403,12 @@ void AllData::cal_finalValues_JingduMode(){
 
 	//A4=A1*(1.008-A16/100)
 	//A5=A2*(1.008-A16/100)
-	//A6=A3-(A11+(0.8-A16)-1.2)/100
+	//A6=A3-(A11+(0.8-A16)-1.5)/100
 	double A11 = accuracy0_Jingdu.back();
 	double A16 = accuracy1_Jingdu.back();
 	double A4 = originalVS1_Jingdu.back() * (1.008 - A16/100);
 	double A5 = originalVS2_Jingdu.back() * (1.008 - A16/100);
-	double A6 = originalFlow_Jingdu.back() - (A11 + (0.8 - A16) - 1.2)/100;
+	double A6 = originalFlow_Jingdu.back() - (A11 + (0.8 - A16) - 1.5)/100;
 
 	adjustVS1_Jingdu.push_back(A4);
 	adjustVS2_Jingdu.push_back(A5);

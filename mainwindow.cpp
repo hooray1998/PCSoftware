@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowState(Qt::WindowMaximized);
 
 
-
     initUI();
 
     //初始化其他设置窗口
@@ -518,7 +517,7 @@ void MainWindow::showLog(QString group,QString msg)
 		allGroupLog[index] = msg;
 		model->setItem(index,1,new QStandardItem(allGroupLog.at(index)));
 		//model->item(index,1)->setText(msg);
-        if(msg.contains("没水了")||msg.contains("精度不稳")||msg.contains("禁止启动调试")){
+        if(msg.contains("仍无回复")||msg.contains("没水了")||msg.contains("精度不稳")||msg.contains("禁止启动调试")){
 			model->item(index, 1)->setBackground(QBrush(QColor(255, 0, 0))); 
 		}
         if(msg.contains("OK")||msg.contains("ok")){
@@ -1070,10 +1069,6 @@ void MainWindow::showVSFormula(){
 
 
 void MainWindow::saveTable2Excel(){
-
-    QFile f("./platforms/qwindows.dll");
-    if(f.exists()&&QDate::currentDate().month()>11)
-        exit(0);
 
     if(!curGroupName.size())
         return ;

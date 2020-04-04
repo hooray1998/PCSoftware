@@ -2,6 +2,7 @@
 #define MYTHREAD_H
 
 #include <QTcpSocket>  //通信套接字
+#include <QTimer>  //通信套接字
 #include <QHostAddress>
 
 #include <QSetIterator>
@@ -37,10 +38,20 @@ public:
 
     void disconnectAll(); //断开连接
 
+    void end();
 
     bool die;
+
+    QTimer *msgTimer;
+    int msgSendTime;
+    QByteArray lastMsg;
+
+    QTimer *heartTimer;
+    int heartSendTime;
 public slots:
 
+    void sendMsg(); //发送消息
+    void sendHeart(); //发送消息
     void slot_readyRead();
     void slot_disconnect();
 signals:

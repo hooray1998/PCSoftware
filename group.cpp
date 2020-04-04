@@ -114,6 +114,7 @@ void Group::returnThreeResult(int mode){
 		machineA->WriteData(header);
         allData.curAction = AllData::Action_request_answer;
         emit SendLog(groupInfo.name, "精度调试OK，返回通知");
+        end();
 	}
 
 }
@@ -184,12 +185,13 @@ void Group::analyzeData_r(QByteArray data){
             if(allData.vs1_ok){
                 allData.vs1_ok = false;
                 allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "VS1调试ok");
+                emit SendLog(groupInfo.name, "VS1调试OK");
+                end();
             }
             else if(allData.VSCount==3){
                 allData.vs1_ok = false;
                 allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "buwen");
+                emit SendLog(groupInfo.name, "VS1不稳");
 			}
             else{
                 request_buchong();
@@ -199,12 +201,13 @@ void Group::analyzeData_r(QByteArray data){
             if(allData.vs2_ok){
                 allData.vs2_ok = false;
                 allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "VS2调试ok");
+                emit SendLog(groupInfo.name, "VS2调试OK");
+                end();
             }
             else if(allData.VSCount==3){
                 allData.vs2_ok = false;
                 allData.curAction=AllData::Action_die;
-                emit SendLog(groupInfo.name, "buwen");
+                emit SendLog(groupInfo.name, "VS2不稳");
             }
             else{
                 request_buchong();
@@ -284,6 +287,7 @@ QString Group::getMachineB_id(){
 }
 
 bool Group::stop(){
+    end();
     allData.complete();
     if(getOnlineStatus()>1){
         machineA->WriteData("91");
@@ -348,4 +352,13 @@ void Group::readData(FILE *fp){
 void Group::saveData(FILE *fp){
     qDebug()<<"cur Name:"<<groupInfo.name;
     allData.saveData(fp);
+}
+void Group::end(){
+    machineA->end();
+    machineB->end();
+}
+
+
+void Group::sendLog(QString msg){
+    emit SendLog(groupInfo.name, msg);
 }

@@ -34,6 +34,7 @@ public:
 
     void setWorker(QString w); //设置工作人员
     bool stop(); //中止当前调试进程
+    void end(); //调试结束
 
     //data processing
     void request_b(); //寻求初值
@@ -52,6 +53,7 @@ public:
 
     void tellToJD(); //通知设备A转化为精度调试
 
+    void sendLog(QString msg);
 
     void saveData(FILE *fp);
     void readData(FILE *fp);

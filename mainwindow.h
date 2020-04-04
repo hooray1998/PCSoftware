@@ -142,6 +142,7 @@ public slots:
     void updateAllDebugValue();
     void setInitValue(int index, bool all); //使用当前的参数初始化index设备组
 
+
     //Worker
     void manageWorker(); //工作人员界面
 
