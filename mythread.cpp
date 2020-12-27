@@ -49,8 +49,7 @@ void MyThread::analyzeHeader(){
     }
     else if(mode=="66"){
         if(heartSendTime>3)
-        this->group->sendLog(QString("设备%1【%2】重新连接")\
-                .arg((this->group->getMachineA_id()==machineId)?'A':'B')\
+        emit SendLog(QString("设备【%1】重新连接")\
                 .arg(QString(machineId)));
         heartSendTime = 0;
     }
@@ -85,6 +84,11 @@ void MyThread::analyzeHeader(){
             case 16:
                 if(ID=='A'){
                     respondMsg(mode);
+                }
+                break;
+            case 42:
+                if(ID=='A'){
+                    SendMsgOnce("42");//应答:补充完成
                     group->receive_buchong();
                 }
                 break;
@@ -167,8 +171,7 @@ void MyThread::sendHeart(){
     if(heartSendTime>=3&& (1==value)){
     //if(heartSendTime>=3){
     DBG<<"cur HEadr time:"<<heartSendTime;
-        this->group->sendLog(QString("设备%1【%2】失去连接，心跳%3次仍无回复。继续心跳")\
-                .arg((this->group->getMachineA_id()==machineId)?'A':'B')\
+        emit SendLog(QString("设备【%1】去连接，心跳%2次仍无回复。继续心跳")\
                 .arg(QString(machineId))\
                 .arg(heartSendTime ));
     }
