@@ -67,8 +67,6 @@ void Group::request_r(){
     QByteArray header = "07";
     machineB->WriteData(header);
     allData.curAction = AllData::Action_request_r;
-    //if(allData.lastRequest==AllData::Action_receive_r)
-        //allData.lastRequest = AllData::Action_die;
 }
 
 void Group::returnFinalResult(int mode){//mode 0:调整后返回，1：vs1初始返回，2：vs2初始返回
@@ -114,7 +112,6 @@ void Group::returnThreeResult(int mode){
 		machineA->WriteData(header);
         allData.curAction = AllData::Action_request_answer;
         emit SendLog(groupInfo.name, "精度调试OK，返回通知");
-        end();
 	}
 
 }
@@ -136,10 +133,8 @@ void Group::analyzeData_answer(){
     }
 }
 void Group::analyzeData_a(QByteArray data){
-
     if(allData.curAction!=AllData::Action_request_a){// request a
         emit SendLog(groupInfo.name, "收到无用的实际值a");
-        //allData.lastRequest = AllData::Action_die;
     }
     else{
         allData.push_a(data.toDouble());
@@ -220,11 +215,11 @@ void Group::analyzeData_r(QByteArray data){
 				allData.updateFlag = false;
                 return1 = true;
                 if(allData.jingdu_step != -2){
-                    returnThreeResult(0);
+                    returnThreeResult(0);//08
                     emit SendLog(groupInfo.name, "精度参数更新");
                 }
                 else
-                    returnThreeResult(2);
+                    returnThreeResult(2);//18
             }
 			
 			if(allData.jingdu_step == -1){
@@ -236,8 +231,7 @@ void Group::analyzeData_r(QByteArray data){
                 emit SendLog(groupInfo.name, "精度调试成功");
 			}
             else{
-                if(!return1)
-                    request_buchong();
+                if(!return1) request_buchong();//16
             }
 		}
     }
@@ -287,7 +281,8 @@ QString Group::getMachineB_id(){
 }
 
 bool Group::stop(){
-    end();
+    this->machineA->end();
+    this->machineB->end();
     allData.complete();
     if(getOnlineStatus()>1){
         machineA->WriteData("91");

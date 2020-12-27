@@ -33,12 +33,14 @@ public:
     qint16 getPort(); //获得端口号
     QString getMachineID(); //获得id
 
+    void SendMsgOnce(QByteArray msg);
     void WriteData(QByteArray); //发送消息
     void analyzeHeader(); //根据协议分析数据，获得id，判断在哪个设备组，然后处理
 
     void disconnectAll(); //断开连接
 
     void end();
+    void respondMsg(QByteArray msg);
 
     bool die;
 

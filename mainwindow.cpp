@@ -142,9 +142,9 @@ void MainWindow::initUI(){
     green.setRgb(127,0,0,127);
 
 
-    connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem1(QTableWidgetItem*)));
-    connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
-    connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
+    //connect(ui->tableWidgetvs1,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem1(QTableWidgetItem*)));
+    //connect(ui->tableWidgetvs2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem2(QTableWidgetItem*)));
+    //connect(ui->tableWidget_2,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(scrollCurItem3(QTableWidgetItem*)));
     connect(ui->tableWidgetvs1,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment1(QModelIndex)));
     connect(ui->tableWidgetvs2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment2(QModelIndex)));
     connect(ui->tableWidget_2,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(changeComment3(QModelIndex)));
@@ -520,7 +520,7 @@ void MainWindow::showLog(QString group,QString msg)
         if(msg.contains("仍无回复")||msg.contains("没水了")||msg.contains("精度不稳")||msg.contains("禁止启动调试")){
 			model->item(index, 1)->setBackground(QBrush(QColor(255, 0, 0))); 
 		}
-        if(msg.contains("OK")||msg.contains("ok")){
+        if(msg.contains("OK")||msg.contains("ok")||msg.contains("重新连接")){
 			model->item(index, 1)->setBackground(QBrush(QColor(0, 255, 0))); 
 		}
     }
@@ -1324,7 +1324,6 @@ void MainWindow::startJingdu(int index){
 			allGroup.at(index)->allData.JingduCount = 0;
 			allGroup.at(index)->allData.curWorker = ui->comboBoxWorker1->currentText();
 			allGroup.at(index)->returnThreeResult(1);
-            //allGroup.at(index)->request_b();
 		}
 		else{
 			showLog("该设备组正在进行其他动作，禁止启动调试。");

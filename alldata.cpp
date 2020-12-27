@@ -5,6 +5,7 @@
 
 AllData::AllData()
 {
+    updateFlag = false;
 
     length_VS1 = 0;
     length_VS2 = 0;
